@@ -21,7 +21,7 @@ app.use(function(req, res, next) {
 var usage = '\
 <html>\
   <table border="1">\
-    <tr><td>classify   </td><td>  [Caffe] </td><td>http://localhost:8080/api/v1/classify </td></tr>\
+    <tr><td>classify   </td><td>  [Caffe] </td><td><a href="http://localhost:8080/api/v1/classify/bvlc_reference_caffenet%2Fdata%2Fsample%2Fad_sunglass.png,3">http://localhost:8080/api/v1/classify/bvlc_reference_caffenet%2Fdata%2Fsample%2Fad_sunglass.png,3</a></td></tr>\
     <tr><td>count_line </td><td>  [Spark] </td><td>http://localhost:8080/api/v1/classify </td></tr>\
     <tr><td>du         </td><td>  [HDFS]  </td><td>http://localhost:8080/api/v1/classify </td></tr>\
     <tr><td>head       </td><td>  [Spark] </td><td>http://localhost:8080/api/v1/classify </td></tr>\
@@ -36,15 +36,31 @@ var usage = '\
   </table>\
 </html>';
 
-app.get('/api/v1/:op?:param', function(req, res) {
-    child = child_process.spawn('/usr/local/bin/fab', ['-f', '/home/tip/tip/cli/fabfile.py', '%(id)s:%(param)s' % req.params ], { stdio: [ 0, 'pipe', 0 ]});
-    child.stdout.on('data',
-        function (data) {
-            res.send(JSON.stringify(data.toString()));
-        }
-    );
+app.get('/api/v1/:op/:param', function(req, res) {
+    console.log(req.params.op);
+    console.log(typeof(req.params.op));
+    console.log(req.params.param);
+    console.log(typeof(req.params.param));
+    console.log(req.params.op + ':' + req.params.param);
+    console.log(['-f', '/Users/dongjoon/tip/cli/fabfile.py', req.params.op + ":" + req.params.param]);
+
+    child = child_process.exec('/usr/local/bin/fab -f /Users/dongjoon/tip/cli/fabfile.py ' + req.params.op + ':' + req.params.param,
+        function (error, stdout, stderr) {
+            console.log('stdout: ' + stdout);
+            console.log('stderr: ' + stderr);
+            res.send(stdout.toString());
+            if (error !== null) {
+                console.log('exec error: ' + error);
+            }
+        });
 });
-app.get('/api/v1/:op', function(req, res) { res.send(usage); });
-app.get('/api/v1/', function(req, res) { res.send(usage); });
+
+app.get('/api/v1/:op', function(req, res) {
+  res.send(usage);
+});
+
+app.get('/api/v1/', function(req, res) {
+  res.send(usage);
+});
 
 app.listen(process.env.PORT || 8080);
