@@ -191,9 +191,9 @@ EOF''' % locals())
 	run(cmd)
 
 @hosts('50.1.100.101')
-def classify(net, caffemodel, path):
+def classify(name, path, topk=5):
 	'''
-	[Caffe]\tfab classify:mnist,mnist,n01440764_3713.JPEG
+	[Caffe]\tfab classify:bvlc_reference_caffenet,/data/sample/ad_sunglass.png,3
 	'''
 	run('''cat <<EOF > /home/hadoop/demo/caffe_classify.py
 # -*- coding: utf-8 -*-
@@ -202,14 +202,22 @@ import sys
 sys.path.insert(0, '/home/hadoop/caffe/distribute/python')
 import caffe
 caffe.set_mode_gpu()
-net = caffe.Classifier('/hdfs/model/caffe/%(net)s.prototxt', '/hdfs/model/caffe/%(caffemodel)s.caffemodel', \
+
+synset_list = []
+with open('/hdfs/model/caffe/%(name)s/synset_words.txt', 'r') as f_read:
+    for line in f_read.readlines():
+        synset_list.append(line[9:].strip())
+
+net = caffe.Classifier('/hdfs/model/caffe/%(name)s/deploy.prototxt', '/hdfs/model/caffe/%(name)s/%(name)s.caffemodel', \
         mean=np.load('/home/hadoop/caffe/distribute/python/caffe/imagenet/ilsvrc_2012_mean.npy').mean(1).mean(1), \
         channel_swap=(2,1,0), \
         raw_scale=255, \
-        image_dims=(28, 28))
-input_image = caffe.io.load_image('%(path)s')
+        image_dims=(256, 256))
+input_image = caffe.io.load_image('/hdfs/%(path)s')
 prediction = net.predict([input_image])
-print prediction
+predicted_top_classes = list(reversed(prediction[0].argsort()[-%(topk)s:]))
+for c in predicted_top_classes:
+        print synset_list[c], prediction[0][c]
 EOF''' % locals())
-	cmd = '/usr/local/bin/python2.7 /home/hadoop/demo/caffe_classify.py'
+	cmd = '/usr/local/bin/python2.7 /home/hadoop/demo/caffe_classify.py 2> /dev/null'
 	run(cmd)
