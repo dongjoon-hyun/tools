@@ -88,8 +88,8 @@ def os_hugepage_enabled():
 	'''
 	OS Parameter: /sys/kernel/mm/redhat_transparent_hugepage/enabled == always [never]
 	'''
-	cmd = 'cat /sys/kernel/mm/redhat_transparent_hugepage/enabled | sed "s/\[*]*//g"'
-	expected = 'always never'
+	cmd = 'cat /sys/kernel/mm/redhat_transparent_hugepage/enabled'
+	expected = 'always madvise [never]'
 	run('''[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")''' % locals())
 
 	cmd = 'grep enabled /etc/rc.local | wc -l'
@@ -101,8 +101,8 @@ def os_hugepage_defrag():
 	'''
 	OS Parameter: cat /sys/kernel/mm/redhat_transparent_hugepage/defrag
 	'''
-	cmd = 'cat /sys/kernel/mm/redhat_transparent_hugepage/defrag | sed "s/\[*]*//g"'
-	expected = 'always never'
+	cmd = 'cat /sys/kernel/mm/redhat_transparent_hugepage/defrag'
+	expected = 'always madvise [never]'
 	run('''[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")''' % locals())
 
 	cmd = 'grep defrag /etc/rc.local | wc -l'
