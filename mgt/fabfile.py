@@ -28,7 +28,6 @@ env.warn_only = True
 env.skip_bad_hosts = True
 env.colorize_errors = True
 env.user = 'root'
-env.password = '!dnpdjgkdntm'
 env.timeout = 3
 env.parallel = True
 output['status'] = False
