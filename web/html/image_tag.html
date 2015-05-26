@@ -442,6 +442,37 @@
                             <div class="col-xs-12">
                                 <!-- PAGE CONTENT BEGINS -->
                                 <div class="row">
+                                    <div class="col-xs-12 col-sm-6">
+                                        <div class="widget-box">
+                                            <div class="widget-header">
+                                                <h4 class="widget-title">Select Box</h4>
+
+                                                        <span class="widget-toolbar">
+                                                            <a href="#" data-action="collapse">
+                                                                <i class="ace-icon fa fa-chevron-up"></i>
+                                                            </a>
+
+                                                            <a href="#" data-action="close">
+                                                                <i class="ace-icon fa fa-times"></i>
+                                                            </a>
+                                                        </span>
+                                            </div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main">
+                                                    <div>
+                                                        <label for="select-1">File</label>
+
+                                                        <select class="form-control" id="select-1" onchange="$('#target_img').attr('src', 'http://gnn-f02-01:14000/webhdfs/v1/data' + $( '#select-1 option:selected' ).text() + '?user.name=hadoop&op=open')">
+                                                            <option value=""></option>
+                                                            <option value="/sample/cat.jpg">/sample/cat.jpg</option>
+                                                            <option value="/sample/ad_sunglass.png">/sample/ad_sunglass.png</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-xs-6">
                                         <form action="../dummy.html" class="dropzone" id="dropzone">
                                             <div class="fallback">
@@ -452,7 +483,7 @@
                                 </div>
                                 <div>
                                     <div class="col-xs-6">
-                                        <img src="http://gnn-f02-01:14000/webhdfs/v1/data/sample/cat.jpg?user.name=hadoop&op=open">
+                                        <img id="target_img" src="" width="100%">
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="col-sm-7 infobox-container">
