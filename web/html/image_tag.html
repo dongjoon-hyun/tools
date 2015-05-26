@@ -463,22 +463,15 @@
                                                     <div>
                                                         <label for="select-1">File</label>
 
-                                                        <select class="form-control" id="select-1" onchange="$('#target_img').attr('src', 'http://gnn-f02-01:14000/webhdfs/v1/data' + $( '#select-1 option:selected' ).text() + '?user.name=hadoop&op=open')">
+                                                        <select class="form-control" id="select-1" onchange="classifyImage()">
                                                             <option value=""></option>
-                                                            <option value="/sample/cat.jpg">/sample/cat.jpg</option>
-                                                            <option value="/sample/ad_sunglass.png">/sample/ad_sunglass.png</option>
+                                                            <option value="/data/sample/cat.jpg">/data/sample/cat.jpg</option>
+                                                            <option value="/data/sample/ad_sunglass.png">/data/sample/ad_sunglass.png</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-xs-6">
-                                        <form action="../dummy.html" class="dropzone" id="dropzone">
-                                            <div class="fallback">
-                                                <input name="file" type="file" multiple="" />
-                                            </div>
-                                        </form>
                                     </div>
                                 </div>
                                 <div>
@@ -557,39 +550,30 @@
 		</script>
 		<script src="../assets/js/bootstrap.min.js"></script>
 
-		<!-- page specific plugin scripts -->
-        <script src="../assets/js/dropzone.min.js"></script>
-
 		<!-- ace scripts -->
 		<script src="../assets/js/ace-elements.min.js"></script>
 		<script src="../assets/js/ace.min.js"></script>
 
 		<!-- inline scripts related to this page -->
         <script type="text/javascript">
-            jQuery(function($){
-
-                Dropzone.autoDiscover = false;
-                try {
-                    var myDropzone = new Dropzone("#dropzone" , {
-                        paramName: "file", // The name that will be used to transfer the file
-                        maxFilesize: 0.5, // MB
-
-                        addRemoveLinks : true,
-                        dictDefaultMessage :
-                                '<span class="bigger-150 bolder"><i class="ace-icon fa fa-caret-right red"></i> Drop files</span> to upload \
-                                <span class="smaller-80 grey">(or click)</span> <br /> \
-                                <i class="upload-icon ace-icon fa fa-cloud-upload blue fa-3x"></i>'
-                        ,
-                        dictResponseError: 'Error while uploading file!',
-
-                        //change the previewTemplate to use Bootstrap progress bars
-                        previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n  <div class=\"dz-details\">\n    <div class=\"dz-filename\"><span data-dz-name></span></div>\n    <div class=\"dz-size\" data-dz-size></div>\n    <img data-dz-thumbnail />\n  </div>\n  <div class=\"progress progress-small progress-striped active\"><div class=\"progress-bar progress-bar-success\" data-dz-uploadprogress></div></div>\n  <div class=\"dz-success-mark\"><span></span></div>\n  <div class=\"dz-error-mark\"><span></span></div>\n  <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>\n</div>"
-                    });
-                } catch(e) {
-                    alert('Dropzone.js does not support older browsers!');
-                }
-
-            });
+            function classifyImage() {
+                var file = $( '#select-1 option:selected' ).text();
+                var url = 'http://gnn-f02-01:14000/webhdfs/v1' + file + '?user.name=hadoop&op=open';
+                $('#target_img').attr('src', url);
+                $.ajax({
+                    type: "GET",
+                    username:"hadoop",
+                    password:"tip",
+                    url:"http://gnn-f05-04:8080/api/v1/classify/bvlc_reference_caffenet," + encodeURIComponent(file) + ",3",
+                    headers: {
+                        Authorization: "Basic " + btoa("hadoop:tip")
+                    }
+                }).done(function(json) {
+                    alert(JSON.stringify(json));
+                }).fail( function(xhr, textStatus, errorThrown) {
+                    alert(JSON.stringify(xhr));
+                });
+            }
         </script>
 
 		<!-- the following scripts are used in demo only for onpage help and you don't need them -->
