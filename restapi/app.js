@@ -1,5 +1,6 @@
 var express = require('express');
 var os = require('os');
+var cors = require('cors');
 var child_process = require('child_process');
 var app = express();
 var user = 'nobody';
@@ -20,6 +21,7 @@ app.use(function(req, res, next) {
         next();
     }
 });
+app.use(cors());
 
 var usage = '\
 <html>\
