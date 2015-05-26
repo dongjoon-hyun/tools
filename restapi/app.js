@@ -50,6 +50,7 @@ app.get('/api/v1/:op/:param', function(req, res) {
         function (error, stdout, stderr) {
             console.log('stdout: ' + stdout);
             console.log('stderr: ' + stderr);
+            res.setHeader('Access-Control-Allow-Origin', '*');
             res.json({ 
                 "user": user,
                 "ip": req.ip,
