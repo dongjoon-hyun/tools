@@ -132,7 +132,7 @@ EOF''' % locals())
 
 def ngram_ko(n,inpath,outpath,sep='\01'):
 	'''
-	[Spark]\tfab ngram:2,/user/hadoop/tf_result,/user/hadoop/ngram_result
+	[Spark]\tfab ngram_ko:2,/user/hadoop/tf_result,/user/hadoop/ngram_result
 	'''
 	if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
 		print 'Unauthorized path: %(outpath)s' % locals()
