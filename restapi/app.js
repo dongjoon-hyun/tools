@@ -42,7 +42,7 @@ var usage = '\
   </table>\
 </html>';
 var hostname = os.hostname();
-usage = usage.replace(/placeholder/g, 'http://' + hostname + ':8080/api/v1');
+usage = usage.replace(/placeholder/g, 'http://hadoop:tip@' + hostname + ':8080/api/v1');
 
 app.get('/api/v1/:op/:param', function(req, res) {
     console.log(user + "@" + req.ip + ": " + req.originalUrl);
