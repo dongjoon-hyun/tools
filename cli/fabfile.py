@@ -224,11 +224,11 @@ EOF''' % locals())
 	run(cmd)
 
 @hosts('50.1.100.101')
-def classify(name, path, topk=5):
+def predict(name, path, topk=5):
 	'''
-	[Caffe]\tfab classify:bvlc_reference_caffenet,/data/sample/ad_sunglass.png,3
+	[Caffe]\tfab predict:bvlc_reference_caffenet,/data/sample/ad_sunglass.png,3
 	'''
-	run('''cat <<EOF > /home/hadoop/demo/caffe_classify.py
+	run('''cat <<EOF > /home/hadoop/demo/predict.py
 # -*- coding: utf-8 -*-
 import numpy as np
 import sys
@@ -252,5 +252,5 @@ predicted_top_classes = list(reversed(prediction[0].argsort()[-%(topk)s:]))
 for c in predicted_top_classes:
         print synset_list[c], prediction[0][c]
 EOF''' % locals())
-	cmd = '/usr/local/bin/python2.7 /home/hadoop/demo/caffe_classify.py 2> /dev/null'
+	cmd = '/usr/local/bin/python2.7 /home/hadoop/demo/predict.py 2> /dev/null'
 	run(cmd)
