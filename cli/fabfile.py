@@ -192,7 +192,7 @@ def word_cloud(inpath,topk,outpath,sep='\01'):
 	run('''cat <<'EOF' > /home/hadoop/demo/word_cloud.R
 library(wordcloud)
 df <- read.table("/hdfs%(inpath)s", header=F, sep="\\001", quote="\\002", stringsAsFactors=F, col.names=c('word','freq'),nrows=%(topk)s)
-png("/hdfs%(outpath)s", width=640,height=480)
+png("/hdfs%(outpath)s", width=400,height=400)
 wordcloud(df$word,df$freq, scale=c(8,.2),min.freq=3,max.words=Inf, random.order=FALSE, rot.per=.15, colors=brewer.pal(8,"Dark2"))
 dev.off()
 EOF''' % locals())
