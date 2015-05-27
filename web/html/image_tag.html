@@ -442,10 +442,10 @@
                             <div class="col-xs-12">
                                 <!-- PAGE CONTENT BEGINS -->
                                 <div class="row">
-                                    <div class="col-xs-12 col-sm-6">
+                                    <div class="col-xs-12 col-sm-12">
                                         <div class="widget-box">
                                             <div class="widget-header">
-                                                <h4 class="widget-title">Select Box</h4>
+                                                <h4 class="widget-title">File</h4>
 
                                                         <span class="widget-toolbar">
                                                             <a href="#" data-action="collapse">
@@ -461,8 +461,6 @@
                                             <div class="widget-body">
                                                 <div class="widget-main">
                                                     <div>
-                                                        <label for="select-1">File</label>
-
                                                         <select class="form-control" id="select-1" onchange="classifyImage()">
                                                             <option value=""></option>
                                                             <option value="/data/sample/cat.jpg">/data/sample/cat.jpg</option>
@@ -474,48 +472,51 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="vspace-12-sm"></div>
+
                                 <div>
                                     <div class="col-xs-6">
-                                        <img id="target_img" src="" width="100%">
+                                        <img id="target_img" src="" width="100%" height="300px">
                                     </div>
-                                    <div class="col-xs-6">
-                                        <div class="col-sm-7 infobox-container">
-                                            <div class="infobox infobox-red">
+                                    <div class="col-xs-6" id="image_tag" hidden>
+                                        <div class="col-sm-12 infobox-container">
+                                            <div class="infobox infobox-red" style="width:100%">
                                                 <div class="infobox-icon">
-                                                    <i class="ace-icon fa fa-comments"></i>
+                                                    <i class="ace-icon fa fa-bar-chart-o"></i>
                                                 </div>
 
                                                 <div class="infobox-data">
-                                                    <span class="infobox-data-number">32</span>
-                                                    <div class="infobox-content">comments + 2 reviews</div>
+                                                    <span class="infobox-data-number" id="top1"></span>
+                                                    <div class="infobox-content" id="rate1"></div>
                                                 </div>
-                                                <div class="stat stat-important">8%</div>
+                                                <div class="stat stat-success">1</div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-7 infobox-container">
-                                            <div class="infobox infobox-green">
+                                        <div class="col-sm-12 infobox-container">
+                                            <div class="infobox infobox-green" style="width:100%">
                                                 <div class="infobox-icon">
-                                                    <i class="ace-icon fa fa-comments"></i>
+                                                    <i class="ace-icon fa fa-bar-chart-o"></i>
                                                 </div>
 
                                                 <div class="infobox-data">
-                                                    <span class="infobox-data-number">32</span>
-                                                    <div class="infobox-content">comments + 2 reviews</div>
+                                                    <span class="infobox-data-number" id="top2"></span>
+                                                    <div class="infobox-content" id="rate2"></div>
                                                 </div>
-                                                <div class="stat stat-success">8%</div>
+                                                <div class="stat stat-success">2</div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-7 infobox-container">
-                                            <div class="infobox infobox-blue">
+                                        <div class="col-sm-12 infobox-container">
+                                            <div class="infobox infobox-blue" style="width:100%">
                                                 <div class="infobox-icon">
-                                                    <i class="ace-icon fa fa-comments"></i>
+                                                    <i class="ace-icon fa fa-bar-chart-o"></i>
                                                 </div>
 
                                                 <div class="infobox-data">
-                                                    <span class="infobox-data-number">32</span>
-                                                    <div class="infobox-content">comments + 2 reviews</div>
+                                                    <span class="infobox-data-number" id="top3"></span>
+                                                    <div class="infobox-content" id="rate3"></div>
                                                 </div>
-                                                <div class="stat stat-success">8%</div>
+                                                <div class="stat stat-success">3</div>
                                             </div>
                                         </div>
                                     </div>
@@ -560,6 +561,12 @@
                 var file = $( '#select-1 option:selected' ).text();
                 var url = 'http://gnn-f02-01:14000/webhdfs/v1' + file + '?user.name=hadoop&op=open';
                 $('#target_img').attr('src', url);
+                $('#top1').text('');
+                $('#top2').text('');
+                $('#top3').text('');
+                $('#rate1').text('');
+                $('#rate2').text('');
+                $('#rate3').text('');
                 $.ajax({
                     type: "GET",
                     username:"hadoop",
@@ -569,7 +576,14 @@
                         Authorization: "Basic " + btoa("hadoop:tip")
                     }
                 }).done(function(json) {
-                    alert(JSON.stringify(json));
+                    $('#image_tag').show();
+                    var result = json['result'].split('\n');
+                    $('#top1').text(result[0].substring(0,result[0].lastIndexOf(" ")));
+                    $('#rate1').text(result[0].substring(result[0].lastIndexOf(" ")));
+                    $('#top2').text(result[1].substring(0,result[1].lastIndexOf(" ")));
+                    $('#rate2').text(result[1].substring(result[1].lastIndexOf(" ")));
+                    $('#top3').text(result[2].substring(0,result[2].lastIndexOf(" ")));
+                    $('#rate3').text(result[2].substring(result[2].lastIndexOf(" ")));
                 }).fail( function(xhr, textStatus, errorThrown) {
                     alert(JSON.stringify(xhr));
                 });
