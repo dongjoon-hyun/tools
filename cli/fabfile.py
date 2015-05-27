@@ -22,28 +22,28 @@ output['running'] = False
 
 def ls(inpath='/'):
 	'''
-	[HDFS]\t\tfab ls:/data/sample
+	[HDFS]\tfab ls:/data/sample
 	'''
 	cmd = '/usr/bin/hadoop fs -ls %(inpath)s 2> /dev/null' % locals()
 	run(cmd)
 
 def count(inpath):
 	'''
-	[HDFS]\t\tfab count:/data/text/newsgroup
+	[HDFS]\tfab count:/data/text/newsgroup
 	'''
 	cmd = '/usr/bin/hadoop fs -count %(inpath)s 2> /dev/null' % locals()
 	run(cmd)
 
 def du(inpath):
 	'''
-	[HDFS]\t\tfab du:/data/sample
+	[HDFS]\tfab du:/data/sample
 	'''
 	cmd = '/usr/bin/hadoop fs -du -h %(inpath)s 2> /dev/null' % locals()
 	run(cmd)
 
 def text(inpath, count=5):
 	'''
-	[HDFS]\t\tfab text:/data/sample/hani_news.head.txt.gz,5
+	[HDFS]\tfab text:/data/sample/hani_news.head.txt.gz,5
 	'''
 	cmd = '/usr/bin/hadoop fs -text %(inpath)s 2> /dev/null | head -n %(count)s' % locals()
 	run(cmd)
@@ -64,7 +64,7 @@ EOF''' % locals())
 
 def sql(sql='show tables'):
 	'''
-	[Hive]\t\tfab sql:'select count(*) from data.news'
+	[Hive]\tfab sql:'select count(*) from data.news'
 	'''
 	run('''cat <<EOF > /home/hadoop/demo/hive.sql
 %(sql)s
@@ -99,6 +99,32 @@ sc = SparkContext(appName='Count Line')
 print sc.textFile('%(inpath)s').count()
 EOF''' % locals())
 	cmd = '/usr/bin/spark-submit --num-executors 300 /home/hadoop/demo/count_line.py 2> /dev/null'
+	run(cmd)
+
+def count_line_with(inpath, keyword):
+	'''
+	[Spark]\tfab count_line_with:/data/text/wikipedia/ko*,'<page>'
+	'''
+	run('''cat <<EOF > /home/hadoop/demo/count_line_with.py
+# -*- coding: utf-8 -*-
+from pyspark import SparkContext
+sc = SparkContext(appName='Grep')
+print sc.textFile('%(inpath)s').filter(lambda line: '%(keyword)s' in line).count()
+EOF''' % locals())
+	cmd = '/usr/bin/spark-submit --num-executors 300 /home/hadoop/demo/count_line_with.py 2> /dev/null'
+	run(cmd)
+
+def grep(inpath, outpath, keyword):
+	'''
+	[Spark]\tfab grep:/data/text/wikipedia/ko*,/user/hadoop/grep_result,'<page>'
+	'''
+	run('''cat <<EOF > /home/hadoop/demo/grep.py
+# -*- coding: utf-8 -*-
+from pyspark import SparkContext
+sc = SparkContext(appName='Grep')
+sc.textFile('%(inpath)s').filter(lambda line: '%(keyword)s' in line).saveAsTextFile('%(outpath)s')
+EOF''' % locals())
+	cmd = '/usr/bin/spark-submit --num-executors 300 /home/hadoop/demo/grep.py 2> /dev/null'
 	run(cmd)
 
 def tf_ko(inpath,outpath,sep='\01'):
@@ -161,7 +187,7 @@ EOF''' % locals())
 
 def word_cloud(inpath):
 	'''
-	[R]\t\tfab word_cloud:/user/hadoop/news_word_count.txt
+	[R]\tfab word_cloud:/user/hadoop/news_word_count.txt
 	* output: http://gnn-f05-04/images/wordcloud.png
 	'''
 	cmd = '/usr/bin/Rscript --vanilla /home/hadoop/demo/word_cloud.R'
