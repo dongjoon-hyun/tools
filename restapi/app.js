@@ -26,7 +26,7 @@ app.use(cors());
 var usage = '\
 <html>\
   <table border="1">\
-    <tr><td>predict   </td><td>  [Caffe] </td><td><a href="placeholder/predict/bvlc_reference_caffenet%2Fdata%2Fsample%2Fad_sunglass.png,3">placeholder/classify/bvlc_reference_caffenet%2Fdata%2Fsample%2Fad_sunglass.png,3</a></td></tr>\
+    <tr><td>predict   </td><td>  [Caffe] </td><td><a href="placeholder/predict/bvlc_reference_caffenet%2Fdata%2Fsample%2Fad_sunglass.png,3">placeholder/predict/bvlc_reference_caffenet%2Fdata%2Fsample%2Fad_sunglass.png,3</a></td></tr>\
     <tr><td>count      </td><td>  [HDFS]  </td><td><a href="placeholder/count/%2Fdata%2Ftext%2Fnewsgroup">placeholder/count/%2Fdata%2Ftext%2Fnewsgroup</a></td></tr>\
     <tr><td>count_line </td><td>  [Spark] </td><td><a href="placeholder/count_line/%2Fdata%2Fimage%2Fimagenet%2F%2A.txt">placeholder/count_line/%2Fdata%2Fimage%2Fimagenet%2F%2A.txt</a></td></tr>\
     <tr><td>du         </td><td>  [HDFS]  </td><td><a href="placeholder/du/%2Fdata%2Fsample">placeholder/du/%2Fdata%2Fsample</a></td></tr>\
