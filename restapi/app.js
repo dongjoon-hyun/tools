@@ -5,6 +5,7 @@ var child_process = require('child_process');
 var app = express();
 var user = 'nobody';
 
+/*
 app.use(function(req, res, next) {
     var auth;
 
@@ -21,6 +22,7 @@ app.use(function(req, res, next) {
         next();
     }
 });
+*/
 app.use(cors());
 
 var usage = '\
