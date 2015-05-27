@@ -424,31 +424,57 @@
 				<!-- /section:basics/content.breadcrumbs -->
 				<div class="page-content">
                     <div class="page-content-area">
-                    <div class="page-header">
-                        <h1>
-                            Image
-                            <small>
-                                <i class="ace-icon fa fa-angle-double-right"></i>
+                        <div class="page-header">
+                            <h1>
+                                Image
+                                <small>
+                                    <i class="ace-icon fa fa-angle-double-right"></i>
 
-                            </small>
-                        </h1>
-                    </div><!-- /.page-header -->
+                                </small>
+                            </h1>
+                        </div><!-- /.page-header -->
 
-                    <div class="row">
-                    <div class="col-xs-12">
-                    <!-- PAGE CONTENT BEGINS -->
-                    <div>
-                    <ul class="ace-thumbnails clearfix">
-                    <li>
-                        <img width="150" height="150" alt="150x150" src="http://gnn-f02-01:14000/webhdfs/v1/data/sample/cat.jpg?user.name=hadoop&op=open" />
-                    </li>
-                    <li>
-                        <img width="150" height="150" alt="150x150" src="http://gnn-f02-01:14000/webhdfs/v1/data/sample/ad_sunglass.png?user.name=hadoop&op=open" />
-                    </li>
-                    </ul>
-                    </div><!-- PAGE CONTENT ENDS -->
-                    </div><!-- /.col -->
-                    </div><!-- /.row -->
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Location</th>
+                                        <th>Record</th>
+                                        <th>Size</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>ImageNet</td>
+                                        <td>/data/image/imagenet</td>
+                                        <td>14,197,122</td>
+                                        <td>138.8GB</td>
+                                    </tr>
+                                    <tr>
+                                        <td>MNIST</td>
+                                        <td>/data/image/mnist</td>
+                                        <td>70,000</td>
+                                        <td>0.05GB</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div><!-- /.span -->
+                            <div class=col-xs-12">
+                                <div style="padding-left: 10px;">
+                                    <ul class="ace-thumbnails clearfix">
+                                        <li>
+                                            <img width="150" height="150" alt="150x150" src="http://gnn-f02-01:14000/webhdfs/v1/data/sample/cat.jpg?user.name=hadoop&op=open" />
+                                        </li>
+                                        <li>
+                                            <img width="150" height="150" alt="150x150" src="http://gnn-f02-01:14000/webhdfs/v1/data/sample/ad_sunglass.png?user.name=hadoop&op=open" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div><!-- /.row -->
                     </div><!-- /.page-content-area -->
 				</div><!-- /.page-content -->
 			</div><!-- /.main-content -->
