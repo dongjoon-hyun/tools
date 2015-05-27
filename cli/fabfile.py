@@ -185,12 +185,18 @@ EOF''' % locals())
 	cmd = '/usr/bin/spark-submit --num-executors 300 /home/hadoop/demo/ngram_ko.py 2> /dev/null'
 	run(cmd)
 
-def word_cloud(inpath):
+def word_cloud(inpath,topk,outpath,sep='\01'):
 	'''
-	[R]\tfab word_cloud:/user/hadoop/news_word_count.txt
-	* output: http://gnn-f05-04/images/wordcloud.png
+	[R]\tfab word_cloud:/user/hadoop/tf_result/part-00000,100,/user/hadoop/wordcloud.png
 	'''
-	cmd = '/usr/bin/Rscript --vanilla /home/hadoop/demo/word_cloud.R'
+	run('''cat <<'EOF' > /home/hadoop/demo/word_cloud.R
+library(wordcloud)
+df <- read.table("/hdfs%(inpath)s", header=F, sep="\\001", quote="\\002", stringsAsFactors=F, col.names=c('word','freq'),nrows=%(topk)s)
+png("/hdfs%(outpath)s", width=640,height=480)
+wordcloud(df$word,df$freq, scale=c(8,.2),min.freq=3,max.words=Inf, random.order=FALSE, rot.per=.15, colors=brewer.pal(8,"Dark2"))
+dev.off()
+EOF''' % locals())
+	cmd = '/usr/bin/Rscript --vanilla /home/hadoop/demo/word_cloud.R 2> /dev/null'
 	run(cmd)
 
 @hosts('50.1.100.101')
