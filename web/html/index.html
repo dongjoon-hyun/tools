@@ -467,21 +467,21 @@
                                             <pre>
 Available commands:
 
-    train_mnist      [Caffe]	fab train_mnist:gpu=0,mode=GPU,net=net.prototxt
-    predict          [Caffe]	fab predict:bvlc_reference_caffenet,/data/sample/ad_sunglass.png,3
-    word_cloud       [R]		fab word_cloud:/user/hadoop/tf_result/part-00000,100,/user/hadoop/wordcloud.png
-    count_line       [Spark]	fab count_line:/data/image/imagenet/*.txt
-    count_line_with  [Spark]	fab count_line_with:/data/text/wikipedia/ko*,'<page>'
-    grep             [Spark]	fab grep:/data/text/wikipedia/ko*,/user/hadoop/grep_result,'<page>'
-    head             [Spark]	fab head:/data/image/imagenet/*.txt,5
-    ngram_ko         [Spark]	fab ngram:2,/user/hadoop/tf_result,/user/hadoop/ngram_result
-    sql2             [Spark]	fab sql2:'select count(*) from data.news'
-    tf_ko            [Spark]	fab tf_ko:/data/text/news/hani/*,/user/hadoop/tf_result
-    sql              [Hive]		fab sql:'select count(*) from data.news'
-    count            [HDFS]		fab count:/data/text/newsgroup
-    du               [HDFS]		fab du:/data/sample
-    ls               [HDFS]		fab ls:/data/sample
-    text             [HDFS]		fab text:/data/sample/hani_news.head.txt.gz,5
+    train_mnist      [Caffe]  fab train_mnist:gpu=0,mode=GPU,net=net.prototxt
+    predict          [Caffe]  fab predict:bvlc_reference_caffenet,/data/sample/ad_sunglass.png,3
+    word_cloud       [R]      fab word_cloud:/user/hadoop/tf_result/part-00000,100,/user/hadoop/wordcloud.png
+    count_line       [Spark]  fab count_line:/data/image/imagenet/*.txt
+    count_line_with  [Spark]  fab count_line_with:/data/text/wikipedia/ko*,'<page>'
+    grep             [Spark]  fab grep:/data/text/wikipedia/ko*,/user/hadoop/grep_result,'<page>'
+    head             [Spark]  fab head:/data/image/imagenet/*.txt,5
+    ngram_ko         [Spark]  fab ngram:2,/user/hadoop/tf_result,/user/hadoop/ngram_result
+    sql2             [Spark]  fab sql2:'select count(*) from data.news'
+    tf_ko            [Spark]  fab tf_ko:/data/text/news/hani/*,/user/hadoop/tf_result
+    sql              [Hive]   fab sql:'select count(*) from data.news'
+    count            [HDFS]   fab count:/data/text/newsgroup
+    du               [HDFS]   fab du:/data/sample
+    ls               [HDFS]   fab ls:/data/sample
+    text             [HDFS]   fab text:/data/sample/hani_news.head.txt.gz,5
                                             </pre>
                                         </li>
                                     </ol>
