@@ -130,9 +130,9 @@ EOF''' % locals())
 	cmd = '/usr/bin/spark-submit --num-executors 300 /home/hadoop/demo/tf_ko.py 2> /dev/null'
 	run(cmd)
 
-def ngram_ko(n,inpath,outpath,sep='\01'):
+def ngram_ko(n,min,inpath,outpath,sep='\01'):
 	'''
-	[Spark]\tfab ngram_ko:2,/user/hadoop/tf_result,/user/hadoop/ngram_result
+	[Spark]\tfab ngram_ko:2,1000,/user/hadoop/tf_result,/user/hadoop/ngram_result
 	'''
 	if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
 		print 'Unauthorized path: %(outpath)s' % locals()
@@ -150,6 +150,7 @@ def ngram(line):
 counts = sc.textFile('%(inpath)s') \
         .flatMap(ngram) \
         .reduceByKey(lambda a,b: a+b) \
+        .filter(lambda (a,b): b>=%(min)s) \
         .map(lambda (a,b): (b,a)) \
         .sortByKey(0,1) \
         .map(lambda (a,b): '%%s%%c%%s' %% (b,1,a))
