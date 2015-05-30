@@ -1,0 +1,9 @@
+# IDE settings
+.idea
+
+# OS Files
+.DS_Store
+
+# Temporary Files
+tmp
+*~
