@@ -7,3 +7,4 @@
 # Temporary Files
 tmp
 *~
+*.pyc
