@@ -27,7 +27,9 @@ print "\n\n", "-"*80, "\n\n# of IPs: ", len(nn + dn)
 env.warn_only = True
 env.skip_bad_hosts = True
 env.colorize_errors = True
+env.use_ssh_config = True
 env.user = 'root'
+env.key_filename = '~/.ssh/GPU.pem'
 env.timeout = 3
 env.parallel = True
 output['status'] = False
@@ -201,6 +203,30 @@ def netstat():
 	Task Tracker CLOSE_WAIT Bug Check 
 	'''
 	cmd = "netstat -n | grep CLOSE_WAIT | wc -l | grep '[0-9][0-9][0-9][0-9]'"
+	run(cmd)
+
+@roles('nn','dn')
+def overruns():
+	'''
+	Network Packket Overrun Check
+	'''
+	cmd = "ifconfig bond0 | grep overruns | grep -v 'overruns:0'"
+	run(cmd)
+
+@roles('nn','dn')
+def errors():
+	'''
+	Network Packket Overrun Check
+	'''
+	cmd = "ifconfig bond0 | grep errors | grep -v 'errors:0'"
+	run(cmd)
+
+@roles('nn','dn')
+def mtu():
+	'''
+	Network MTU Check
+	'''
+	cmd = "ifconfig bond0 | grep MTU | grep -v 1500"
 	run(cmd)
 
 @roles('nn','dn')
