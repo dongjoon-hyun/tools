@@ -127,6 +127,29 @@ EOF''' % locals())
 	cmd = '/usr/bin/spark-submit --num-executors 300 /home/hadoop/demo/grep.py 2> /dev/null'
 	run(cmd)
 
+def select(inpath, outpath, columns='*', sep='\01'):
+	'''
+	[Spark]\tfab select:/data/text/news/hani/*,/user/hadoop/selected,'1;0'
+	'''
+	run('''cat <<EOF > /home/hadoop/demo/cli_select.py
+# -*- coding: utf-8 -*-
+from pyspark import SparkContext
+import re
+sc = SparkContext(appName='Select')
+columns = '%(columns)s'
+def select(alist, cols):
+	blist = [alist[c] for c in cols]
+	return ('%%c' %% (1)).join(blist)
+if '*' == columns:
+	cols = xrange(len(columns.split(';')))
+else:
+	cols = [int(i) for i in columns.split(';')]
+sc.textFile('%(inpath)s').map(lambda line: select(re.split('%%c' %% (1),line), cols)).saveAsTextFile('%(outpath)s')
+EOF''' % locals())
+	cmd = '/usr/bin/spark-submit --num-executors 300 /home/hadoop/demo/cli_select.py 2> /dev/null'
+	run(cmd)
+
+
 def tf_ko(inpath,outpath,sep='\01'):
 	'''
 	[Spark]\tfab tf_ko:/data/text/news/hani/*,/user/hadoop/tf_result
