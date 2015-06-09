@@ -198,6 +198,14 @@ def sensors():
 	run(cmd)
 
 @roles('nn','dn')
+def fan():
+	'''
+	Fan Speed
+	'''
+	cmd = "ipmi-sensors | grep Fan | grep RPM"
+	run(cmd)
+
+@roles('nn','dn')
 def netstat():
 	'''
 	Task Tracker CLOSE_WAIT Bug Check 
@@ -331,5 +339,14 @@ def r():
 	'''
 	cmd = "/usr/bin/R --version | head -n 1 | cut -d ' ' -f 3"
 	expected = '3.1.3'
+	run('''[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")''' % locals())
+
+@roles('dn')
+def sge_execd():
+	'''
+	Sun Grid Engine Daemon
+	'''
+	cmd = "ps aux | grep sge_execd | grep hmi | wc -l"
+	expected = '1'
 	run('''[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")''' % locals())
 
