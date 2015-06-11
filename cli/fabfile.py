@@ -257,7 +257,7 @@ import numpy as np
 import sys
 sys.path.insert(0, '/home/hadoop/caffe/distribute/python')
 import caffe
-caffe.set_mode_gpu()
+caffe.set_mode_cpu()
 
 synset_list = []
 with open('/hdfs/model/caffe/%(name)s/synset_words.txt', 'r') as f_read:
@@ -269,7 +269,7 @@ net = caffe.Classifier('/hdfs/model/caffe/%(name)s/deploy.prototxt', '/hdfs/mode
         channel_swap=(2,1,0), \
         raw_scale=255, \
         image_dims=(256, 256))
-input_image = caffe.io.load_image('/hdfs/%(path)s')
+input_image = caffe.io.load_image('/hdfs%(path)s')
 prediction = net.predict([input_image])
 predicted_top_classes = list(reversed(prediction[0].argsort()[-%(topk)s:]))
 for c in predicted_top_classes:
