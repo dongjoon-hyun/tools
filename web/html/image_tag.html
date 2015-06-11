@@ -568,7 +568,7 @@
         <script type="text/javascript">
             function classifyImage() {
                 var file = $( '#select-1 option:selected' ).text();
-                var url = 'http://gnn-f02-01:14000/webhdfs/v1' + file + '?user.name=hadoop&op=open';
+                var url = 'http://tip:14000/webhdfs/v1' + file + '?user.name=hadoop&op=open';
                 $('#target_img').attr('src', url);
                 $('#top1').text('');
                 $('#top2').text('');
@@ -580,7 +580,7 @@
                     type: "GET",
                     username:"hadoop",
                     password:"tip",
-                    url:"http://hadoop:tip@gnn-f05-04:8080/api/v1/predict/bvlc_reference_caffenet," + encodeURIComponent(file) + ",3",
+                    url:"http://hadoop:tip@tip:8080/api/v1/predict/bvlc_reference_caffenet," + encodeURIComponent(file) + ",3",
                     headers: {
                         Authorization: "Basic " + btoa("hadoop:tip")
                     }

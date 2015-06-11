@@ -571,7 +571,7 @@
                 }
 
                 $.ajax({
-                    url:"http://gnn-f02-01:14000/webhdfs/v1/data/audio/speech?user.name=hadoop&op=liststatus",
+                    url:"http://tip:14000/webhdfs/v1/data/audio/speech?user.name=hadoop&op=liststatus",
                 }).done(function(json) {
                     var result = json['FileStatuses']['FileStatus'];
                     alert(JSON.stringify(result));
