@@ -194,7 +194,7 @@ def sensors():
 	Sensors : Chip `Intel digital thermal sensor' (confidence: 9)
 		  Chip `IPMI BMC KCS' (confidence: 8)
 	'''
-	cmd = "sensors | awk '{print $3}' | grep '+[6-9]'"
+	cmd = "sensors | awk '{print $3}' | grep '+[0-9]' | sort -r | head -1"
 	run(cmd)
 
 @roles('nn','dn')
@@ -202,7 +202,7 @@ def fan():
 	'''
 	Fan Speed
 	'''
-	cmd = "ipmi-sensors | grep Fan | grep RPM"
+	cmd = "ipmi-sensors | grep Fan | grep RPM | awk -F '|' '{print $4}' | sort -r | head -1"
 	run(cmd)
 
 @roles('nn','dn')
