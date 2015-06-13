@@ -350,3 +350,26 @@ def sge_execd():
 	expected = '1'
 	run('''[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")''' % locals())
 
+@roles('dn')
+def hmount():
+	'''
+	Check /hdfs/ mounting
+	'''
+	cmd = "ls /hdfs"
+	run(cmd)
+
+@roles('nn','dn')
+def alive():
+	'''
+	Check server are alive
+	'''
+	cmd = "echo alive"
+	run(cmd)
+
+@roles('dn')
+def gpu_temp():
+	'''
+	GPU Temperature
+	'''
+	cmd = "nvidia-smi -q -d TEMPERATURE | grep 'GPU Current Temp'"
+	run(cmd)
