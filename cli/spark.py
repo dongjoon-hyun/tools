@@ -166,3 +166,20 @@ counts.saveAsTextFile('%(outpath)s')
 EOF''' % locals())
 	cmd = '/usr/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.ngram_ko.py 2> /dev/null'
 	run(cmd)
+
+@task
+def sent2kma(inpath, outpath, numpartitions):
+    '''
+    fab spark.sent2kma:/user/hadoop/demo/nlp/1000_news_sample.txt,/user/hadoop/demo/nlp/1000_news_sample_kma.txt,20
+    '''
+    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 /hdfs/user/hadoop/demo/nlp/SparkJavisNLP.py %(inpath)s %(outpath)s, %(numpartitions)s 2> /dev/null' % locals()
+    run(cmd)
+
+
+@task
+def word2vec(inpath, queryword):
+    '''
+    fab spark.word2vec:/user/hadoop/demo/nlp/1000_news_sample_kma.txt,대통령
+    '''
+    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 /hdfs/user/hadoop/demo/nlp/SparkWord2Vec.py %(inpath)s %(queryword)s 2> /dev/null' % locals()
+    run(cmd)
