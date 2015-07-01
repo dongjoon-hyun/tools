@@ -167,6 +167,42 @@ EOF''' % locals())
 	cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.ngram_ko.py 2> /dev/null'
 	run(cmd)
 
+
+@task
+def doc2sent(inpath, outpath):
+    '''
+    fab spark.doc2sent:/user/hadoop/demo/nlp/hani-doc,/user/hadoop/demo/nlp/hani-sent
+    '''
+    run('''cat <<EOF > /home/hadoop/demo/spark.doc2sent.py
+# -*- encoding: utf-8 -*-
+
+from pyspark.context import SparkContext
+from pyspark.conf import SparkConf
+import sys
+
+inputFileName = '%(inpath)s'
+outputFileName = '%(outpath)s'
+print sys.argv
+
+conf = SparkConf()
+conf.setAppName('doc2sent')
+sc = SparkContext(conf=conf)
+
+docs = sc.textFile(inputFileName)
+numDocs = docs.count()
+sents = docs.flatMap(lambda line: line.split('.'))
+numSents = sents.count()
+sents.saveAsTextFile(outputFileName)
+for s in sents.take(5):
+    print s.encode('utf-8')
+print 'Documents: ' + str(numDocs) + ' -> Sentences: ' + str(numSents)
+print 'Completed: ' + outputFileName
+EOF''' % locals())
+
+    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 /home/hadoop/demo/spark.doc2sent.py 2> /dev/null'
+    run(cmd)
+
+
 @task
 def sent2kma(inpath, outpath, numpartitions, numthreads):
     '''
