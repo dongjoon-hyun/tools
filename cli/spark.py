@@ -124,7 +124,7 @@ regex = re.compile(r'[%%s\s0-9a-zA-Z~·]+' %% re.escape(string.punctuation))
 sc = SparkContext(appName='Term Frequency')
 counts = sc.textFile('%(inpath)s') \
         .map(lambda line: re.split('%%c' %% (1),line)[1]) \
-        .map(lambda line: line.replace(u"‘"," ").replace(u"’"," ").replace(u"“"," ").replace(u"”"," ").replace(u"△"," ").replace(u"◇"," ")) \
+        .map(lambda line: line.replace(u"'"," ").replace(u"’"," ").replace(u"“"," ").replace(u"”"," ").replace(u"△"," ").replace(u"◇"," ")) \
         .flatMap(lambda line: regex.split(line)) \
         .filter(lambda word: len(word.strip())>0) \
         .map(lambda word: (word, 1)) \
@@ -168,11 +168,110 @@ EOF''' % locals())
 	run(cmd)
 
 @task
-def sent2kma(inpath, outpath, numpartitions):
+def sent2kma(inpath, outpath, numpartitions, numthreads):
     '''
-    fab spark.sent2kma:/user/hadoop/demo/nlp/1000_news_sample.txt,/user/hadoop/demo/nlp/1000_news_sample_kma.txt,20
+    fab spark.sent2kma:/user/hadoop/demo/nlp/1000_news_sample.txt,/user/hadoop/demo/nlp/1000_news_sample_kma.txt,20,4
     '''
-    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 /hdfs/user/hadoop/demo/nlp/SparkJavisNLP.py %(inpath)s %(outpath)s, %(numpartitions)s 2> /dev/null' % locals()
+
+    run('''cat <<EOF > /home/hadoop/demo/spark.sent2kma.py
+# -*- encoding: utf-8 -*-
+
+from pyspark.context import SparkContext
+from pyspark.conf import SparkConf
+import sys
+
+
+nlpModuleName = 'kma'
+inputFileName = '%(inpath)s'
+outputFileName = '%(outpath)s'
+numPartitions = int('%(numpartitions)s')
+numThreads = int('%(numthreads)s')
+print sys.argv
+
+conf = SparkConf()
+conf.setAppName('sent2kma')
+sc = SparkContext(conf=conf)
+
+scNLPModuleName = sc.broadcast(nlpModuleName)
+scNumThreads = sc.broadcast(numThreads)
+
+sents = sc.textFile(inputFileName)
+if numPartitions >= 1 and numPartitions <= 30:
+    print 'Repartition: ' + str(numPartitions)
+    sents = sents.repartition(numPartitions)
+
+def runKMA(pindex, lines):
+    import sys
+    sys.path.append('/hdfs/user/hadoop/javisnlp/')
+    from JavisNLP import JavisNLP
+    nlp = JavisNLP()
+    nlp.init('/hdfs/user/hadoop/javisnlp/config/NLU.cfg')
+    new_lines = nlp.runBatch(list(lines), scNumThreads.value, scNLPModuleName.value)
+    return new_lines
+
+
+results = sents.mapPartitionsWithIndex(runKMA)
+results.saveAsTextFile(outputFileName)
+for s in results.take(5):
+    print s.encode('utf-8')
+print 'Completed: ' + outputFileName
+EOF''' % locals())
+
+    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --driver-memory 4G --executor-memory 4G  --conf spark.executor.extraLibraryPath=/hdfs/user/hadoop/javisnlp/ /home/hadoop/demo/spark.sent2kma.py 2> /dev/null'
+    run(cmd)
+
+
+@task
+def sent2ner(inpath, outpath, numpartitions, numthreads):
+    '''
+    fab spark.sent2ner:/user/hadoop/demo/nlp/1000_news_sample.txt,/user/hadoop/demo/nlp/1000_news_sample_ner.txt,20,4
+    '''
+
+    run('''cat <<EOF > /home/hadoop/demo/spark.sent2ner.py
+# -*- encoding: utf-8 -*-
+
+from pyspark.context import SparkContext
+from pyspark.conf import SparkConf
+import sys
+
+
+nlpModuleName = 'ner'
+inputFileName = '%(inpath)s'
+outputFileName = '%(outpath)s'
+numPartitions = int('%(numpartitions)s')
+numThreads = int('%(numthreads)s')
+print sys.argv
+
+conf = SparkConf()
+conf.setAppName('sent2ner')
+sc = SparkContext(conf=conf)
+
+scNLPModuleName = sc.broadcast(nlpModuleName)
+scNumThreads = sc.broadcast(numThreads)
+
+sents = sc.textFile(inputFileName)
+if numPartitions >= 1 and numPartitions <= 30:
+    print 'Repartition: ' + str(numPartitions)
+    sents = sents.repartition(numPartitions)
+
+def runNER(pindex, lines):
+    import sys
+    sys.path.append('/hdfs/user/hadoop/javisnlp/')
+    from JavisNLP import JavisNLP
+    nlp = JavisNLP()
+    nlp.init('/hdfs/user/hadoop/javisnlp/config/NLU.cfg')
+    new_lines = nlp.runBatch(list(lines), scNumThreads.value, scNLPModuleName.value)
+    return new_lines
+
+
+results = sents.mapPartitionsWithIndex(runNER)
+results.saveAsTextFile(outputFileName)
+for s in results.take(5):
+    print s.encode('utf-8')
+print 'Completed: ' + outputFileName
+EOF''' % locals())
+
+    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --driver-memory 4G --executor-memory 4G  --conf spark.executor.extraLibraryPath=/hdfs/user/hadoop/javisnlp/ /home/hadoop/demo/spark.sent2ner.py 2> /dev/null'
     run(cmd)
 
 
