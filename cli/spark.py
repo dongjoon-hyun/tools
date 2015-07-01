@@ -22,7 +22,7 @@ sc = SparkContext(appName='Head')
 for x in sc.textFile('%(inpath)s').take(%(count)s):
 	print x.encode('utf8')
 EOF''' % locals())
-	cmd = '/usr/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.head.py 2> /dev/null'
+	cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.head.py 2> /dev/null'
 	run(cmd)
 
 @task
@@ -39,7 +39,7 @@ sqlContext = HiveContext(sc)
 for x in sqlContext.sql('%(sql)s').collect():
 	print x
 EOF''' % locals())
-	cmd = 'HADOOP_CONF_DIR=/etc/hive/conf /usr/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.sql.py 2> /dev/null'
+	cmd = 'HADOOP_CONF_DIR=/etc/hive/conf /opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.sql.py 2> /dev/null'
 	run(cmd)
 
 @task
@@ -53,7 +53,7 @@ from pyspark import SparkContext
 sc = SparkContext(appName='Count Line')
 print sc.textFile('%(inpath)s').count()
 EOF''' % locals())
-	cmd = '/usr/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.count_line.py 2> /dev/null'
+	cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.count_line.py 2> /dev/null'
 	run(cmd)
 
 @task
@@ -67,7 +67,7 @@ from pyspark import SparkContext
 sc = SparkContext(appName='Grep')
 print sc.textFile('%(inpath)s').filter(lambda line: '%(keyword)s' in line).count()
 EOF''' % locals())
-	cmd = '/usr/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.count_line_with.py 2> /dev/null'
+	cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.count_line_with.py 2> /dev/null'
 	run(cmd)
 
 @task
@@ -81,7 +81,7 @@ from pyspark import SparkContext
 sc = SparkContext(appName='Grep')
 sc.textFile('%(inpath)s').filter(lambda line: '%(keyword)s' in line).saveAsTextFile('%(outpath)s')
 EOF''' % locals())
-	cmd = '/usr/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.grep.py 2> /dev/null'
+	cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.grep.py 2> /dev/null'
 	run(cmd)
 
 @task
@@ -104,7 +104,7 @@ else:
 	cols = [int(i) for i in columns.split(';')]
 sc.textFile('%(inpath)s').map(lambda line: select(re.split('%%c' %% (1),line), cols)).saveAsTextFile('%(outpath)s')
 EOF''' % locals())
-	cmd = '/usr/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.select.py 2> /dev/null'
+	cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.select.py 2> /dev/null'
 	run(cmd)
 
 @task
@@ -134,7 +134,7 @@ counts = sc.textFile('%(inpath)s') \
         .map(lambda (a,b): '%%s%%c%%s' %% (b,1,a))
 counts.saveAsTextFile('%(outpath)s')
 EOF''' % locals())
-	cmd = '/usr/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.tf_ko.py 2> /dev/null'
+	cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.tf_ko.py 2> /dev/null'
 	run(cmd)
 
 @task
@@ -164,7 +164,7 @@ counts = sc.textFile('%(inpath)s') \
         .map(lambda (a,b): '%%s%%c%%s' %% (b,1,a))
 counts.saveAsTextFile('%(outpath)s')
 EOF''' % locals())
-	cmd = '/usr/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.ngram_ko.py 2> /dev/null'
+	cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.ngram_ko.py 2> /dev/null'
 	run(cmd)
 
 @task
