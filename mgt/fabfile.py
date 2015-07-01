@@ -166,11 +166,11 @@ def disk_size():
 	run(cmd)
 
 @roles('dn')
-def disk_ext3():
+def disk_ext4():
 	'''
-	noatime: /data* should have 'ext3'
+	noatime: /data* should have 'ext4'
 	'''
-	run("grep '/data' /etc/fstab | grep -v ext3")
+	run("grep '/data' /etc/fstab | grep -v ext4")
 
 @roles('dn')
 def disk_noatime():
