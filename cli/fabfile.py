@@ -15,6 +15,7 @@ import hive
 import caffe
 import r
 import snu
+import nlp
 
 env.hosts = ['50.1.100.98']
 env.warn_only = True

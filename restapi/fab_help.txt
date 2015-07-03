@@ -7,6 +7,9 @@ Available commands:
     hdfs.ls                fab hdfs.ls:/data/sample
     hdfs.text              fab hdfs.text:/data/sample/hani_news.head.txt.gz,5
     hive.sql               fab hive.sql:'select count(*) from data.news'
+    nlp.doc2sent           fab nlp.doc2sent:/data/sample/sample_hani_doc,/user/hadoop/sample_hani_sent
+    nlp.sent2kma           fab nlp.sent2kma:/data/sample/sample_hani_sent,/user/hadoop/sample_hani_kma,20,4
+    nlp.sent2ner           fab nlp.sent2ner:/data/sample/sample_hani_sent,/user/hadoop/sample_hani_ner,20,4
     r.word_cloud           fab r.word_cloud:/user/hadoop/tf_result/part-00000,100,/user/hadoop/wordcloud.png
     snu.em                 fab snu.em:/data/sample/sample_cluster,/user/hadoop/em_result,4,0.01,20
     snu.kmeans             fab snu.kmeans:/data/sample/sample_cluster,/user/hadoop/kmeans_result,4,0.01,20
@@ -15,13 +18,10 @@ Available commands:
     snu.pagerank           fab snu.pagerank:/data/sample/sample_pagerank,/user/hadoop/pagerank_result,0.01,10,0.85
     spark.count_line       fab spark.count_line:/data/image/imagenet/*.txt
     spark.count_line_with  fab spark.count_line_with:/data/text/wikipedia/ko*,'<page>'
-    spark.doc2sent         fab spark.doc2sent:/user/hadoop/demo/nlp/hani-doc,/user/hadoop/demo/nlp/hani-sent
     spark.grep             fab spark.grep:/data/text/wikipedia/ko*,/user/hadoop/grep_result,'<page>'
     spark.head             fab spark.head:/data/image/imagenet/*.txt,5
     spark.ngram_ko         fab spark.ngram_ko:2,1000,/user/hadoop/tf_result,/user/hadoop/ngram_result
     spark.select           fab spark.select:/data/text/news/hani/*,/user/hadoop/selected,'1;0'
-    spark.sent2kma         fab spark.sent2kma:/user/hadoop/demo/nlp/1000_news_sample.txt,/user/hadoop/demo/nlp/1000_news_sample_kma.txt,20,4
-    spark.sent2ner         fab spark.sent2ner:/user/hadoop/demo/nlp/1000_news_sample.txt,/user/hadoop/demo/nlp/1000_news_sample_ner.txt,20,4
     spark.sql              fab spark.sql:'select count(*) from data.news'
     spark.tf_ko            fab spark.tf_ko:/data/text/news/hani/*,/user/hadoop/tf_result
-    spark.word2vec         fab spark.word2vec:/user/hadoop/demo/nlp/1000_news_sample_kma.txt,대통령
+    spark.word2vec         fab spark.word2vec:/data/sample/sample_hani_kma,대통령
