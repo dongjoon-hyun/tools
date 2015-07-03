@@ -2,7 +2,10 @@ var express = require('express');
 var os = require('os');
 var cors = require('cors');
 var child_process = require('child_process');
+var path = require('path');
 var app = express();
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 var user = 'nobody';
 
 /*
@@ -24,27 +27,6 @@ app.use(function(req, res, next) {
 });
 */
 app.use(cors());
-
-var usage = '\
-<html>\
-  <table border="1">\
-    <tr><td>predict   </td><td>  [Caffe] </td><td><a href="placeholder/predict/bvlc_reference_caffenet,%2Fdata%2Fsample%2Fad_sunglass.png,3">placeholder/predict/bvlc_reference_caffenet,%2Fdata%2Fsample%2Fad_sunglass.png,3</a></td></tr>\
-    <tr><td>count      </td><td>  [HDFS]  </td><td><a href="placeholder/count/%2Fdata%2Ftext%2Fnewsgroup">placeholder/count/%2Fdata%2Ftext%2Fnewsgroup</a></td></tr>\
-    <tr><td>count_line </td><td>  [Spark] </td><td><a href="placeholder/count_line/%2Fdata%2Fimage%2Fimagenet%2F%2A.txt">placeholder/count_line/%2Fdata%2Fimage%2Fimagenet%2F%2A.txt</a></td></tr>\
-    <tr><td>du         </td><td>  [HDFS]  </td><td><a href="placeholder/du/%2Fdata%2Fsample">placeholder/du/%2Fdata%2Fsample</a></td></tr>\
-    <tr><td>head       </td><td>  [Spark] </td><td><a href="placeholder/head/%2Fdata%2Fimage%2Fimagenet%2F%2A.txt,5">placeholder/head/%2Fdata%2Fimage%2Fimagenet%2F%2A.txt,5</a></td></tr>\
-    <tr><td>ls         </td><td>  [HDFS]  </td><td><a href="placeholder/ls/%2Fdata%2Fsample">placeholder/ls/%2Fdata%2Fsample</a></td></tr>\
-    <tr><td>ngram_ko   </td><td>  [Spark] </td><td><a href="placeholder/ngram_ko/2,%2Fuser%2Fhadoop%2Ftf_result,%2Fuser%2Fhadoop%2Fngram_result">placeholder/ngram_ko/2,%2Fuser%2Fhadoop%2Ftf_result,%2Fuser%2Fhadoop%2Fngram_result</a></td></tr>\
-    <tr><td>sql        </td><td>  [Hive]  </td><td><a href="placeholder/sql/%27select%20count(%2A)%20from%20data.news%27">placeholder/sql/%27select%20count(%2A)%20from%20data.news%27</a></td></tr>\
-    <tr><td>sql2       </td><td>  [Hive]  </td><td><a href="placeholder/sql2/%27select%20count(%2A)%20from%20data.news%27">placeholder/sql2/%27select%20count(%2A)%20from%20data.news%27</a></td></tr>\
-    <tr><td>text       </td><td>  [HDFS]  </td><td><a href="placeholder/text/%2Fdata%2Fsample%2Fhani_news.head.txt.gz,5">placeholder/text/%2Fdata%2Fsample%2Fhani_news.head.txt.gz,5</a></td></tr>\
-    <tr><td>tf_ko      </td><td>  [Spark] </td><td><a href="placeholder/tf_ko/%2Fdata%2Ftext%2Fnews%2Fhani%2F%2A,%2Fuser%2Fhadoop%2Ftf_result">placeholder/tf_ko/%2Fdata%2Ftext%2Fnews%2Fhani%2F%2A,%2Fuser%2Fhadoop%2Ftf_result</a></td></tr>\
-    <tr><td>train_mnist</td><td>  [Caffe] </td><td><a href="placeholder/train_mnist/gpu=0,mode=GPU,net=net.prototxt">placeholder/train_mnist/gpu=0,mode=GPU,net=net.prototxt</a></td></tr>\
-    <tr><td>word_cloud </td><td>  [R]     </td><td><a href="placeholder/word_cloud/%2Fuser%2Fhadoop%2Fnews_word_count.txt">placeholder/word_cloud/%2Fuser%2Fhadoop%2Fnews_word_count.txt</a></td></tr>\
-  </table>\
-</html>';
-var hostname = os.hostname();
-usage = usage.replace(/placeholder/g, 'http://hadoop:tip@' + hostname + ':8080/api/v1');
 
 app.get('/api/v1/:op/:param', function(req, res) {
     console.log(user + "@" + req.ip + ": " + req.originalUrl);
@@ -68,11 +50,28 @@ app.get('/api/v1/:op/:param', function(req, res) {
 });
 
 app.get('/api/v1/:op', function(req, res) {
-  res.send(usage);
+  res.redirect('/api/v1/');
 });
 
 app.get('/api/v1/', function(req, res) {
-  res.send(usage);
+	var fs = require('fs');
+	var fab_help = fs.readFileSync('./fab_help.txt', 'utf8');
+	var fab_modules = new Array();
+    var fab_lines = fab_help.split("\n");
+    
+    for	(index = 2; index < fab_lines.length; index++) {
+    	var fab_line = fab_lines[index].trim().split("fab ");
+    	var fab_command = String(fab_line[0]).trim();
+    	var fab_parameter = String(fab_line[1]).replace(fab_command + ":", "").trim();
+    	var fab_url = "/api/v1/" + fab_command + "/" + encodeURIComponent(fab_parameter); 
+        console.log(fab_command + " --> " + fab_parameter);
+        
+        if (fab_command.length > 0) {
+        	fab_modules.push({'name': fab_command, 'parameter': fab_parameter, 'url': fab_url});
+        }
+    }
+    
+	res.render('index', { fab_modules: fab_modules });
 });
 
-app.listen(process.env.PORT || 8080);
+app.listen(process.env.PORT || 5555);
