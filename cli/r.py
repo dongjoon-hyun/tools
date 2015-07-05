@@ -24,3 +24,42 @@ dev.off()
 EOF''' % locals())
 	cmd = '/usr/bin/Rscript --vanilla /home/hadoop/demo/r.word_cloud.R 2> /dev/null'
 	run(cmd)
+
+@task
+def sql(inpath,sql):
+	'''
+	fab r.sql:/data/sample/people.json,'SELECT name FROM people WHERE age <\= 19'
+	'''
+	import os
+	table = os.path.splitext(os.path.basename(inpath))[0]
+	run('''cat <<'EOF' > /home/hadoop/demo/r.sql.R
+suppressMessages(library(SparkR))
+sc <- sparkR.init(appName="SparkR SQL")
+sqlContext <- sparkRSQL.init(sc)
+jsondf <- jsonFile(sqlContext, "%(inpath)s")
+registerTempTable(jsondf, "%(table)s")
+result <- sql(sqlContext, "%(sql)s")
+resultDF <- collect(result)
+print(resultDF)
+sparkR.stop()
+EOF''' % locals())
+	cmd = '/opt/spark/bin/spark-submit /home/hadoop/demo/r.sql.R 2> /dev/null | tail -n +4'
+	run(cmd)
+
+@task
+def summary(inpath):
+	'''
+	fab r.summary:/data/sample/people.json
+	'''
+	import os
+	table = os.path.splitext(os.path.basename(inpath))[0]
+	run('''cat <<'EOF' > /home/hadoop/demo/r.summary.R
+suppressMessages(library(SparkR))
+sc <- sparkR.init(appName="SparkR Summary")
+sqlContext <- sparkRSQL.init(sc)
+jsondf <- jsonFile(sqlContext, "%(inpath)s")
+summary(collect(jsondf))
+sparkR.stop()
+EOF''' % locals())
+	cmd = '/opt/spark/bin/spark-submit /home/hadoop/demo/r.summary.R 2> /dev/null | tail -n +4'
+	run(cmd)
