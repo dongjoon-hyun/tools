@@ -223,3 +223,17 @@ sc.textFile('%(inpath)s').map(parseLine).map(model.predict).saveAsTextFile('%(ou
 EOF''' % locals())
 	cmd = '/opt/spark/bin/spark-submit /home/hadoop/demo/spark.naivebayes_test.py 2> /dev/null'
 	run(cmd)
+
+@task
+def sample(inpath,replacement,fraction,seed,outpath):
+	'''
+	fab spark.sample:/data/sample/sample_movielens_movies.txt,False,0.5,0,/tmp/sampled_movielens
+	'''
+	run('''cat <<EOF > /home/hadoop/demo/spark.sample.py
+# -*- coding: utf-8 -*-
+from pyspark import SparkContext
+sc = SparkContext(appName='Sampling')
+sc.textFile('%(inpath)s').sample(%(replacement)s,%(fraction)s,%(seed)s).saveAsTextFile('%(outpath)s')
+EOF''' % locals())
+	cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.sample.py 2> /dev/null'
+	run(cmd)
