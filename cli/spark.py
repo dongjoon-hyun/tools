@@ -172,5 +172,54 @@ def word2vec(inpath, queryword):
     '''
     fab spark.word2vec:/data/sample/sample_hani_kma,대통령
     '''
-    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 /hdfs/user/hadoop/demo/nlp/SparkWord2Vec.py %(inpath)s %(queryword)s 2> /dev/null' % locals()
+    cmd = '/opt/spark/bin/spark-submit /hdfs/user/hadoop/demo/nlp/SparkWord2Vec.py %(inpath)s %(queryword)s 2> /dev/null' % locals()
     run(cmd)
+
+@task
+def naivebayes_train(inpath, lambda_, outpath):
+	'''
+	fab spark.naivebayes_train:/data/sample/sample_naive_bayes_data.txt,1.0,/tmp/nb.model
+	'''
+	run('''cat <<EOF > /home/hadoop/demo/spark.naivebayes_train.py
+# -*- coding: utf-8 -*-
+from pyspark import SparkContext
+from pyspark.mllib.classification import NaiveBayes
+from pyspark.mllib.linalg import Vectors
+from pyspark.mllib.regression import LabeledPoint
+
+def parseLine(line):
+    parts = line.split(',')
+    label = float(parts[0])
+    features = Vectors.dense([float(x) for x in parts[1].split(' ')])
+    return LabeledPoint(label, features)
+
+sc = SparkContext(appName='Naive Bayes Train')
+data = sc.textFile('%(inpath)s').map(parseLine)
+model = NaiveBayes.train(data, %(lambda_)s)
+model.save(sc, '%(outpath)s')
+EOF''' % locals())
+	cmd = '/opt/spark/bin/spark-submit /home/hadoop/demo/spark.naivebayes_train.py 2> /dev/null'
+	run(cmd)
+
+@task
+def naivebayes_predict(model, inpath, outpath):
+	'''
+	fab spark.naivebayes_predict:/tmp/nb.model,/data/sample/sample_naive_bayes_test.txt,/tmp/nb.result
+	'''
+	run('''cat <<EOF > /home/hadoop/demo/spark.naivebayes_test.py
+# -*- coding: utf-8 -*-
+from pyspark import SparkContext
+from pyspark.mllib.classification import NaiveBayesModel
+from pyspark.mllib.linalg import Vectors
+from pyspark.mllib.regression import LabeledPoint
+
+def parseLine(line):
+    features = Vectors.dense([float(x) for x in line.split(' ')])
+    return features
+
+sc = SparkContext(appName='Naive Bayes Predict')
+model = NaiveBayesModel.load(sc, '%(model)s')
+sc.textFile('%(inpath)s').map(parseLine).map(model.predict).saveAsTextFile('%(outpath)s')
+EOF''' % locals())
+	cmd = '/opt/spark/bin/spark-submit /home/hadoop/demo/spark.naivebayes_test.py 2> /dev/null'
+	run(cmd)
