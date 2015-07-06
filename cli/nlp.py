@@ -173,7 +173,6 @@ def kma(inputText):
 import sys
 
 input = '%(inputText)s'.decode('utf-8')
-print 'INPUT: ' + input
 
 def runNLP(inputText, nlpModuleName):
     import sys
@@ -185,8 +184,7 @@ def runNLP(inputText, nlpModuleName):
     return nlp.run(inputText)
 
 result = runNLP(input, 'kma')
-print 'RESULT: ' + result
-print 'Completed'
+print result
 EOF''' % locals())
 
     cmd = 'export LD_LIBRARY_PATH=/hdfs/user/hadoop/javisnlp/:$LD_LIBRARY_PATH && python2.7 /home/hadoop/demo/nlp.kma.py 2> /dev/null'
@@ -203,7 +201,6 @@ def ner(inputText):
 import sys
 
 input = '%(inputText)s'.decode('utf-8')
-print 'INPUT: ' + input
 
 def runNLP(inputText, nlpModuleName):
     import sys
@@ -215,8 +212,7 @@ def runNLP(inputText, nlpModuleName):
     return nlp.run(inputText)
 
 result = runNLP(input, 'ner')
-print 'RESULT: ' + result
-print 'Completed'
+print result
 EOF''' % locals())
 
     cmd = 'export LD_LIBRARY_PATH=/hdfs/user/hadoop/javisnlp/:$LD_LIBRARY_PATH && python2.7 /home/hadoop/demo/nlp.ner.py 2> /dev/null'
