@@ -161,3 +161,63 @@ EOF''' % locals())
 
     cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --driver-memory 4G --executor-memory 4G  --conf spark.executor.extraLibraryPath=/hdfs/user/hadoop/javisnlp/ /home/hadoop/demo/nlp.sent2ner.py 2> /dev/null'
     run(cmd)
+    
+    
+@task
+def kma(inputText):
+    '''
+    fab nlp.kma:"서울의 인구는 1000만명이다."
+    '''
+    run('''cat <<EOF > /home/hadoop/demo/nlp.kma.py
+# -*- encoding: utf-8 -*-
+import sys
+
+input = '%(inputText)s'.decode('utf-8')
+print 'INPUT: ' + input
+
+def runNLP(inputText, nlpModuleName):
+    import sys
+    sys.path.append('/hdfs/user/hadoop/javisnlp/')
+    from JavisNLP import JavisNLP
+    nlp = JavisNLP()
+    nlp.init('/hdfs/user/hadoop/javisnlp/config/NLU.cfg')
+    nlp.setFormatter(nlpModuleName)
+    return nlp.run(inputText)
+
+result = runNLP(input, 'kma')
+print 'RESULT: ' + result
+print 'Completed'
+EOF''' % locals())
+
+    cmd = 'export LD_LIBRARY_PATH=/hdfs/user/hadoop/javisnlp/:$LD_LIBRARY_PATH && python2.7 /home/hadoop/demo/nlp.kma.py 2> /dev/null'
+    run(cmd)    
+
+
+@task
+def ner(inputText):
+    '''
+    fab nlp.ner:"서울의 인구는 1000만명이다."
+    '''
+    run('''cat <<EOF > /home/hadoop/demo/nlp.ner.py
+# -*- encoding: utf-8 -*-
+import sys
+
+input = '%(inputText)s'.decode('utf-8')
+print 'INPUT: ' + input
+
+def runNLP(inputText, nlpModuleName):
+    import sys
+    sys.path.append('/hdfs/user/hadoop/javisnlp/')
+    from JavisNLP import JavisNLP
+    nlp = JavisNLP()
+    nlp.init('/hdfs/user/hadoop/javisnlp/config/NLU.cfg')
+    nlp.setFormatter(nlpModuleName)
+    return nlp.run(inputText)
+
+result = runNLP(input, 'ner')
+print 'RESULT: ' + result
+print 'Completed'
+EOF''' % locals())
+
+    cmd = 'export LD_LIBRARY_PATH=/hdfs/user/hadoop/javisnlp/:$LD_LIBRARY_PATH && python2.7 /home/hadoop/demo/nlp.ner.py 2> /dev/null'
+    run(cmd)  
