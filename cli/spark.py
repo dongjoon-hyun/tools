@@ -124,7 +124,7 @@ regex = re.compile(r'[%%s\s0-9a-zA-Z~·]+' %% re.escape(string.punctuation))
 sc = SparkContext(appName='Term Frequency')
 counts = sc.textFile('%(inpath)s') \
         .map(lambda line: re.split('%%c' %% (1),line)[1]) \
-        .map(lambda line: line.replace(u"'"," ").replace(u"’"," ").replace(u"“"," ").replace(u"”"," ").replace(u"△"," ").replace(u"◇"," ")) \
+        .map(lambda line: line.replace(u"‘"," ").replace(u"’"," ").replace(u"“"," ").replace(u"”"," ").replace(u"△"," ").replace(u"◇"," ")) \
         .flatMap(lambda line: regex.split(line)) \
         .filter(lambda word: len(word.strip())>0) \
         .map(lambda word: (word, 1)) \
