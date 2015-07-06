@@ -343,7 +343,7 @@
                         <b class="arrow"></b>
 
                         <ul class="submenu">
-							<li>
+							<li class="active">
 								<a href="nn.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									Neural Network
@@ -352,7 +352,7 @@
 								<b class="arrow"></b>
 							</li>
 
-                            <li class="active">
+                            <li class="">
                                 <a href="word_cloud.html">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     Word Cloud
@@ -448,7 +448,7 @@
 					<div class="page-content-area">
 						<div class="page-header">
 							<h1>
-								Word Cloud
+								Neural Network
 								<small>
 									<i class="ace-icon fa fa-angle-double-right"></i>
 
@@ -462,11 +462,9 @@
 								<div class="row">
 									<div class="col-xs-12">
                                         <ol>
-                                            <li>Korean Term Frequency</li>
-                                            <pre>fab tf_ko:/data/text/news/hani/*,/user/hadoop/tf_result</pre>
-                                            <li>Word Cloud for Top 100</li>
-                                            <pre>fab word_cloud:/user/hadoop/tf_result/part-00000,100,/user/hadoop/wordcloud.png</pre>
-                                            <img src="http://tip:14000/webhdfs/v1/user/hadoop/wordcloud.png?user.name=hadoop&op=open">
+                                            <li>Neural Network Visualization</li>
+                                            <pre>fab r.nn_visualize:/model/r/nn.train,y1~x1+x2+x3,6:12:8,/user/hadoop/nn.png</pre>
+                                            <img src="http://tip:14000/webhdfs/v1/user/hadoop/nn.png?user.name=hadoop&op=open">
                                         </ol>
 									</div><!-- /.span -->
 								</div><!-- /.row -->

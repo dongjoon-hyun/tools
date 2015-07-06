@@ -63,3 +63,24 @@ sparkR.stop()
 EOF''' % locals())
 	cmd = '/opt/spark/bin/spark-submit /home/hadoop/demo/r.summary.R 2> /dev/null | tail -n +4'
 	run(cmd)
+
+@task
+def nn_visualize(inpath,formula,hidden,outpath):
+	'''
+	fab r.nn_visualize:/model/r/nn.train,y1~x1+x2+x3,6:12:8,/user/hadoop/nn.png
+	'''
+	hidden = hidden.replace(':',',')
+	run('''cat <<'EOF' > /home/hadoop/demo/r.nn_visualize.R
+library(NeuralNetTools)
+library(neuralnet)
+AND <- c(rep(0, 7), 1)
+OR <- c(0, rep(1, 7))
+data <- read.table("/hdfs%(inpath)s")
+model <- neuralnet(%(formula)s, data, hidden = c(%(hidden)s), rep = 10, err.fct = 'ce', linear.output = FALSE)
+png("/hdfs%(outpath)s", width=400,height=400)
+par(mar = numeric(4), family = 'serif')
+plotnet(model, alpha = 0.6)
+dev.off()
+EOF''' % locals())
+	cmd = '/usr/bin/Rscript --vanilla /home/hadoop/demo/r.nn_visualize.R &> /dev/null'
+	run(cmd)
