@@ -164,9 +164,9 @@ EOF''' % locals())
     
     
 @task
-def kma(inputText):
+def kma(inputText, formatter):
     '''
-    fab nlp.kma:'서울의 인구는 1000만명이다.'
+    fab nlp.kma:'서울의 인구는 1000만명이다.',kma(or cls)
     '''
     run('''cat <<EOF > /home/hadoop/demo/nlp.kma.py
 # -*- encoding: utf-8 -*-
@@ -180,10 +180,11 @@ def runNLP(inputText, nlpModuleName):
     from JavisNLP import JavisNLP
     nlp = JavisNLP()
     nlp.init('/hdfs/user/hadoop/javisnlp/config/NLU.cfg')
+    nlp.setModuleFlow(['KMA'])
     nlp.setFormatter(nlpModuleName)
     return nlp.run(inputText)
 
-result = runNLP(input, 'kma')
+result = runNLP(input, '%(formatter)s')
 print result
 EOF''' % locals())
 
@@ -192,9 +193,9 @@ EOF''' % locals())
 
 
 @task
-def kner(inputText):
+def kner(inputText, formatter):
     '''
-    fab nlp.kner:'서울의 인구는 1000만명이다.'
+    fab nlp.kner:'서울의 인구는 1000만명이다.',ner(or cls)
     '''
     run('''cat <<EOF > /home/hadoop/demo/nlp.kner.py
 # -*- encoding: utf-8 -*-
@@ -208,10 +209,11 @@ def runNLP(inputText, nlpModuleName):
     from JavisNLP import JavisNLP
     nlp = JavisNLP()
     nlp.init('/hdfs/user/hadoop/javisnlp/config/NLU.cfg')
+    nlp.setModuleFlow(['KMA', 'NER'])
     nlp.setFormatter(nlpModuleName)
     return nlp.run(inputText)
 
-result = runNLP(input, 'ner')
+result = runNLP(input, '%(formatter)s')
 print result
 EOF''' % locals())
 
