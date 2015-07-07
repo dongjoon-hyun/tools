@@ -219,3 +219,25 @@ EOF''' % locals())
 
     cmd = 'export LD_LIBRARY_PATH=/hdfs/user/hadoop/javisnlp/:$LD_LIBRARY_PATH && python2.7 /home/hadoop/demo/nlp.kner.py 2> /dev/null'
     run(cmd)
+
+
+@task
+def word2vec_train(inpath, outpath, numpartitions, numiterations):
+    '''
+    fab nlp.word2vec_train:/data/sample/sample_hani_kma,/user/hadoop/sample_hani_wordvec,20,1
+    '''
+    if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
+        print 'Unauthorized path: %(outpath)s' % locals()
+	return
+    run('hadoop fs -rm -r -f -skipTrash %(outpath)s &> /dev/null' % locals())
+    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --class SparkWord2VecTrain --num-executors 120 --driver-memory 4G --executor-memory 4G --conf spark.akka.frameSize=200 /hdfs/user/hadoop/demo/nlp/sparkword2vec_2.10-1.0.jar %(inpath)s %(outpath)s %(numpartitions)s %(numiterations)s 2> /dev/null' % locals()
+    run(cmd)
+    
+
+@task
+def word2vec_test(modelpath, queryword, topn):
+    '''
+    fab nlp.word2vec_test:/data/sample/sample_hani_wordvec,서울,10
+    '''
+    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --class SparkWord2VecTest --num-executors 120 --driver-memory 4G --executor-memory 4G --conf spark.akka.frameSize=200 /hdfs/user/hadoop/demo/nlp/sparkword2vec_2.10-1.0.jar %(modelpath)s %(queryword)s %(topn)s  2> /dev/null' % locals()
+    run(cmd)
