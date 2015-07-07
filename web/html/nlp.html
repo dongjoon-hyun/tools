@@ -343,7 +343,7 @@
                         <b class="arrow"></b>
 
                         <ul class="submenu">
-							<li class="active">
+							<li class="">
 								<a href="nn.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									Neural Network
@@ -352,7 +352,7 @@
 								<b class="arrow"></b>
 							</li>
 
-							<li class="">
+							<li class="active">
 								<a href="nlp.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									NLP
@@ -446,7 +446,7 @@
 						</li>
 
 						<li>
-							<a href="#">Neural Network</a>
+							<a href="#">Natual Language Processing</a>
 						</li>
 						<!--li class="active"></li-->
 					</ul><!-- /.breadcrumb -->
@@ -457,7 +457,7 @@
 					<div class="page-content-area">
 						<div class="page-header">
 							<h1>
-								Neural Network
+								Natural Language Processing
 								<small>
 									<i class="ace-icon fa fa-angle-double-right"></i>
 
@@ -471,9 +471,12 @@
 								<div class="row">
 									<div class="col-xs-12">
                                         <ol>
-                                            <li>Neural Network Visualization</li>
-                                            <pre>fab r.nn_visualize:/model/r/nn.train,y1~x1+x2+x3,6:12:8,/user/hadoop/nn.png</pre>
-                                            <img src="http://tip:14000/webhdfs/v1/user/hadoop/nn.png?user.name=hadoop&op=open">
+                                            <li>Korean Morphological Analysis</li>
+                                            <pre>fab nlp.kma:'서울의 인구는 1000만명이다.'</pre>
+											<pre style="background-color:#38424a">&lt;LC>서울&lt;/LC>의 인구는 &lt;QT>1000만명&lt;/QT>이다.</pre>
+											<li>Korean Named Entity Recognition</li>
+											<pre>fab nlp.kner:'서울의 인구는 1000만명이다.'</pre>
+											<pre style="background-color:#38424a">서울/NNP 의/JKG 인구/NNG 는/JX 1000/SN 만/NR 명/NNB 이/VCP 다/EF ./SF</pre>
                                         </ol>
 									</div><!-- /.span -->
 								</div><!-- /.row -->
