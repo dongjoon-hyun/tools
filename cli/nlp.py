@@ -166,7 +166,7 @@ EOF''' % locals())
 @task
 def kma(inputText):
     '''
-    fab nlp.kma:"서울의 인구는 1000만명이다."
+    fab nlp.kma:'서울의 인구는 1000만명이다.'
     '''
     run('''cat <<EOF > /home/hadoop/demo/nlp.kma.py
 # -*- encoding: utf-8 -*-
@@ -192,11 +192,11 @@ EOF''' % locals())
 
 
 @task
-def ner(inputText):
+def kner(inputText):
     '''
-    fab nlp.ner:"서울의 인구는 1000만명이다."
+    fab nlp.kner:'서울의 인구는 1000만명이다.'
     '''
-    run('''cat <<EOF > /home/hadoop/demo/nlp.ner.py
+    run('''cat <<EOF > /home/hadoop/demo/nlp.kner.py
 # -*- encoding: utf-8 -*-
 import sys
 
@@ -215,5 +215,5 @@ result = runNLP(input, 'ner')
 print result
 EOF''' % locals())
 
-    cmd = 'export LD_LIBRARY_PATH=/hdfs/user/hadoop/javisnlp/:$LD_LIBRARY_PATH && python2.7 /home/hadoop/demo/nlp.ner.py 2> /dev/null'
-    run(cmd)  
+    cmd = 'export LD_LIBRARY_PATH=/hdfs/user/hadoop/javisnlp/:$LD_LIBRARY_PATH && python2.7 /home/hadoop/demo/nlp.kner.py 2> /dev/null'
+    run(cmd)
