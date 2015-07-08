@@ -177,5 +177,5 @@ for k,v in catDic.iteritems():
     if label == v:
         print k
 EOF''' % locals())
-	cmd = '/opt/spark/bin/spark-submit /home/hadoop/demo/news.predict.py 2> /dev/null'
+	cmd = '/opt/spark/bin/spark-submit /home/hadoop/demo/news.predict.py 2> /dev/null | head -n 1'
 	run(cmd)
