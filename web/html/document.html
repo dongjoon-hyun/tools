@@ -548,7 +548,7 @@ Model Accuracy(all):  0.813699244903</pre>
 		<!-- inline scripts related to this page -->
         <script type="text/javascript">
             function classifyText() {
-                var text = $('#targetText').val().replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()\n]/g," ");
+                var text = $('#targetText').val().replace(/['"\.,-\/#!$%\^&\*;:{}=\-_`~()\n]/g," ");
 				$('#top1').text('Precessing');
                 $.ajax({
                     type: "GET",
