@@ -315,7 +315,7 @@
                     </li>
 
                     <li class="">
-                        <a href="function.html" class="">
+                        <a href="#" class="">
                             <i class="menu-icon fa fa-square-o"></i>
                             <span class="menu-text"> Function </span>
 
@@ -343,7 +343,7 @@
                         <b class="arrow"></b>
 
                         <ul class="submenu">
-							<li>
+							<li class="">
 								<a href="nn.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									Neural Network
@@ -361,7 +361,7 @@
 								<b class="arrow"></b>
 							</li>
 
-                            <li class="active">
+                            <li class="">
                                 <a href="word_cloud.html">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     Word Cloud
@@ -406,7 +406,7 @@
                                 <b class="arrow"></b>
                             </li>
 
-                            <li class="">
+                            <li class="active">
                                 <a href="document.html">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     Text Categorization
@@ -442,11 +442,11 @@
 					<ul class="breadcrumb">
 						<li>
 							<i class="ace-icon fa fa-home home-icon"></i>
-							<a href="#">Home</a>
+                            <a href="#">Home</a>
 						</li>
 
 						<li>
-							<a href="#">Word Cloud</a>
+							<a href="#">Text Categorization</a>
 						</li>
 						<!--li class="active"></li-->
 					</ul><!-- /.breadcrumb -->
@@ -457,7 +457,7 @@
 					<div class="page-content-area">
 						<div class="page-header">
 							<h1>
-								Word Cloud
+								Text Categorization
 								<small>
 									<i class="ace-icon fa fa-angle-double-right"></i>
 
@@ -465,22 +465,87 @@
 							</h1>
 						</div><!-- /.page-header -->
 
-						<div class="row">
-							<div class="col-xs-12">
-								<!-- PAGE CONTENT BEGINS -->
-								<div class="row">
-									<div class="col-xs-12">
-                                        <ol>
-                                            <li>Korean Term Frequency</li>
-                                            <pre>fab tf_ko:/data/text/news/hani/*,/user/hadoop/tf_result</pre>
-                                            <li>Word Cloud for Top 100</li>
-                                            <pre>fab word_cloud:/user/hadoop/tf_result/part-00000,100,/user/hadoop/wordcloud.png</pre>
-                                            <img src="http://tip:14000/webhdfs/v1/user/hadoop/wordcloud.png?user.name=hadoop&op=open">
-                                        </ol>
-									</div><!-- /.span -->
-								</div><!-- /.row -->
-							</div><!-- /.col -->
-						</div><!-- /.row -->
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <!-- PAGE CONTENT BEGINS -->
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12">
+                                        <div class="widget-box">
+                                            <div class="widget-header">
+                                                <h4 class="widget-title">URL</h4>
+												<span class="widget-toolbar">
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+													<a href="#" data-action="close">
+														<i class="ace-icon fa fa-times"></i>
+													</a>
+												</span>
+                                            </div>
+                                            <div class="widget-body">
+                                                <div class="widget-main">
+                                                    <div>
+                                                        <select class="form-control" id="select-1" onchange="classifyText()">
+                                                            <option value=""></option>
+                                                            <option value="http://www.hani.co.kr/arti/economy/stock/699305.html">http://www.hani.co.kr/arti/economy/stock/699305.html</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="vspace-12-sm"></div>
+
+                                <div>
+                                    <div class="col-xs-6">
+										<textarea id="targetText" style="width:100%;height:400px"></textarea>
+                                    </div>
+                                    <div class="col-xs-6" id="image_tag">
+                                        <div class="col-sm-12 infobox-container">
+                                            <div class="infobox infobox-red" style="width:100%">
+                                                <div class="infobox-icon">
+                                                    <i class="ace-icon fa fa-bar-chart-o"></i>
+                                                </div>
+
+                                                <div class="infobox-data">
+                                                    <span class="infobox-data-number" id="top1"></span>
+                                                    <div class="infobox-content" id="rate1"></div>
+                                                </div>
+                                                <div class="stat stat-success">1</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 infobox-container">
+                                            <div class="infobox infobox-green" style="width:100%">
+                                                <div class="infobox-icon">
+                                                    <i class="ace-icon fa fa-bar-chart-o"></i>
+                                                </div>
+
+                                                <div class="infobox-data">
+                                                    <span class="infobox-data-number" id="top2"></span>
+                                                    <div class="infobox-content" id="rate2"></div>
+                                                </div>
+                                                <div class="stat stat-success">2</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 infobox-container">
+                                            <div class="infobox infobox-blue" style="width:100%">
+                                                <div class="infobox-icon">
+                                                    <i class="ace-icon fa fa-bar-chart-o"></i>
+                                                </div>
+
+                                                <div class="infobox-data">
+                                                    <span class="infobox-data-number" id="top3"></span>
+                                                    <div class="infobox-content" id="rate3"></div>
+                                                </div>
+                                                <div class="stat stat-success">3</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- PAGE CONTENT ENDS -->
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
 					</div><!-- /.page-content-area -->
 				</div><!-- /.page-content -->
 			</div><!-- /.main-content -->
@@ -509,82 +574,36 @@
 		</script>
 		<script src="../assets/js/bootstrap.min.js"></script>
 
-		<!-- page specific plugin scripts -->
-		<script src="../assets/js/jquery.dataTables.min.js"></script>
-		<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
-
 		<!-- ace scripts -->
 		<script src="../assets/js/ace-elements.min.js"></script>
 		<script src="../assets/js/ace.min.js"></script>
 
 		<!-- inline scripts related to this page -->
-		<script type="text/javascript">
-			jQuery(function($) {
-				var oTable1 = 
-				$('#sample-table-2')
-				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
-				.dataTable( {
-					bAutoWidth: false,
-					"aoColumns": [
-					  { "bSortable": false },
-					  null, null,null, null, null,
-					  { "bSortable": false }
-					],
-					"aaSorting": [],
-			
-					//,
-					//"sScrollY": "200px",
-					//"bPaginate": false,
-			
-					//"sScrollX": "100%",
-					//"sScrollXInner": "120%",
-					//"bScrollCollapse": true,
-					//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
-					//you may want to wrap the table inside a "div.dataTables_borderWrap" element
-			
-					//"iDisplayLength": 50
-			    } );
-				/**
-				var tableTools = new $.fn.dataTable.TableTools( oTable1, {
-					"sSwfPath": "../../copy_csv_xls_pdf.swf",
-			        "buttons": [
-			            "copy",
-			            "csv",
-			            "xls",
-						"pdf",
-			            "print"
-			        ]
-			    } );
-			    $( tableTools.fnContainer() ).insertBefore('#sample-table-2');
-				*/
-			
-			
-				$(document).on('click', 'th input:checkbox' , function(){
-					var that = this;
-					$(this).closest('table').find('tr > td:first-child input:checkbox')
-					.each(function(){
-						this.checked = that.checked;
-						$(this).closest('tr').toggleClass('selected');
-					});
-				});
-			
-			
-				$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
-				function tooltip_placement(context, source) {
-					var $source = $(source);
-					var $parent = $source.closest('table')
-					var off1 = $parent.offset();
-					var w1 = $parent.width();
-			
-					var off2 = $source.offset();
-					//var w2 = $source.width();
-			
-					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
-					return 'left';
-				}
-			
-			})
-		</script>
+        <script type="text/javascript">
+            function classifyText() {
+                var url = $( '#select-1 option:selected' ).text();
+				var text = "올해 상반기 주가연계증권(ELS) 발행액이 지난해 같은 기간에 견줘 크게 늘었다. " +
+						"저금리 영향으로 원금보장을 포기하더라도 고수익을 추구하는 흐름이 두드러진다. " +
+						"한국예탁결제원은 올해 상반기 주가연계증권 발행금액은 47조3453억원으로 지난해 같은 기간(27조6177억원)에 비해 " +
+						"71.4%나 늘었다고 7일 발표했다. 주가연계증권 발행금액은 지난해 하반기 44조1792억원으로 급증한 뒤 상승세를 이어오고 있다. " +
+						" 예탁결제원은 “저금리 기조와 국내외 증시의 완만한 상승흐름이 복합적으로 작용해 중위험·중수익을 표방하는 주가연계증권 시장으로 개인투자자들이 관심을 전환하고 있다”고 설명했다. 주가연계증권은 특정주식의 가격이나 주가지수의 변동에 연동돼 투자손익이 결정되는 금융투자상품을 말한다."
+				$('#targetText').text(text);
+                $.ajax({
+                    type: "GET",
+                    username:"hadoop",
+                    password:"tip",
+                    url:"http://hadoop:tip@tip:5555/api/v1/news.predict/" + encodeURIComponent("/model/spark/news") + ",'" + encodeURIComponent(text) + "'",
+                    headers: {
+                        Authorization: "Basic " + btoa("hadoop:tip")
+                    }
+                }).done(function(json) {
+                    var result = json['result'].split('\n');
+                    $('#top1').text(result[0].substring(result[0].lastIndexOf(" "),result[0].length));
+                }).fail( function(xhr, textStatus, errorThrown) {
+                    alert(JSON.stringify(xhr));
+                });
+            }
+        </script>
 
 		<!-- the following scripts are used in demo only for onpage help and you don't need them -->
 		<link rel="stylesheet" href="../assets/css/ace.onpage-help.css" />

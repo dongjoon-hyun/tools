@@ -88,7 +88,6 @@ def getLabel(url):
 
 sc = SparkContext(appName='Naive Bayes Train')
 data = sc.textFile('%(inpath)s').filter(lambda line: getLabel(line.split('%%c' %% 1)[0]) != 99).cache()
-
 terms = data.map(lambda line: line.split('%%c' %% 1)[1]) \
     .map(lambda line: line.replace(u"‘"," ").replace(u"’"," ").replace(u"“"," ").replace(u"”"," ").replace(u"△"," ").replace(u"◇"," ").replace(u"ㆍ"," ")) \
     .flatMap(lambda line: regex.split(line)) \
@@ -118,14 +117,22 @@ def parseLine(line):
     features = Vectors.sparse(maxID, tids, values)
     return LabeledPoint(label, features)
 
-labeledPoints = data.map(parseLine)
+fractions = { 0.0 : 0.16, 1.0 : 0.16, 2.0 : 0.16, 3.0 : 0.16, 4.0 : 0.16, 5.0 : 0.16 }
+labeledPoints = data.map(lambda line: (getLabel(line.split('%%c' %% 1)[0]), line)) \
+    .sampleByKey(False, fractions) \
+    .map(lambda (x,y): y) \
+    .map(parseLine)
 labeledPoints.saveAsTextFile('%(outpath)s/docs')
 
 model = NaiveBayes.train(labeledPoints, %(lambda_)s)
 model.save(sc, '%(outpath)s/model')
 
-predictionAndLabel = labeledPoints.map(lambda p: (p.label, model.predict(p.features)))
-accuracy = 1.0 * predictionAndLabel.filter(lambda (x,y): x == y).count() / labeledPoints.count()
+predictedSample = labeledPoints.map(lambda p: (p.label, model.predict(p.features)))
+accuracy = 1.0 * predictedSample.filter(lambda (x,y): x == y).count() / predictedSample.count()
+print 'Model Accuracy(self): ', accuracy
+
+predictedAll = data.map(parseLine).map(lambda p: (p.label, model.predict(p.features)))
+accuracy = 1.0 * predictedAll.filter(lambda (x,y): x == y).count() / predictedAll.count()
 print 'Model Accuracy: ', accuracy
 EOF''' % locals())
 	cmd = '/opt/spark/bin/spark-submit --driver-memory 2G --executor-memory 2G /home/hadoop/demo/news.train.py 2> /dev/null'
@@ -134,7 +141,7 @@ EOF''' % locals())
 @task
 def predict(model, text):
 	'''
-	fab news.predict:/model/spark/news,'최근 전국 아파트 분양 시장의 주된 수요층은 30~40대지만, 30대와 40대가 선호하는 주택은 다소 차이를 보이는 것으로 나타났다.'
+	fab news.predict:/model/spark/news,'최근 전국 아파트 분양 시장의'
 	'''
 	run('''cat <<EOF > /home/hadoop/demo/news.predict.py
 # -*- coding: utf-8 -*-
