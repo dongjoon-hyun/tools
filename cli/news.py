@@ -65,7 +65,7 @@ EOF''' % locals())
 @task
 def train(inpath, lambda_, model, outpath):
 	'''
-	fab news.train:/data/text/news/hani/*,1.0,multinomial,/tmp/haninb
+	fab news.train:/data/text/news/hani/*,1.0,multinomial,/tmp/news
 	'''
 	run('''cat <<EOF > /home/hadoop/demo/news.train.py
 # -*- coding: utf-8 -*-
@@ -133,7 +133,7 @@ print 'Model Accuracy(self): ', accuracy
 
 predictedAll = data.map(parseLine).map(lambda p: (p.label, model.predict(p.features)))
 accuracy = 1.0 * predictedAll.filter(lambda (x,y): x == y).count() / predictedAll.count()
-print 'Model Accuracy: ', accuracy
+print 'Model Accuracy(all): ', accuracy
 EOF''' % locals())
 	cmd = '/opt/spark/bin/spark-submit --driver-memory 2G --executor-memory 2G /home/hadoop/demo/news.train.py 2> /dev/null'
 	run(cmd)
@@ -179,7 +179,6 @@ def parseLine(line):
 
 label = model.predict(parseLine('%(text)s'.decode('utf8')))
 catDic = { 'society' : 0.0, 'economy' : 1.0, 'politics': 2.0, 'sports' : 3.0, 'international' : 4.0, 'culture' : 5.0 }
-print label, 
 for k,v in catDic.iteritems():
     if label == v:
         print k

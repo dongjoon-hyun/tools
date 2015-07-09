@@ -469,10 +469,25 @@
                             <div class="col-xs-12">
                                 <!-- PAGE CONTENT BEGINS -->
                                 <div class="row">
-                                    <div class="col-xs-12 col-sm-12">
+									<div class="row">
+										<div class="col-xs-12">
+											<ol>
+												<li>Train Category</li>
+												<pre>fab news.train:/data/text/news/hani/*,1.0,multinomial,/model/spark/news</pre>
+												<pre style="background-color:#38424a">
+Model Accuracy(self):  0.835927740422
+Model Accuracy(all):  0.813699244903</pre>
+												<li>Predict Category</li>
+												<pre>fab news.predict:/model/spark/news,'최근 전국 아파트 분양 시장의'</pre>
+												<pre style="background-color:#38424a">economy</pre>
+											</ol>
+										</div><!-- /.span -->
+									</div><!-- /.row -->
+
+									<div class="col-xs-12 col-sm-12">
                                         <div class="widget-box">
                                             <div class="widget-header">
-                                                <h4 class="widget-title">URL</h4>
+                                                <h4 class="widget-title">TEXT</h4>
 												<span class="widget-toolbar">
 													<a href="#" data-action="collapse">
 														<i class="ace-icon fa fa-chevron-up"></i>
@@ -483,64 +498,16 @@
 												</span>
                                             </div>
                                             <div class="widget-body">
-                                                <div class="widget-main">
-                                                    <div>
-                                                        <select class="form-control" id="select-1" onchange="classifyText()">
-                                                            <option value=""></option>
-                                                            <option value="http://www.hani.co.kr/arti/economy/stock/699305.html">http://www.hani.co.kr/arti/economy/stock/699305.html</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                                <div class="widget-main" align="center">
+													<textarea id="targetText" style="width:100%;height:200px"></textarea>
+													<a href="#" class="btn btn-app btn-primary btn-xs" style="align:center" onclick="classifyText()">
+														<i class="ace-icon fa fa-refresh 160"></i>
+														Analyze
+													</a>
 
-                                <div class="vspace-12-sm"></div>
-
-                                <div>
-                                    <div class="col-xs-6">
-										<textarea id="targetText" style="width:100%;height:400px"></textarea>
-                                    </div>
-                                    <div class="col-xs-6" id="image_tag">
-                                        <div class="col-sm-12 infobox-container">
-                                            <div class="infobox infobox-red" style="width:100%">
-                                                <div class="infobox-icon">
-                                                    <i class="ace-icon fa fa-bar-chart-o"></i>
+													<button class="btn disabled btn-success" id="top1">Unknown</button>
                                                 </div>
-
-                                                <div class="infobox-data">
-                                                    <span class="infobox-data-number" id="top1"></span>
-                                                    <div class="infobox-content" id="rate1"></div>
-                                                </div>
-                                                <div class="stat stat-success">1</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 infobox-container">
-                                            <div class="infobox infobox-green" style="width:100%">
-                                                <div class="infobox-icon">
-                                                    <i class="ace-icon fa fa-bar-chart-o"></i>
-                                                </div>
-
-                                                <div class="infobox-data">
-                                                    <span class="infobox-data-number" id="top2"></span>
-                                                    <div class="infobox-content" id="rate2"></div>
-                                                </div>
-                                                <div class="stat stat-success">2</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 infobox-container">
-                                            <div class="infobox infobox-blue" style="width:100%">
-                                                <div class="infobox-icon">
-                                                    <i class="ace-icon fa fa-bar-chart-o"></i>
-                                                </div>
-
-                                                <div class="infobox-data">
-                                                    <span class="infobox-data-number" id="top3"></span>
-                                                    <div class="infobox-content" id="rate3"></div>
-                                                </div>
-                                                <div class="stat stat-success">3</div>
-                                            </div>
+											</div>
                                         </div>
                                     </div>
                                 </div><!-- PAGE CONTENT ENDS -->
@@ -581,13 +548,8 @@
 		<!-- inline scripts related to this page -->
         <script type="text/javascript">
             function classifyText() {
-                var url = $( '#select-1 option:selected' ).text();
-				var text = "올해 상반기 주가연계증권(ELS) 발행액이 지난해 같은 기간에 견줘 크게 늘었다. " +
-						"저금리 영향으로 원금보장을 포기하더라도 고수익을 추구하는 흐름이 두드러진다. " +
-						"한국예탁결제원은 올해 상반기 주가연계증권 발행금액은 47조3453억원으로 지난해 같은 기간(27조6177억원)에 비해 " +
-						"71.4%나 늘었다고 7일 발표했다. 주가연계증권 발행금액은 지난해 하반기 44조1792억원으로 급증한 뒤 상승세를 이어오고 있다. " +
-						" 예탁결제원은 “저금리 기조와 국내외 증시의 완만한 상승흐름이 복합적으로 작용해 중위험·중수익을 표방하는 주가연계증권 시장으로 개인투자자들이 관심을 전환하고 있다”고 설명했다. 주가연계증권은 특정주식의 가격이나 주가지수의 변동에 연동돼 투자손익이 결정되는 금융투자상품을 말한다."
-				$('#targetText').text(text);
+                var text = $('#targetText').val().replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()\n]/g," ");
+				$('#top1').text('Precessing');
                 $.ajax({
                     type: "GET",
                     username:"hadoop",
