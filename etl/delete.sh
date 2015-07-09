@@ -5,8 +5,11 @@ if [ $# -eq 0 ]; then
         exit
 fi
 
-DIR=/home/ubuntu/2015/news/opengraph
-DB=$DIR/$1
+DIR=/home/ubuntu/tip/etl/opengraph
+if [ $1 == 'joins' ]; then
+        DIR=/home/ubuntu/2015/news/opengraph
+fi
+DB=$DIR/$1.db
 SERVER=$2
 i=$3
 FILE=$DIR/${i}00000.txt
