@@ -63,11 +63,11 @@ EOF''' % locals())
 	run(cmd)
 
 @task
-def train(inpath, lambda_, model, outpath):
+def nb_train(inpath, lambda_, model, outpath):
 	'''
-	fab news.train:/data/text/news/hani/*,1.0,multinomial,/tmp/news
+	fab news.nb_train:/data/text/news/hani/*,1.0,multinomial,/tmp/news
 	'''
-	run('''cat <<EOF > /home/hadoop/demo/news.train.py
+	run('''cat <<EOF > /home/hadoop/demo/news.nb_train.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
 from pyspark.mllib.classification import NaiveBayes
@@ -94,7 +94,7 @@ terms = data.map(lambda line: line.split('%%c' %% 1)[1]) \
     .filter(lambda word: len(word.strip())>1) \
     .map(lambda word: (word,1)) \
     .reduceByKey(lambda x,y: x+y) \
-    .filter(lambda (word,count): count>100) \
+    .filter(lambda (word,count): count>1) \
     .zipWithIndex() \
     .cache()
 terms.map(lambda ((word,count),index): '%%s%%c%%s%%c%%s' %% (index+1,1,word,1,count)) \
@@ -117,7 +117,6 @@ def parseLine(line):
     features = Vectors.sparse(maxID, tids, values)
     return LabeledPoint(label, features)
 
-#fractions = { 0.0 : 0.16, 1.0 : 0.16, 2.0 : 0.16, 3.0 : 0.16, 4.0 : 0.16, 5.0 : 0.16 }
 fractions = { 0.0 : 0.25, 1.0 : 0.64, 2.0 : 0.74, 3.0 : 0.95, 4.0 : 0.97, 5.0 : 1.0 }
 labeledPoints = data.map(lambda line: (getLabel(line.split('%%c' %% 1)[0]), line)) \
     .sampleByKey(False, fractions) \
@@ -136,15 +135,15 @@ predictedAll = data.map(parseLine).map(lambda p: (p.label, model.predict(p.featu
 accuracy = 1.0 * predictedAll.filter(lambda (x,y): x == y).count() / predictedAll.count()
 print 'Model Accuracy(all): ', accuracy
 EOF''' % locals())
-	cmd = '/opt/spark/bin/spark-submit --driver-memory 2G --executor-memory 2G /home/hadoop/demo/news.train.py 2> /dev/null'
+	cmd = '/opt/spark/bin/spark-submit --driver-memory 2G --executor-memory 2G --conf spark.akka.frameSize=200 /home/hadoop/demo/news.nb_train.py 2> /dev/null'
 	run(cmd)
 
 @task
-def predict(model, text):
+def nb_predict(model, text):
 	'''
-	fab news.predict:/model/spark/news,'최근 전국 아파트 분양 시장의'
+	fab news.nb_predict:/model/spark/news,'최근 전국 아파트 분양 시장의'
 	'''
-	run('''cat <<EOF > /home/hadoop/demo/news.predict.py
+	run('''cat <<EOF > /home/hadoop/demo/news.nb_predict.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
 from pyspark.mllib.classification import NaiveBayesModel
@@ -184,5 +183,71 @@ for k,v in catDic.iteritems():
     if label == v:
         print k
 EOF''' % locals())
-	cmd = '/opt/spark/bin/spark-submit /home/hadoop/demo/news.predict.py 2> /dev/null | head -n 1'
+	cmd = '/opt/spark/bin/spark-submit /home/hadoop/demo/news.nb_predict.py 2> /dev/null'
+	run(cmd)
+
+@task
+def svm_train(inpath, iteration, outpath):
+	'''
+	fab news.svm_train:/data/text/news/hani/*,100,/tmp/svm2
+	'''
+        run('''cat <<EOF > /home/hadoop/demo/news.svm_train.py
+# -*- coding: utf-8 -*-
+from pyspark import SparkContext
+from pyspark.mllib.classification import SVMWithSGD, SVMModel
+from pyspark.mllib.linalg import Vectors
+from pyspark.mllib.regression import LabeledPoint
+
+import re
+import string
+regex = re.compile(r'[%%s\s0-9a-zA-Z~·]+' %% re.escape(string.punctuation))
+
+catDic = { 'society' : 0.0, 'economy' : 1.0, 'politics': 2.0, 'sports' : 3.0, 'international' : 4.0, 'culture' : 5.0 }
+def getLabel(url):
+    label = url[27:].split('/')[0]
+    if label in catDic.keys():
+        return catDic[label]
+    else:
+        return 99
+
+sc = SparkContext(appName='SVM Train')
+data = sc.textFile('%(inpath)s').filter(lambda line: getLabel(line.split('%%c' %% 1)[0]) != 99).cache()
+terms = data.map(lambda line: line.split('%%c' %% 1)[1]) \
+    .map(lambda line: line.replace(u"‘"," ").replace(u"’"," ").replace(u"“"," ").replace(u"”"," ").replace(u"△"," ").replace(u"◇"," ").replace(u"ㆍ"," ")) \
+    .flatMap(lambda line: regex.split(line)) \
+    .filter(lambda word: len(word.strip())>1) \
+    .map(lambda word: (word,1)) \
+    .reduceByKey(lambda x,y: x+y) \
+    .filter(lambda (word,count): count>100) \
+    .zipWithIndex() \
+    .cache()
+terms.map(lambda ((word,count),index): '%%s%%c%%s%%c%%s' %% (index+1,1,word,1,count)) \
+    .saveAsTextFile('%(outpath)s/terms')
+
+maxID = terms.values().max() + 1
+termDic = sc.broadcast(terms.map(lambda ((word,count),index): (word,index)).collectAsMap())
+def getTermID(word):
+    try:
+        return termDic.value[word]
+    except:
+        return 0
+
+def parseLine(line):
+    parts = line.split('%%c' %% 1)
+    label = getLabel(parts[0])
+    words = regex.split(parts[1].replace(u"‘"," ").replace(u"’"," ").replace(u"“"," ").replace(u"”"," ").replace(u"△"," ").replace(u"◇"," ").replace(u"ㆍ"," "))
+    tids = sorted(set([getTermID(x) for x in words]))
+    values = [1] * len(tids)
+    features = Vectors.sparse(maxID, tids, values)
+    return LabeledPoint(label, features)
+
+labeledPoints = data.map(parseLine)
+labeledPoints.saveAsTextFile('%(outpath)s/docs')
+model = SVMWithSGD.train(labeledPoints, iterations=%(iteration)s)
+labelsAndPreds = labeledPoints.map(lambda p: (p.label, model.predict(p.features)))
+trainErr = labelsAndPreds.filter(lambda (v, p): v != p).count() / float(labeledPoints.count())
+print("Training Error = " + str(trainErr))
+model.save(sc, '%(outpath)s/model')
+EOF''' % locals())
+	cmd = '/opt/spark/bin/spark-submit /home/hadoop/demo/news.svm_train.py 2> /dev/null'
 	run(cmd)
