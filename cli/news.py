@@ -117,7 +117,8 @@ def parseLine(line):
     features = Vectors.sparse(maxID, tids, values)
     return LabeledPoint(label, features)
 
-fractions = { 0.0 : 0.16, 1.0 : 0.16, 2.0 : 0.16, 3.0 : 0.16, 4.0 : 0.16, 5.0 : 0.16 }
+#fractions = { 0.0 : 0.16, 1.0 : 0.16, 2.0 : 0.16, 3.0 : 0.16, 4.0 : 0.16, 5.0 : 0.16 }
+fractions = { 0.0 : 0.25, 1.0 : 0.64, 2.0 : 0.74, 3.0 : 0.95, 4.0 : 0.97, 5.0 : 1.0 }
 labeledPoints = data.map(lambda line: (getLabel(line.split('%%c' %% 1)[0]), line)) \
     .sampleByKey(False, fractions) \
     .map(lambda (x,y): y) \
