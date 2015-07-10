@@ -143,6 +143,8 @@ class News:
 			articles = soup.findAll('div', {'id': 'cont_newstext'})
 		if self.is_empty(articles): # mk
 			articles = soup.findAll('div', {'id': 'artText'})
+		if self.is_empty(articles): # chosun
+			articles = soup.findAll('div', {'id': 'news_body_id'})
 		return ''.join([' '.join(a.get_text().split()) for a in articles if len(a.text.strip())>0])
 
 	def is_empty(self, articles):
