@@ -554,7 +554,7 @@ Model Accuracy(all):  0.833137644744</pre>
                     type: "GET",
                     username:"hadoop",
                     password:"tip",
-                    url:"http://hadoop:tip@tip:5555/api/v1/news.predict/" + encodeURIComponent("/model/spark/news") + ",'" + encodeURIComponent(text) + "'",
+                    url:"http://hadoop:tip@tip:5555/api/v1/news.nb_predict/" + encodeURIComponent("/model/spark/news") + ",'" + encodeURIComponent(text) + "'",
                     headers: {
                         Authorization: "Basic " + btoa("hadoop:tip")
                     }

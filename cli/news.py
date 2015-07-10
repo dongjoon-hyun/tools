@@ -183,7 +183,7 @@ for k,v in catDic.iteritems():
     if label == v:
         print k
 EOF''' % locals())
-	cmd = '/opt/spark/bin/spark-submit /home/hadoop/demo/news.nb_predict.py 2> /dev/null'
+	cmd = '/opt/spark/bin/spark-submit --driver-memory 2G --executor-memory 2G /home/hadoop/demo/news.nb_predict.py 2> /dev/null'
 	run(cmd)
 
 @task
