@@ -18,6 +18,7 @@ import snu
 import nlp
 import deepdist
 import news
+import cuda
 
 env.hosts = ['50.1.100.98']
 env.warn_only = True
