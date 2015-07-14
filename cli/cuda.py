@@ -12,6 +12,26 @@ from fabric.api import *
 
 @task
 @hosts('50.1.100.101')
+def show():
+	'''
+	fab cuda.show
+	'''
+	run('''cat <<'EOF' > /home/hadoop/demo/cuda.show.py
+import pycuda.driver as cuda
+
+cuda.init()
+print "%%d device(s) found." %% cuda.Device.count()
+for ordinal in range(cuda.Device.count()):
+    dev = cuda.Device(ordinal)
+    print "Device #%%d: %%s" %% (ordinal, dev.name())
+    print " Compute Capability: %%d.%%d" %% dev.compute_capability()
+    print " Total Memory: %%s GB" %% (dev.total_memory()//(1024*1024*1024))
+EOF''' % locals())
+	cmd = '/usr/local/bin/python2.7 /home/hadoop/demo/cuda.show.py 2> /dev/null'
+	run(cmd)
+
+@task
+@hosts('50.1.100.101')
 def limit(gpuid,name='MAX_THREADS_PER_BLOCK'):
 	'''
 	fab cuda.limit:0,max_threads_per_block
@@ -45,7 +65,6 @@ from pycuda.compiler import SourceModule
 import numpy as np
 
 mod = SourceModule("""
-#include <stdio.h>
 __global__ void multiply_kernel(float *dest, float *a, float *b)
 {
   const int i = threadIdx.x;
@@ -65,5 +84,90 @@ EOF''' % locals())
 	run('hadoop fs -get %(file1)s /home/hadoop/demo/ 2> /dev/null' % locals())
 	run('hadoop fs -get %(file2)s /home/hadoop/demo/ 2> /dev/null' % locals())
 	cmd = '/usr/local/bin/python2.7 /home/hadoop/demo/cuda.sdot.py 2> /dev/null'
+	run(cmd)
+	run('hadoop fs -put /home/hadoop/demo/cuda.tmp %(outfile)s 2> /dev/null' % locals())
+
+# working
+def sgemm_c(gpuid, file1, file2, outfile):
+	'''
+	fab cuda.sgemm:0,/data/sample/m1.txt,/data/sample/m2.txt,/tmp/m3.txt
+	'''
+	name1 = file1.split('/')[-1]
+	name2 = file2.split('/')[-1]
+	run('''cat <<'EOF' > /home/hadoop/demo/cuda.sgemm.py
+#!/usr/local/bin/python2.7
+import pycuda.autoinit
+import pycuda.gpuarray as gpuarray
+import pycuda.driver as cuda
+import numpy as np
+
+import skcuda.linalg as culinalg
+import skcuda.misc as cumisc
+culinalg.init()
+
+a = np.fromfile('/home/hadoop/demo/%(name1)s', dtype=np.float32, sep=' ')
+b = np.fromfile('/home/hadoop/demo/%(name2)s', dtype=np.float32, sep=' ')
+c = np.zeros_like(a)
+
+a_gpu = gpuarray.to_gpu(a)
+b_gpu = gpuarray.to_gpu(b)
+c_gpu = culinalg.dot(a_gpu, c_gpu)
+print c_gpu
+EOF''' % locals())
+	run('rm /home/hadoop/demo/%(file1)s 2> /dev/null' % locals())
+	run('rm /home/hadoop/demo/%(file2)s 2> /dev/null' % locals())
+	run('hadoop fs -get %(file1)s /home/hadoop/demo/ 2> /dev/null' % locals())
+	run('hadoop fs -get %(file2)s /home/hadoop/demo/ 2> /dev/null' % locals())
+	cmd = '/usr/local/bin/python2.7 /home/hadoop/demo/cuda.sgemm.py 2> /dev/null'
+	run(cmd)
+	run('hadoop fs -put /home/hadoop/demo/cuda.tmp %(outfile)s 2> /dev/null' % locals())
+
+# working
+def sgemm_(gpuid, file1, file2, outfile):
+	'''
+	fab cuda.sgemm:0,/data/sample/m1.txt,/data/sample/m2.txt,/tmp/m3.txt
+	'''
+	name1 = file1.split('/')[-1]
+	name2 = file2.split('/')[-1]
+	run('''cat <<'EOF' > /home/hadoop/demo/cuda.sgemm.py
+#!/usr/local/bin/python2.7
+import pycuda.autoinit
+import pycuda.driver as cuda
+from pycuda.compiler import SourceModule
+import numpy as np
+
+mod = SourceModule("""
+#define INDX( row, col, ld ) ( ( (col) * (ld) ) + (row) )
+__global__ void sgemm_kernel(int m, int n, int k, float *a, float *b, float *c) {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+    int j = blockIdx.y * blockDim.y + threadIdx.y;
+    float tmp = 0.0;
+    for( int koff = 0; koff < k; koff++ )
+        tmp += a[INDX(i, koff, m)] * b[INDX(koff, j, n)];
+    c[INDX(i, j, m)] = tmp;
+}
+""")
+sgemm_kernel = mod.get_function('sgemm_kernel')
+
+a = np.fromfile('/home/hadoop/demo/%(name1)s', dtype=np.float32, sep=' ')
+b = np.fromfile('/home/hadoop/demo/%(name2)s', dtype=np.float32, sep=' ')
+dest = np.zeros_like(a)
+
+block_size = 32
+grid_size = 1
+# 2d picture - map to 2d grid
+grid = (grid_size,grid_size)
+block = (block_size,block_size,1)
+size = block_size * grid_size
+
+sgemm_kernel(np.int32(32),np.int32(32),np.int32(32),cuda.Out(dest), cuda.In(a), cuda.In(b), block=block, grid=grid)
+print dest
+np.savetxt('/home/hadoop/demo/cuda.tmp', dest, fmt='%%f')
+EOF''' % locals())
+	run('rm /home/hadoop/demo/%(file1)s 2> /dev/null' % locals())
+	run('rm /home/hadoop/demo/%(file2)s 2> /dev/null' % locals())
+	run('hadoop fs -get %(file1)s /home/hadoop/demo/ 2> /dev/null' % locals())
+	run('hadoop fs -get %(file2)s /home/hadoop/demo/ 2> /dev/null' % locals())
+	cmd = '/usr/local/bin/python2.7 /home/hadoop/demo/cuda.sgemm.py 2> /dev/null'
 	run(cmd)
 	run('hadoop fs -put /home/hadoop/demo/cuda.tmp %(outfile)s 2> /dev/null' % locals())
