@@ -33,9 +33,9 @@ def view():
 
 @task
 @hosts('127.0.0.1')
-def capture(outpath, max_count='10'):
+def capture(outpath, max_count='3'):
     '''
-    fab cam.capture:/tmp/cam1,10
+    fab cam.capture:/tmp/cam1,3
     '''
     max_count = int(max_count)
     import os
