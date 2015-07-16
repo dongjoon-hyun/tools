@@ -60,7 +60,7 @@ def capture(outpath, max_count='10'):
                 tmpImage = copy.copy(image)
                 filename = '%05d.jpg' % (count/skip)
                 hdfspath = 'hdfs://gnn-f02-01%(outpath)s/%(filename)s' % locals()
-                cv2.putText(tmpImage, hdfspath, (50,50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+                cv2.putText(tmpImage, filename, (50,50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
                 cv2.imshow('Windows1', tmpImage)
                 cv2.waitKey(1)
                 cv2.imwrite(basename + '_' + filename, image)
