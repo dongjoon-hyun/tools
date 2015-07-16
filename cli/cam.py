@@ -62,12 +62,13 @@ def capture(outpath, max_count='10'):
                 hdfspath = 'hdfs://gnn-f02-01%(outpath)s/%(filename)s' % locals()
                 cv2.putText(tmpImage, hdfspath, (50,50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
                 cv2.imshow('Windows1', tmpImage)
+                cv2.waitKey(1)
                 cv2.imwrite(basename + '_' + filename, image)
                 hdfs.put(basename + '_' + filename, hdfspath)
                 print basename + '_' + filename, hdfspath
             else:
                 cv2.imshow('Windows1', image)
-            cv2.waitKey(1)
+                cv2.waitKey(1)
         except KeyboardInterrupt:
             break
         count = count + 1
