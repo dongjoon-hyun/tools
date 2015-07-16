@@ -21,6 +21,9 @@ import news
 import cuda
 import cam
 
+import os
+import datetime
+env.dir = '/log/tip/%s_%s' % (datetime.datetime.now().__format__('%Y%m%d_%H%M'), os.getpid())
 env.hosts = ['50.1.100.98']
 env.warn_only = True
 env.user = 'hadoop'
