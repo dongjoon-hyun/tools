@@ -50,6 +50,136 @@ EOF''' % locals())
 
 
 @task
+def doc2kma(inpath, outpath, numpartitions, numthreads, sep = '\01'):
+    '''
+    fab nlp.doc2kma:/data/sample/sample_hani,/user/hadoop/sample_hani_kma,20,4
+    '''
+    if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
+        print 'Unauthorized path: %(outpath)s' % locals()
+        return 
+    run('hadoop fs -rm -r -f -skipTrash %(outpath)s &> /dev/null' % locals())
+    run('''cat <<EOF > /home/hadoop/demo/nlp.doc2kma.py
+# -*- encoding: utf-8 -*-
+
+from pyspark.context import SparkContext
+from pyspark.conf import SparkConf
+import sys
+
+nlpModuleName = 'kma'
+inputFileName = '%(inpath)s'
+outputFileName = '%(outpath)s'
+numPartitions = int('%(numpartitions)s')
+numThreads = int('%(numthreads)s')
+print sys.argv
+
+conf = SparkConf()
+conf.setAppName('doc2kma')
+sc = SparkContext(conf=conf)
+
+scNLPModuleName = sc.broadcast(nlpModuleName)
+scNumThreads = sc.broadcast(numThreads)
+
+def runNLP(pindex, lines):
+    import sys
+    sys.path.append('/hdfs/user/hadoop/javisnlp/')
+    from JavisNLP import JavisNLP
+    nlp = JavisNLP()
+    nlp.init('/hdfs/user/hadoop/javisnlp/config/NLU.cfg')
+    lines = list(lines)
+    others = [s[:-1] for s in lines]
+    sents = [s[-1] for s in lines]    
+    results = nlp.runBatch(sents, scNumThreads.value, scNLPModuleName.value)
+    return [tuple(list(t[0]) + [t[1]]) for t in zip(others, results)]
+   
+for f in sc.wholeTextFiles(inputFileName).map(lambda (f,c): f).collect():
+    print f
+    sents = sc.textFile(f) \
+        .map(lambda line: line.split('%%c' %% (1))) \
+        .map(lambda line: tuple(list(line[:-1]) + ['.\\n'.join(t.strip() for t in line[-1].split('.'))]))
+    
+    if numPartitions >= 1 and numPartitions <= 60:
+        print 'Repartition: ' + str(numPartitions)
+        sents = sents.repartition(numPartitions).cache()
+    else:
+        print 'NumPartitions: ' + str(sents.getNumPartitions())
+    
+    results = sents.mapPartitionsWithIndex(runNLP)
+    results.cache()
+    print results.count()
+    results.map(lambda line: tuple(list(line[:-1]) + [' '.join(line[-1].split('\\n'))])).map(lambda line: ('%%c' %% (1)).join(line)).repartition(1).saveAsTextFile(outputFileName + '/' + f.split('/')[-1])
+print 'Completed: ' + outputFileName
+EOF''' % locals())
+
+    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --driver-memory 4G --executor-memory 4G --conf spark.cores.max=240 --conf spark.executor.extraLibraryPath=/hdfs/user/hadoop/javisnlp/ /home/hadoop/demo/nlp.doc2kma.py 2> /dev/null'
+    run(cmd)
+    
+    
+@task
+def doc2ner(inpath, outpath, numpartitions, numthreads, sep = '\01'):
+    '''
+    fab nlp.doc2ner:/data/sample/sample_hani,/user/hadoop/sample_hani_ner,20,4
+    '''
+    if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
+        print 'Unauthorized path: %(outpath)s' % locals()
+        return 
+    run('hadoop fs -rm -r -f -skipTrash %(outpath)s &> /dev/null' % locals())
+    run('''cat <<EOF > /home/hadoop/demo/nlp.doc2ner.py
+# -*- encoding: utf-8 -*-
+
+from pyspark.context import SparkContext
+from pyspark.conf import SparkConf
+import sys
+
+nlpModuleName = 'ner'
+inputFileName = '%(inpath)s'
+outputFileName = '%(outpath)s'
+numPartitions = int('%(numpartitions)s')
+numThreads = int('%(numthreads)s')
+print sys.argv
+
+conf = SparkConf()
+conf.setAppName('doc2ner')
+sc = SparkContext(conf=conf)
+
+scNLPModuleName = sc.broadcast(nlpModuleName)
+scNumThreads = sc.broadcast(numThreads)
+
+def runNLP(pindex, lines):
+    import sys
+    sys.path.append('/hdfs/user/hadoop/javisnlp/')
+    from JavisNLP import JavisNLP
+    nlp = JavisNLP()
+    nlp.init('/hdfs/user/hadoop/javisnlp/config/NLU.cfg')
+    lines = list(lines)
+    others = [s[:-1] for s in lines]
+    sents = [s[-1] for s in lines]    
+    results = nlp.runBatch(sents, scNumThreads.value, scNLPModuleName.value)
+    return [tuple(list(t[0]) + [t[1]]) for t in zip(others, results)]
+   
+for f in sc.wholeTextFiles(inputFileName).map(lambda (f,c): f).collect():
+    print f
+    sents = sc.textFile(f) \
+        .map(lambda line: line.split('%%c' %% (1))) \
+        .map(lambda line: tuple(list(line[:-1]) + ['.\\n'.join(t.strip() for t in line[-1].split('.'))]))
+    
+    if numPartitions >= 1 and numPartitions <= 60:
+        print 'Repartition: ' + str(numPartitions)
+        sents = sents.repartition(numPartitions).cache()
+    else:
+        print 'NumPartitions: ' + str(sents.getNumPartitions())
+    
+    results = sents.mapPartitionsWithIndex(runNLP)
+    results.cache()
+    print results.count()
+    results.map(lambda line: tuple(list(line[:-1]) + [' '.join(line[-1].split('\\n'))])).map(lambda line: ('%%c' %% (1)).join(line)).repartition(1).saveAsTextFile(outputFileName + '/' + f.split('/')[-1])
+print 'Completed: ' + outputFileName
+EOF''' % locals())
+
+    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --driver-memory 4G --executor-memory 4G --conf spark.cores.max=240 --conf spark.executor.extraLibraryPath=/hdfs/user/hadoop/javisnlp/ /home/hadoop/demo/nlp.doc2ner.py 2> /dev/null'
+    run(cmd)
+    
+
+@task
 def sent2kma(inpath, outpath, numpartitions, numthreads):
     '''
     fab nlp.sent2kma:/data/sample/sample_hani_sent,/user/hadoop/sample_hani_kma,20,4
