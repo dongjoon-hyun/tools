@@ -16,7 +16,7 @@ from fabric.api import *
 @hosts('50.1.100.101')
 def train(solver='data/solver.prototxt',net='data/train_val.prototxt',model='/tmp/model'):
     """
-    fab caffe.train:data/solver.prototxt,data/net.prototxt,/tmp/model
+    fab caffe.train:data/solver.prototxt,data/train_val.prototxt,/tmp/model
     """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
@@ -27,13 +27,66 @@ def train(solver='data/solver.prototxt',net='data/train_val.prototxt',model='/tm
         run("sed -i 's/__DIR__/%s/' solver.prototxt" % env.dir.replace('/','\/'))
         run("sed -i 's/__DIR__/%s/' train_val.prototxt" % env.dir.replace('/','\/'))
         run("sed -i 's/__DIR__/%s/' train_val.prototxt" % env.dir.replace('/','\/'))
-        run('hadoop fs -get /data/image/mnist/train_db/data.mdb train_db/')
-        run('hadoop fs -get /data/image/mnist/test_db/data.mdb test_db/')
+        run('hadoop fs -get /data/image/mnist/train_db/data.mdb train_db/', quiet=True)
+        run('hadoop fs -get /data/image/mnist/test_db/data.mdb test_db/', quiet=True)
         run('/home/hadoop/caffe/distribute/bin/caffe.bin train --solver=solver.prototxt')
         run('hadoop fs -mkdir -p %s' % model)
-        run('hadoop fs -put solver.prototxt %s' % model, queit=True)
-        run('hadoop fs -put train_val.prototxt %s' % model, queit=True)
-        run('hadoop fs -put *.caffemodel %s/pretrained.caffemodel' % model, queit=True)
+        run('hadoop fs -put solver.prototxt %s' % model, quiet=True)
+        run('hadoop fs -put train_val.prototxt %s' % model, quiet=True)
+        run('hadoop fs -put *.caffemodel %s/pretrained.caffemodel' % model, quiet=True)
+
+@task
+@hosts('50.1.100.101')
+def draw(net,imgpath):
+    """
+    """
+
+@task
+def deploy(model):
+    """
+    fab caffe.deploy:/tmp/model
+    """
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('hadoop fs -get %(model)s/train_val.prototxt' % locals(), quiet=True)
+        run('''cat <<EOF > caffe.deploy.py
+# -*- coding: utf-8 -*-
+import cStringIO
+from caffe.proto import caffe_pb2
+from google.protobuf import text_format
+from google.protobuf import descriptor
+
+net = caffe_pb2.NetParameter()
+text_format.Merge(open('train_val.prototxt').read(), net)
+
+out = cStringIO.StringIO()
+for f,v in net.ListFields():
+    if f.label == descriptor.FieldDescriptor.LABEL_REPEATED:
+        for e in v:
+            if e.type == 'SoftmaxWithLoss':
+                print >>out, """layer {
+  name: "prob"
+  type: "Softmax"
+  bottom: "%%s"
+  top: "prob"
+}""" %% e.bottom[0]
+            elif e.type not in ('Data', 'Accuracy', 'Loss'):
+                text_format.PrintField(f, e, out)
+    else:
+        if f.label == 1: # net name
+            print >>out, 'input: "data"'
+            print >>out, 'input_dim: 1'
+            print >>out, 'input_dim: 1'
+            print >>out, 'input_dim: 28'
+            print >>out, 'input_dim: 28'
+        else:
+            text_format.PrintField(f, v, out)
+print out.getvalue()
+out.close()
+EOF''' % locals())
+        cmd = '/usr/local/bin/python2.7 caffe.deploy.py > deploy.prototxt 2> /dev/null'
+        run(cmd)
+        run('hadoop fs -put deploy.prototxt %s' % model, quiet=True)
 
 @task
 @hosts('50.1.100.101')
