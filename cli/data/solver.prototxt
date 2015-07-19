@@ -12,3 +12,4 @@ max_iter: 10000
 snapshot: 10000
 snapshot_prefix: "snapshot"
 solver_mode: GPU
+solver_type: SGD

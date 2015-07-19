@@ -28,7 +28,7 @@ layer {
     scale: 0.00390625
   }
   data_param {
-    source: "__DIR__/test_db"
+    source: "__DIR__/val_db"
     batch_size: 100
     backend: LMDB
   }

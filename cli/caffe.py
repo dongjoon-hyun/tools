@@ -14,21 +14,21 @@ from fabric.api import *
 
 @task
 @hosts('50.1.100.101')
-def train(solver='data/solver.prototxt',net='data/train_val.prototxt',model='/tmp/model'):
+def train(solver='data/solver.prototxt',net='data/train_val.prototxt',data='/tmp/mnist',model='/tmp/model'):
     """
     fab caffe.train:data/solver.prototxt,data/train_val.prototxt,/tmp/model
     """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
         run('mkdir train_db')
-        run('mkdir test_db')
+        run('mkdir val_db')
         put(solver, 'solver.prototxt')
         put(net, 'train_val.prototxt')
         run("sed -i 's/__DIR__/%s/' solver.prototxt" % env.dir.replace('/','\/'))
         run("sed -i 's/__DIR__/%s/' train_val.prototxt" % env.dir.replace('/','\/'))
-        run("sed -i 's/__DIR__/%s/' train_val.prototxt" % env.dir.replace('/','\/'))
-        run('hadoop fs -get /data/image/mnist/train_db/data.mdb train_db/', quiet=True)
-        run('hadoop fs -get /data/image/mnist/test_db/data.mdb test_db/', quiet=True)
+        run('hadoop fs -get %s/train_db/data.mdb train_db/' % data, quiet=True)
+        run('hadoop fs -get %s/val_db/data.mdb val_db/' % data, quiet=True)
+        run('hadoop fs -get %s/labels.txt' % data, quiet=True)
         run('/home/hadoop/caffe/distribute/bin/caffe.bin train --solver=solver.prototxt')
         run('hadoop fs -mkdir -p %s' % model)
         run('hadoop fs -put solver.prototxt %s' % model, quiet=True)
@@ -90,9 +90,9 @@ EOF''' % locals())
 
 @task
 @hosts('50.1.100.101')
-def predict(name, path, topk=5):
+def predict(name, path, color='True',topk=3):
     """
-    fab caffe.predict:/model/caffe/bvlc_reference_caffenet,/data/sample/ad_sunglass.png,3
+    fab caffe.predict:/model/caffe/bvlc_reference_caffenet,/data/sample/ad_sunglass.png,True,3
     """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
@@ -111,22 +111,34 @@ import caffe
 caffe.set_mode_cpu()
 
 labels = []
-with hdfs.open('%(name)s/labels.txt') as f:
-    for line in f:
-        labels.append(line[9:].strip())
+try:
+    with hdfs.open('%(name)s/labels.txt') as f:
+        for line in f:
+            labels.append(line[9:].strip())
+except:
+    pass
+
+mean = None
+try:
+    mean=np.load('mean.npy').mean(1).mean(1)
+except:
+    pass
 
 net = caffe.Classifier('deploy.prototxt', 'pretrained.caffemodel', \
-        mean=np.load('mean.npy').mean(1).mean(1), \
-        channel_swap=(2,1,0), \
+        mean=mean, \
+        channel_swap=None, \
         raw_scale=255, \
-        image_dims=(256, 256))
-input_image = caffe.io.load_image('%(img)s')
+        image_dims=(28,28))
+#        channel_swap=(2,1,0),
+#        image_dims=(256,256))
+input_image = caffe.io.load_image('%(img)s',%(color)s)
 prediction = net.predict([input_image])
 predicted_top_classes = list(reversed(prediction[0].argsort()[-%(topk)s:]))
 for c in predicted_top_classes:
-        print labels[c], prediction[0][c]
+        print c, prediction[0][c]
 EOF''' % locals())
-        cmd = '/usr/local/bin/python2.7 caffe.predict.py 2> /dev/null'
+        #cmd = '/usr/local/bin/python2.7 caffe.predict.py 2> /dev/null'
+        cmd = '/usr/local/bin/python2.7 caffe.predict.py'
         run(cmd)
 
 @task
@@ -136,15 +148,18 @@ def resize_img(inpath,height,width,outpath):
     """
 
 @task
-def build_lmdb(imgpath,dbpath):
+def build_db(imgpath,dbpath,val=0.1):
     """
-    fab caffe.build_lmdb:/data/image/mnist/jpg/labeled_list.txt,/tmp/mnist.lmdb
+    fab caffe.build_db:/data/image/mnist/jpg/labeled_list.txt,/tmp/mnist
     """
-    run('''cat <<EOF > /home/hadoop/demo/caffe.build_lmdb.py
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > caffe.build_db.py
 # -*- coding: utf-8 -*-
 import os
 import sys
 import lmdb
+import random
 import pydoop.hdfs as hdfs
 import PIL.Image
 import numpy as np
@@ -187,13 +202,19 @@ def load_image(path):
     else:
         raise errors.LoadImageError, 'Image mode "%%s" not supported' %% image.mode
 
-db = lmdb.open('%(dbpath)s', map_size=1000000000000, map_async=True, max_dbs=0)
+train_db = lmdb.open('train_db', map_size=1000000000000, map_async=True, max_dbs=0)
+val_db = lmdb.open('val_db', map_size=1000000000000, map_async=True, max_dbs=0)
 count = 1
+labels = {}
 with hdfs.open('%(imgpath)s') as f:
     for line in f:
         parts = line.strip().split()
         path = parts[0]
-        label = int(parts[1])
+        if parts[1] in labels:
+            label = labels[parts[1]]
+        else:
+            labels[parts[1]] = len(labels)
+            label = labels[parts[1]]
 
         image = np.array(load_image('/hdfs' + path))
         if image.ndim == 3:
@@ -209,16 +230,31 @@ with hdfs.open('%(imgpath)s') as f:
             raise Exception('Image has unrecognized shape: "%%s"' %% image.shape)
         datum = caffe.io.array_to_datum(image, label)
 
+        if random.random() < %(val)s:
+            db = val_db
+            print 'val\t',
+        else:
+            db = train_db
+            print 'train\t',
         lmdb_txn = db.begin(write=True)
         lmdb_txn.put("%%s_%%d" %% (path,label), datum.SerializeToString())
         lmdb_txn.commit()
-        print count, path, label
+        print "%%d\t%%s\tLabel:%%-10s\tClassID:%%s" %% (count, path, parts[1], label)
         count = count + 1
+
+f = open('labels.txt', 'w')
+for k,v in sorted(labels.items()):
+    f.write("%%s\t%%s\\n" %% (k, v))
+f.close()
 EOF''' % locals())
-    cmd = '/usr/local/bin/python2.7 /home/hadoop/demo/caffe.build_lmdb.py 2> /dev/null'
-    #run(cmd)
-    run('hadoop fs -mkdir -p %(dbpath)s/' % locals())
-    run('hadoop fs -put -f %(dbpath)s/data.mdb %(dbpath)s/' % locals())
+        #cmd = '/usr/local/bin/python2.7 caffe.build_db.py 2> /dev/null'
+        cmd = '/usr/local/bin/python2.7 caffe.build_db.py'
+        run(cmd)
+        run('hadoop fs -mkdir -p %(dbpath)s/train_db' % locals())
+        run('hadoop fs -mkdir -p %(dbpath)s/val_db' % locals())
+        run('hadoop fs -put -f train_db/data.mdb %(dbpath)s/train_db' % locals())
+        run('hadoop fs -put -f val_db/data.mdb %(dbpath)s/val_db' % locals())
+        run('hadoop fs -put -f labels.txt %(dbpath)s/' % locals())
 
 @task
 def ls_lmdb(dbpath):
@@ -245,3 +281,57 @@ EOF''' % locals())
     cmd = '/usr/local/bin/python2.7 /home/hadoop/demo/caffe.ls_lmdb.py'
     run(cmd)
 
+@task
+def classify(model,image):
+    """
+    fab caffe.classify:/tmp/model,/data/image/mnist/jpg/0/00003.jpg
+    """
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > caffe.classify.py
+import caffe
+from google.protobuf import text_format
+from caffe.proto import caffe_pb2
+
+caffe.set_mode_gpu()
+net = caffe.Net('/hdfs%(model)s/deploy.prototxt', '/hdfs%(model)s/pretrained.caffemodel', caffe.TEST)
+
+network = caffe_pb2.NetParameter()
+with open('/hdfs%(model)s/deploy.prototxt') as infile:
+    text_format.Merge(infile.read(), network)
+
+dims = network.input_dim
+t = caffe.io.Transformer(inputs = {'data': dims})
+t.set_transpose('data', (2,0,1)) # transpose to (channels, height, width)
+if dims[1] == 3:
+    t.set_channel_swap('data', (2,1,0)) # channel swap
+_, channels, height, width = t.inputs['data']
+
+if channels == 3:
+    mode = 'RGB'
+elif channels == 1:
+    mode = 'L'
+else:
+    raise ValueError('Invalid number for channels: %%s' %% channels)
+
+input_image = caffe.io.load_image('/hdfs%(image)s')
+scores = forward_pass([input_image], net, t)
+print scores
+
+if image.ndim == 2:
+    image = image[:,:,np.newaxis]
+    preprocessed = self.get_transformer().preprocess('data', image)
+    # reshape net input (if necessary)
+    test_shape = (1,) + preprocessed.shape
+    if net.blobs['data'].data.shape != test_shape:
+        net.blobs['data'].reshape(*test_shape)
+
+    net.blobs['data'].data[...] = preprocessed
+    output = net.forward()
+    scores = output[net.outputs[-1]].flatten()
+    indices = (-scores).argsort()
+    predictions = []
+    for i in indices:
+        predictions.append( (labels[i], scores[i]) )
+EOF''' % locals())
+        run('python2.7 caffe.classify.py')
