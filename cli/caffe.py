@@ -90,9 +90,9 @@ EOF''' % locals())
 
 @task
 @hosts('50.1.100.101')
-def predict(name, path, color='True',topk=3):
+def predict(name, path, color='True',dims='(256,256)',topk=3):
     """
-    fab caffe.predict:/model/caffe/bvlc_reference_caffenet,/data/sample/ad_sunglass.png,True,3
+    fab caffe.predict:/model/caffe/bvlc_reference_caffenet,/data/sample/ad_sunglass.png,True,'(256,256)',3
     """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
@@ -101,6 +101,7 @@ def predict(name, path, color='True',topk=3):
         run('hadoop fs -get %(name)s/pretrained.caffemodel' % locals(), quiet=True)
         run('hadoop fs -get %(name)s/mean.*' % locals(), quiet=True)
         run('hadoop fs -get %(path)s %(img)s' % locals(), quiet=True)
+        run('hadoop fs -get %(name)s/labels.txt' % locals(), quiet=True)
         run('''cat <<EOF > caffe.predict.py
 # -*- coding: utf-8 -*-
 import sys
@@ -124,18 +125,23 @@ try:
 except:
     pass
 
+channel_swap=None
+if True:
+    channel_swap=(2,1,0)
+
 net = caffe.Classifier('deploy.prototxt', 'pretrained.caffemodel', \
         mean=mean, \
-        channel_swap=None, \
+        channel_swap=channel_swap, \
         raw_scale=255, \
-        image_dims=(28,28))
-#        channel_swap=(2,1,0),
-#        image_dims=(256,256))
+        image_dims=%(dims)s)
 input_image = caffe.io.load_image('%(img)s',%(color)s)
 prediction = net.predict([input_image])
 predicted_top_classes = list(reversed(prediction[0].argsort()[-%(topk)s:]))
 for c in predicted_top_classes:
+    if len(labels) == 0:
         print c, prediction[0][c]
+    else:
+        print labels[c], prediction[0][c]
 EOF''' % locals())
         #cmd = '/usr/local/bin/python2.7 caffe.predict.py 2> /dev/null'
         cmd = '/usr/local/bin/python2.7 caffe.predict.py'
