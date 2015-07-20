@@ -92,7 +92,7 @@ EOF''' % locals())
 @hosts('50.1.100.101')
 def predict(name, path, color='True',dims='(256,256)',topk=3):
     """
-    fab caffe.predict:/model/caffe/bvlc_reference_caffenet,/data/sample/ad_sunglass.png,True,'(256,256)',3
+    fab caffe.predict:/model/caffe/bvlc_reference_caffenet,/data/sample/ad_sunglass.png,True,'(256\,256)',3
     """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
@@ -115,7 +115,7 @@ labels = []
 try:
     with hdfs.open('%(name)s/labels.txt') as f:
         for line in f:
-            labels.append(line[9:].strip())
+            labels.append(' '.join(line.split()[1:]))
 except:
     pass
 
@@ -143,8 +143,7 @@ for c in predicted_top_classes:
     else:
         print labels[c], prediction[0][c]
 EOF''' % locals())
-        #cmd = '/usr/local/bin/python2.7 caffe.predict.py 2> /dev/null'
-        cmd = '/usr/local/bin/python2.7 caffe.predict.py'
+        cmd = '/usr/local/bin/python2.7 caffe.predict.py 2> /dev/null'
         run(cmd)
 
 @task
