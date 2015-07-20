@@ -109,7 +109,7 @@ import numpy as np
 import pydoop.hdfs as hdfs
 sys.path.insert(0, '/home/hadoop/caffe/distribute/python')
 import caffe
-caffe.set_mode_cpu()
+caffe.set_mode_gpu()
 
 labels = []
 try:
