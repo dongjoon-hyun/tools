@@ -754,6 +754,18 @@ time, mark, audio, video {
 											<pre>fab nlp.kner:'삼성물산이 분양한 해운대 래미안 아파트는 지난달 25일 청약접수에 들어가 평균 364대 1의 경쟁률을 보이며 역시 뜨거운 열기를 보였다.'</pre>
 											<pre style="background-color:#38424a">&lt;OG>삼성물산&lt;/OG>이 분양한 &lt;LC>해운대&lt;/LC> &lt;AF>래미안 아파트&lt;/AF>는 &lt;DT>지난달 25일&lt;/DT> 청약접수에 들어가 평균 &lt;QT>364대 1&lt;/QT>의 경쟁률을 보이며 역시 뜨거운 열기를 보였다.</pre>
 												
+											<li>Korean Word2Vec</li>
+											<pre>Word2Vec QA</pre>
+												<form>
+													Hint Words:
+													<input type="text" id="hint1" value="프랑스">
+													<input type="text" id="hint2" value="파리">
+													<input type="text" id="hint3" value="태국">
+													<button type="button" onclick="onclick_word2vecqa()">Click Me!</button>
+													<br>
+													<pre style="background-color:#38424a" id="answer"></pre>
+												</form>
+												
                                         </ol>
 									</div><!-- /.span -->									
 								</div><!-- /.row -->
@@ -768,6 +780,27 @@ time, mark, audio, video {
 			</a>
 		</div><!-- /.main-container -->
 
+		<!-- inline scripts related to this page -->
+        <script type="text/javascript">
+            function onclick_word2vecqa() {
+            	var question = $('#hint1').val() + "," + $('#hint2').val() + "," + $('#hint3').val();
+                $.ajax({
+                    type: "GET",
+                    url:"http://localhost:5666/api/v1/word2vec/qa/" + encodeURIComponent(question)
+                }).done(function(json) {
+                    var jsonobj = JSON.parse(json);
+                    var answer = "";
+                    for(key in jsonobj) {
+                    	answer += key + ": " + jsonobj[key] + "\n";
+                    }
+                    answer = answer.replace(/\/NNP/gi, "");
+                    $('#answer').text(answer);
+                }).fail( function(xhr, textStatus, errorThrown) {
+                    alert(JSON.stringify(xhr));
+                });
+            }
+        </script>
+        
 		<!-- basic scripts -->
 
 		<!--[if !IE]> -->
