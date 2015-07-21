@@ -5,7 +5,7 @@ News Feed Crawler
 '''
 from twisted.protocols.ftp import FileNotFoundError
 
-__author__    = 'Dongjoon Hyun'
+__author__    = 'Dongjoon Hyun (dongjoon@apache.org)'
 __copyright__ = 'Copyright (c) 2015'
 __license__   = 'Apache License 2.0'
 __version__   = '0.1'
