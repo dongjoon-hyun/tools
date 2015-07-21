@@ -4,6 +4,7 @@ var cors = require('cors');
 var child_process = require('child_process');
 var path = require('path');
 var fs = require('fs');
+var math = require('mathjs');
 var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -13,6 +14,7 @@ app.use(cors());
 
 var words = [];
 var vectors = [];
+var norms = [];
 
 //Read word vectors from file
 if(words.length == 0) {
@@ -36,6 +38,9 @@ if(words.length == 0) {
 	    }
 	    words.push(word);
 	    vectors.push(vec);
+	    norms.push(math.norm(vec));
+	}).on('close', function() {
+		console.log("Loading Completed: " + words.length + " words..");
 	});
 }
 
@@ -49,18 +54,35 @@ app.get('/api/v1/word2vec/qa/:param', function(req, res) {
 	var hint1 = inputwords[0] + "/NNP";
 	var hint2 = inputwords[1] + "/NNP";
 	var hint3 = inputwords[2] + "/NNP";
-	var index1, index2, index3;
+	var index1 = -1, index2 = -1, index3 = -1;
+	var oov = [0, 0, 0];
+	var times = [];
+	
+	times.push(Date.now());
 	
 	// Get hint word indexes for hint vectors
 	for(i in words) {
 		if(words[i].trim() == hint1.trim()) {
 			index1 = i;
+			oov[0] = 1;
 		}
 		if(words[i].trim() == hint2.trim()) {
 			index2 = i;
+			oov[1] = 1;
 		}
 		if(words[i].trim() == hint3.trim()) {
 			index3 = i;
+			oov[2] = 1;
+		}
+	}
+	
+	for(i in oov) {
+		if(oov[i] == 0) {
+			result = {'out of vocabulary': inputwords[i]}
+			res.charset = 'utf-8';
+		    res.contentType('text');
+		    res.send(JSON.stringify(result));
+		    return;
 		}
 	}
 	
@@ -68,34 +90,34 @@ app.get('/api/v1/word2vec/qa/:param', function(req, res) {
 	console.log(words[index2] + ": " + vectors[index2]);
 	console.log(words[index3] + ": " + vectors[index3]);
 	
+	times.push(Date.now());
+	
 	// Calculate answer vector from hint vectors
 	var ansvec = [];
-	var normansvec = 0;
 	for(i in vectors[index1]) {
 		var v = vectors[index2][i] - vectors[index1][i] + vectors[index3][i];
 		ansvec.push(v);
-		normansvec += v * v;
 	}
-	normansvec = Math.sqrt(normansvec);
+	var normansvec = math.norm(ansvec);
 	
 	console.log("Ansvec: " + ansvec);
+	
+	times.push(Date.now());
+	
+	var matwords = math.matrix(vectors);
+	var distvectors = math.multiply(matwords, ansvec).valueOf();
+	
+	times.push(Date.now());
 	
 	// Calculate distances from answer vector to all other word vectors
 	var distances = [];
 	for(i in vectors) {
-		var wordvec = vectors[i];
-		var dist = 0;
-		for(j in ansvec) {
-			dist += ansvec[j] * wordvec[j];
-		}
-		var normwordvec = 0;
-		for(j in wordvec) {
-			normwordvec += wordvec[j] * wordvec[j];
-		}
-		normwordvec = Math.sqrt(normwordvec);
-		
+		var dist = distvectors[i];
+		var normwordvec = norms[i];
 		distances[i] = dist / normansvec / normwordvec;
 	}
+	
+	times.push(Date.now());
 	
 	// Get Top N words and vectors
 	var topindexes = [0, 0, 0, 0, 0];
@@ -103,7 +125,7 @@ app.get('/api/v1/word2vec/qa/:param', function(req, res) {
 	var best = 0;
 	for(i in distances) {
 		for(j in topn) {
-			if(distances[i] > topn[j]) {
+			if(distances[i] > topn[j] && i != index1 && i != index2 && i != index3) {
 				for(k=topn.length - 1; k>=j+1; k--) {
 					topn[k] = topn[k - 1];
 					topindexes[k] = topindexes[k - 1];
@@ -112,6 +134,13 @@ app.get('/api/v1/word2vec/qa/:param', function(req, res) {
 				topindexes[j] = i;
 				break;
 			}
+		}
+	}
+	
+	times.push(Date.now());
+	for(t in times) {
+		if(t > 0) {
+			console.log(times[t] - times[t-1] + "ms");
 		}
 	}
 	
