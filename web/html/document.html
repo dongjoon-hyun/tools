@@ -502,36 +502,47 @@
                                 <h4>1. Train Category</h4>
 
                                 <div style="padding-left: 20px">
-                                    <pre>fab news.nb_train:/data/text/news/hani/*,1.0,multinomial,/model/spark/news</pre>
-												<pre style="background-color:#38424a">
-Model Accuracy(self):  0.88198881847
-Model Accuracy(all):  0.833137644744</pre>
-                                </div>
-                                <h4>2. Predict Category</h4>
-
-                                <div style="padding-left: 20px">
-                                    <pre>fab news.nb_predict:/model/spark/news,'최근 전국 아파트 분양 시장의'</pre>
-                                    <pre style="background-color:#38424a">economy</pre>
+                                    <pre>fab news.nb_train:/data/text/news/hani/*,1.0,multinomial,/tmp/news100</pre>
+                                    <pre style="background-color:#38424a">
+Model Accuracy(self):  0.848272085031
+Model Accuracy(all):  0.813659237458</pre>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12 col-sm-12">
+                                <h4>2. Predict Category</h4>
                                 <div class="widget-box">
                                     <div class="widget-header">
                                         <h4 class="widget-title">TEXT</h4>
-												<span class="widget-toolbar">
-													<a href="#" data-action="collapse">
-                                                        <i class="ace-icon fa fa-chevron-up"></i>
-                                                    </a>
-													<a href="#" data-action="close">
-                                                        <i class="ace-icon fa fa-times"></i>
-                                                    </a>
-												</span>
+                                        <span class="widget-toolbar">
+                                        <a href="#" data-action="collapse">
+                                            <i class="ace-icon fa fa-chevron-up"></i>
+                                        </a>
+                                        <a href="#" data-action="close">
+                                            <i class="ace-icon fa fa-times"></i>
+                                        </a>
+                                        </span>
                                     </div>
                                     <div class="widget-body">
                                         <div class="widget-main" align="center">
-                                            <textarea id="targetText" style="width:100%;height:200px"></textarea>
+                                            <div>
+                                                <select class="form-control" id="select-1" onchange="$('#targetText').text($('#select-1').val())">
+                                                    <option value=""></option>
+                                                    <option value="여름 보양식 “올해는 장어도 대세”
+23일 중복을 앞두고 여름 보양식으로 장어와 전복 등 다양한 음식이 소비자들을 사로잡고 있는 것으로 나타났다. 여름 보양식의 ‘대세’인 삼계탕은 1~2인 가구가 늘면서 반 마리 상품 판매가 증가하고 있다.
+온라인 쇼핑사이트 11번가 자료를 보면 초복(13일)이 있었던 지난 1일부터 20일까지 전복과 장어 매출이 지난해 같은 기간보다 각각 402%, 232% 늘어난 것으로 집계됐다.">
+                                                        여름 보양식 “올해는 장어도 대세”
+                                                    </option>
+                                                    <option value="담보 충분해도 원금갚을 능력 따져 대출액 조정
+정부가 22일 내놓은 ‘가계부채 종합관리방안’은 대출자의 빚 갚을 능력을 꼼꼼히 따지고, 대출받은 시점부터 원금을 나눠 갚도록 해 가계부채를 안정적으로 관리하겠다는 게 핵심 내용이다.
+저금리나 주택담보인정비율(LTV)·총부채상환비율(DTI) 규제 완화 등 가계부채를 늘린 원인을 직접 손보지는 않고, 은행이 대출 관행을 개선하는 간접적인 방식을 통해 대출 규모를 줄이고 가계부채의 취약고리를 제거해 나가겠다는 것이다.">
+                                                        담보 충분해도 원금갚을 능력 따져 대출액 조정
+                                                    </option>
+                                                </select>
+                                            </div>
+
+                                            <textarea id="targetText" style="width:100%;height:100px"></textarea>
                                             <a href="#" class="btn btn-app btn-primary btn-xs" style="align:center"
                                                onclick="classifyText()">
                                                 <i class="ace-icon fa fa-refresh 160"></i>
@@ -593,8 +604,8 @@ Model Accuracy(all):  0.833137644744</pre>
         $.ajax({
             type: "GET",
             username: "hadoop",
+            url: "http://hadoop:tip@tip:5555/api/v1/news.nb_predict/" + encodeURIComponent("/tmp/news100") + ",'" + encodeURIComponent(text) + "'",
             password: "tip",
-            url: "http://hadoop:tip@tip:5555/api/v1/news.nb_predict/" + encodeURIComponent("/model/spark/news") + ",'" + encodeURIComponent(text) + "'",
             headers: {
                 Authorization: "Basic " + btoa("hadoop:tip")
             }

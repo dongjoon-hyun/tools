@@ -94,7 +94,7 @@ terms = data.map(lambda line: line.split('%%c' %% 1)[1]) \
     .filter(lambda word: len(word.strip())>1) \
     .map(lambda word: (word,1)) \
     .reduceByKey(lambda x,y: x+y) \
-    .filter(lambda (word,count): count>2) \
+    .filter(lambda (word,count): count>100) \
     .zipWithIndex() \
     .cache()
 terms.map(lambda ((word,count),index): '%%s%%c%%s%%c%%s' %% (index+1,1,word,1,count)) \
