@@ -728,34 +728,27 @@ time, mark, audio, video {
                                             <li>Korean Morphological Analysis</li>
                                             <pre>fab nlp.kma:'삼성물산이 분양한 해운대 래미안 아파트는 지난달 25일 청약접수에 들어가 평균 364대 1의 경쟁률을 보이며 역시 뜨거운 열기를 보였다.'</pre>
                                             <pre style="background-color:#38424a">삼성물산/NNP 이/JKS 분양/NNG 하/XSV ㄴ/ETM 해운대/NNP 래미안/NNP 아파트/NNG 는/JX 지난달/NNG 25/SN 일/NNB 청약/NNG 접수/NNG 에/JKB 들어가/VV 아/EC 평균/NNG 364/SN 대/NNB 1/SN 의/JKG 경쟁/NNG 률/XSN 을/JKO 보이/VV 며/EC 역시/MAG 뜨겁/VA ㄴ/ETM 열기/NNG 를/JKO 보이/VV 었/EP 다/EF ./SF</pre>											
-											<div class="pannel t_review">
-												<div class="box_gr_grp"><dl class="grp_view">
-														<dt>삼성물산이</dt><dd class="type_n"><strong>삼성물산</strong><em>NNP</em></dd><dd class="type_j"><strong>이</strong><em>JKS</em></dd></dl><dl class="grp_view">
-														<dt>분양한</dt><dd class="type_n"><strong>분양</strong><em>NNG</em></dd><dd class="type_x"><strong>하</strong><em>XSV</em></dd><dd class="type_e"><strong>ㄴ</strong><em>ETM</em></dd></dl><dl class="grp_view">
-														<dt>해운대</dt><dd class="type_n"><strong>해운대</strong><em>NNP</em></dd></dl><dl class="grp_view">
-														<dt>래미안</dt><dd class="type_n"><strong>래미안</strong><em>NNP</em></dd></dl><dl class="grp_view">
-														<dt>아파트는</dt><dd class="type_n"><strong>아파트</strong><em>NNG</em></dd><dd class="type_j"><strong>는</strong><em>JX</em></dd></dl><dl class="grp_view">
-														<dt>지난달</dt><dd class="type_n"><strong>지난달</strong><em>NNG</em></dd></dl><dl class="grp_view">
-														<dt>25일</dt><dd class="type_s"><strong>25</strong><em>SN</em></dd><dd class="type_n"><strong>일</strong><em>NNB</em></dd></dl><dl class="grp_view">
-														<dt>청약접수에</dt><dd class="type_n"><strong>청약</strong><em>NNG</em></dd><dd class="type_n"><strong>접수</strong><em>NNG</em></dd><dd class="type_j"><strong>에</strong><em>JKB</em></dd></dl><dl class="grp_view">
-														<dt>들어가</dt><dd class="type_v"><strong>들어가</strong><em>VV</em></dd><dd class="type_e"><strong>아</strong><em>EC</em></dd></dl><dl class="grp_view">
-														<dt>평균</dt><dd class="type_n"><strong>평균</strong><em>NNG</em></dd></dl><dl class="grp_view">
-														<dt>364대</dt><dd class="type_s"><strong>364</strong><em>SN</em></dd><dd class="type_n"><strong>대</strong><em>NNB</em></dd></dl><dl class="grp_view">
-														<dt>1의</dt><dd class="type_s"><strong>1</strong><em>SN</em></dd><dd class="type_j"><strong>의</strong><em>JKG</em></dd></dl><dl class="grp_view">
-														<dt>경쟁률을</dt><dd class="type_n"><strong>경쟁</strong><em>NNG</em></dd><dd class="type_x"><strong>률</strong><em>XSN</em></dd><dd class="type_j"><strong>을</strong><em>JKO</em></dd></dl><dl class="grp_view">
-														<dt>보이며</dt><dd class="type_v"><strong>보이</strong><em>VV</em></dd><dd class="type_e"><strong>며</strong><em>EC</em></dd></dl><dl class="grp_view">
-														<dt>역시</dt><dd class="type_m"><strong>역시</strong><em>MAG</em></dd></dl><dl class="grp_view">
-														<dt>뜨거운</dt><dd class="type_v"><strong>뜨겁</strong><em>VA</em></dd><dd class="type_e"><strong>ㄴ</strong><em>ETM</em></dd></dl><dl class="grp_view">
-														<dt>열기를</dt><dd class="type_n"><strong>열기</strong><em>NNG</em></dd><dd class="type_j"><strong>를</strong><em>JKO</em></dd></dl><dl class="grp_view">
-														<dt>보였다.</dt><dd class="type_v"><strong>보이</strong><em>VV</em></dd><dd class="type_e"><strong>었</strong><em>EP</em></dd><dd class="type_e"><strong>다</strong><em>EF</em></dd><dd class="type_s"><strong>.</strong><em>SF</em></dd></dl></div>
-												</div>
-												<div class="clearfloat"></div>								
+													
 											<li>Korean Named Entity Recognition</li>
 											<pre>fab nlp.kner:'삼성물산이 분양한 해운대 래미안 아파트는 지난달 25일 청약접수에 들어가 평균 364대 1의 경쟁률을 보이며 역시 뜨거운 열기를 보였다.'</pre>
 											<pre style="background-color:#38424a">&lt;OG>삼성물산&lt;/OG>이 분양한 &lt;LC>해운대&lt;/LC> &lt;AF>래미안 아파트&lt;/AF>는 &lt;DT>지난달 25일&lt;/DT> 청약접수에 들어가 평균 &lt;QT>364대 1&lt;/QT>의 경쟁률을 보이며 역시 뜨거운 열기를 보였다.</pre>
 												
-											<li>Korean Word2Vec</li>
-											<pre>Word2Vec QA</pre>
+											<li>Korean Word2Vec Test</li>
+											<pre>fab nlp.word2vec_test:/data/sample/sample_hani_wordvec,벨기에,5</pre>
+												<form>
+													Query Word:
+													<input type="text" id="queryword" value="벨기에">
+													<button type="button" onclick="onclick_word2vectest()">Click Me!</button>
+													<br>
+													<pre style="background-color:#38424a" id="answer_test">헝가리: 0.8472120924271183
+네덜란드: 0.846804379437618
+스위스: 0.8121931531091364
+슬로베니아: 0.8012198661329796
+노르웨이: 0.7746411038970719</pre>
+												</form>
+												
+											<li>Korean Word2Vec QA</li>
+											<pre>fab nlp.word2vec_qa:/data/sample/sample_hani_wordvec,프랑스,파리,태국,5</pre>
 												<form>
 													Hint Words:
 													<input type="text" id="hint1" value="프랑스">
@@ -763,7 +756,11 @@ time, mark, audio, video {
 													<input type="text" id="hint3" value="태국">
 													<button type="button" onclick="onclick_word2vecqa()">Click Me!</button>
 													<br>
-													<pre style="background-color:#38424a" id="answer"></pre>
+													<pre style="background-color:#38424a" id="answer_qa">방콕: 0.7977599149263724
+파타야: 0.7660347927977422
+푸껫: 0.7290235416582129
+푸켓: 0.7069917151962726
+수라바야: 0.6874885647507958</pre>
 												</form>
 												
                                         </ol>
@@ -782,6 +779,24 @@ time, mark, audio, video {
 
 		<!-- inline scripts related to this page -->
         <script type="text/javascript">
+        	function onclick_word2vectest() {
+            	var question = $('#queryword').val();
+                $.ajax({
+                    type: "GET",
+                    url:"http://localhost:5666/api/v1/word2vec/test/" + encodeURIComponent(question)
+                }).done(function(json) {
+                    var jsonobj = JSON.parse(json);
+                    var answer = "";
+                    for(key in jsonobj) {
+                    	answer += key + ": " + jsonobj[key] + "\n";
+                    }
+                    answer = answer.replace(/\/NNP/gi, "");
+                    $('#answer_test').text(answer);
+                }).fail( function(xhr, textStatus, errorThrown) {
+                    alert(JSON.stringify(xhr));
+                });
+            }
+            
             function onclick_word2vecqa() {
             	var question = $('#hint1').val() + "," + $('#hint2').val() + "," + $('#hint3').val();
                 $.ajax({
@@ -794,7 +809,7 @@ time, mark, audio, video {
                     	answer += key + ": " + jsonobj[key] + "\n";
                     }
                     answer = answer.replace(/\/NNP/gi, "");
-                    $('#answer').text(answer);
+                    $('#answer_qa').text(answer);
                 }).fail( function(xhr, textStatus, errorThrown) {
                     alert(JSON.stringify(xhr));
                 });

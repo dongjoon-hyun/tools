@@ -352,15 +352,15 @@ EOF''' % locals())
 
 
 @task
-def word2vec_train(inpath, outpath, numpartitions, mincount, numiterations):
+def word2vec_train(inpath, outpath, numpartitions, mincount, numiterations, vectorsize):
     '''
-    fab nlp.word2vec_train:/data/sample/sample_hani_kma,/user/hadoop/sample_hani_wordvec,20,5,3
+    fab nlp.word2vec_train:/data/sample/sample_hani_kma,/user/hadoop/sample_hani_wordvec,20,5,3,100
     '''
     if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
         print 'Unauthorized path: %(outpath)s' % locals()
         return
     run('hadoop fs -rm -r -f -skipTrash %(outpath)s &> /dev/null' % locals())
-    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --class SparkWord2VecTrain2 --num-executors 120 --driver-memory 8G --executor-memory 8G --conf spark.akka.frameSize=200 --conf spark.driver.maxResultSize=2g /hdfs/user/hadoop/demo/nlp/sparkword2vec_2.10-1.0.jar %(inpath)s %(outpath)s %(numpartitions)s %(mincount)s %(numiterations)s 2> /dev/null' % locals()
+    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --class SparkWord2VecTrain2 --num-executors 120 --driver-memory 8G --executor-memory 8G --conf spark.akka.frameSize=200 --conf spark.driver.maxResultSize=2g /hdfs/user/hadoop/demo/nlp/sparkword2vec_2.10-1.0.jar %(inpath)s %(outpath)s %(numpartitions)s %(mincount)s %(numiterations)s %(vectorsize)s' % locals()
     run(cmd)
     
 
@@ -383,11 +383,10 @@ argtopn = int('%(topn)s')
 fread = open(argmodelfile, 'r')
 wordvectors = {}
 for f in fread.readlines():
-    tok = f.split("\t")
+    tok = f.split(" ")
     w = tok[0].strip()
-    v = tok[1].strip().split(" ")
     if '/N' in w:
-        wordvectors[w] = [double(d) for d in v]
+        wordvectors[w] = [double(d) for d in tok[1:]]
  
 words = [wv[0] for wv in wordvectors.items()]
 vectors = [wv[1] for wv in wordvectors.items()]
@@ -425,11 +424,10 @@ argtopn = int('%(topn)s')
 fread = open(argmodelfile, 'r')
 wordvectors = {}
 for f in fread.readlines():
-    tok = f.split("\t")
+    tok = f.split(" ")
     w = tok[0].strip()
-    v = tok[1].strip().split(" ")
     if '/N' in w:
-        wordvectors[w] = [double(d) for d in v]
+        wordvectors[w] = [double(d) for d in tok[1:]]
  
 words = [wv[0] for wv in wordvectors.items()]
 vectors = [wv[1] for wv in wordvectors.items()]
@@ -494,10 +492,10 @@ argtopn = int('%(topn)s')
 fread = open(argmodelfile, 'r')
 wordvectors = {}
 for f in fread.readlines():
-    tok = f.split("\t")
+    tok = f.split(" ")
     w = tok[0].strip()
-    v = tok[1].strip().split(" ")
-    wordvectors[w] = [double(d) for d in v]
+    if '/N' in w:
+        wordvectors[w] = [double(d) for d in tok[1:]]
   
 words = [wv[0] for wv in wordvectors.items()]
 vectors = [wv[1] for wv in wordvectors.items()]
