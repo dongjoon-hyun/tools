@@ -502,16 +502,15 @@
                                 <div class="widget-box">
                                     <div class="widget-header">
                                         <h4 class="widget-title">File</h4>
+                                        <span class="widget-toolbar">
+                                        <a href="#" data-action="collapse">
+                                            <i class="ace-icon fa fa-chevron-up"></i>
+                                        </a>
 
-                                                        <span class="widget-toolbar">
-                                                            <a href="#" data-action="collapse">
-                                                                <i class="ace-icon fa fa-chevron-up"></i>
-                                                            </a>
-
-                                                            <a href="#" data-action="close">
-                                                                <i class="ace-icon fa fa-times"></i>
-                                                            </a>
-                                                        </span>
+                                        <a href="#" data-action="close">
+                                            <i class="ace-icon fa fa-times"></i>
+                                        </a>
+                                        </span>
                                     </div>
 
                                     <div class="widget-body">
@@ -612,87 +611,85 @@ car 0.0570637</pre>
                                                  src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000021.jpg?user.name=hadoop&op=open"/>
                                         </li>
                                     </ul>
-                                    <div>
-                                        </ol>
-                                    </div>
-                                    <!-- /.span -->
                                 </div>
-                                <!-- /.row -->
-
-                                <!-- PAGE CONTENT ENDS -->
                             </div>
-                            <!-- /.col -->
                         </div>
                         <!-- /.row -->
+
+                        <!-- PAGE CONTENT ENDS -->
                     </div>
-                    <!-- /.page-content-area -->
+                    <!-- /.col -->
                 </div>
-                <!-- /.page-content -->
+                <!-- /.row -->
             </div>
-            <!-- /.main-content -->
-
-            <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-                <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
-            </a>
+            <!-- /.page-content-area -->
         </div>
-        <!-- /.main-container -->
+        <!-- /.page-content -->
+    </div>
+    <!-- /.main-content -->
 
-        <!-- basic scripts -->
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+        <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+    </a>
+</div>
+<!-- /.main-container -->
 
-        <!--[if !IE]> -->
-        <script type="text/javascript">
-            window.jQuery || document.write("<script src='../assets/js/jquery.min.js'>" + "<" + "/script>");
-        </script>
+<!-- basic scripts -->
 
-        <!-- <![endif]-->
+<!--[if !IE]> -->
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='../assets/js/jquery.min.js'>" + "<" + "/script>");
+</script>
 
-        <!--[if IE]>
-        <script type="text/javascript">
-            window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>" + "<" + "/script>");
-        </script>
-        <![endif]-->
-        <script type="text/javascript">
-            if ('ontouchstart' in document.documentElement) document.write("<script src='../assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
-        </script>
-        <script src="../assets/js/bootstrap.min.js"></script>
+<!-- <![endif]-->
 
-        <!-- ace scripts -->
-        <script src="../assets/js/ace-elements.min.js"></script>
-        <script src="../assets/js/ace.min.js"></script>
+<!--[if IE]>
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>" + "<" + "/script>");
+</script>
+<![endif]-->
+<script type="text/javascript">
+    if ('ontouchstart' in document.documentElement) document.write("<script src='../assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+</script>
+<script src="../assets/js/bootstrap.min.js"></script>
 
-        <!-- inline scripts related to this page -->
-        <script type="text/javascript">
-            function classifyPDF() {
-                var text = $('#targetText').val().replace(/['"\.,-\/#!$%\^&\*;:{}=\-_`~()\n]/g, " ");
-                $('#top1').text('Precessing');
-                $.ajax({
-                    type: "GET",
-                    username: "hadoop",
-                    password: "tip",
-                    url: "http://hadoop:tip@tip:5555/api/v1/news.nb_predict/" + encodeURIComponent("/model/spark/news") + ",'" + encodeURIComponent(text) + "'",
-                    headers: {
-                        Authorization: "Basic " + btoa("hadoop:tip")
-                    }
-                }).done(function (json) {
-                    var result = json['result'].split('\n');
-                    $('#top1').text(result[0].substring(result[0].lastIndexOf(" "), result[0].length));
-                }).fail(function (xhr, textStatus, errorThrown) {
-                    alert(JSON.stringify(xhr));
-                });
+<!-- ace scripts -->
+<script src="../assets/js/ace-elements.min.js"></script>
+<script src="../assets/js/ace.min.js"></script>
+
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    function classifyPDF() {
+        var text = $('#targetText').val().replace(/['"\.,-\/#!$%\^&\*;:{}=\-_`~()\n]/g, " ");
+        $('#top1').text('Precessing');
+        $.ajax({
+            type: "GET",
+            username: "hadoop",
+            password: "tip",
+            url: "http://hadoop:tip@tip:5555/api/v1/news.nb_predict/" + encodeURIComponent("/model/spark/news") + ",'" + encodeURIComponent(text) + "'",
+            headers: {
+                Authorization: "Basic " + btoa("hadoop:tip")
             }
-        </script>
+        }).done(function (json) {
+            var result = json['result'].split('\n');
+            $('#top1').text(result[0].substring(result[0].lastIndexOf(" "), result[0].length));
+        }).fail(function (xhr, textStatus, errorThrown) {
+            alert(JSON.stringify(xhr));
+        });
+    }
+</script>
 
-        <!-- the following scripts are used in demo only for onpage help and you don't need them -->
-        <link rel="stylesheet" href="../assets/css/ace.onpage-help.css"/>
-        <link rel="stylesheet" href="../docs/assets/js/themes/sunburst.css"/>
+<!-- the following scripts are used in demo only for onpage help and you don't need them -->
+<link rel="stylesheet" href="../assets/css/ace.onpage-help.css"/>
+<link rel="stylesheet" href="../docs/assets/js/themes/sunburst.css"/>
 
-        <script type="text/javascript"> ace.vars['base'] = '..'; </script>
-        <script src="../assets/js/ace/elements.onpage-help.js"></script>
-        <script src="../assets/js/ace/ace.onpage-help.js"></script>
-        <script src="../docs/assets/js/rainbow.js"></script>
-        <script src="../docs/assets/js/language/generic.js"></script>
-        <script src="../docs/assets/js/language/html.js"></script>
-        <script src="../docs/assets/js/language/css.js"></script>
-        <script src="../docs/assets/js/language/javascript.js"></script>
+<script type="text/javascript"> ace.vars['base'] = '..'; </script>
+<script src="../assets/js/ace/elements.onpage-help.js"></script>
+<script src="../assets/js/ace/ace.onpage-help.js"></script>
+<script src="../docs/assets/js/rainbow.js"></script>
+<script src="../docs/assets/js/language/generic.js"></script>
+<script src="../docs/assets/js/language/html.js"></script>
+<script src="../docs/assets/js/language/css.js"></script>
+<script src="../docs/assets/js/language/javascript.js"></script>
 </body>
 </html>
