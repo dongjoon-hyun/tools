@@ -1,591 +1,622 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-		<meta charset="utf-8" />
-		<title>TIP - T Intelligence Platform</title>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title>TIP - T Intelligence Platform</title>
 
-		<meta name="description" content="Static &amp; Dynamic Tables" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="description" content="Static &amp; Dynamic Tables"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 
-		<!-- bootstrap & fontawesome -->
-		<link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="../assets/css/font-awesome.min.css" />
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../assets/css/font-awesome.min.css"/>
 
-		<!-- page specific plugin styles -->
+    <!-- page specific plugin styles -->
 
-		<!-- text fonts -->
-		<link rel="stylesheet" href="../assets/css/ace-fonts.css" />
+    <!-- text fonts -->
+    <link rel="stylesheet" href="../assets/css/ace-fonts.css"/>
 
-		<!-- ace styles -->
-		<link rel="stylesheet" href="../assets/css/ace.min.css" id="main-ace-style" />
+    <!-- ace styles -->
+    <link rel="stylesheet" href="../assets/css/ace.min.css" id="main-ace-style"/>
 
-		<!--[if lte IE 9]>
-			<link rel="stylesheet" href="../assets/css/ace-part2.min.css" />
-		<![endif]-->
-		<link rel="stylesheet" href="../assets/css/ace-skins.min.css" />
-		<link rel="stylesheet" href="../assets/css/ace-rtl.min.css" />
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="../assets/css/ace-part2.min.css"/>
+    <![endif]-->
+    <link rel="stylesheet" href="../assets/css/ace-skins.min.css"/>
+    <link rel="stylesheet" href="../assets/css/ace-rtl.min.css"/>
 
-		<!--[if lte IE 9]>
-		  <link rel="stylesheet" href="../assets/css/ace-ie.min.css" />
-		<![endif]-->
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="../assets/css/ace-ie.min.css"/>
+    <![endif]-->
 
-		<!-- inline styles related to this page -->
+    <!-- inline styles related to this page -->
 
-		<!-- ace settings handler -->
-		<script src="../assets/js/ace-extra.min.js"></script>
+    <!-- ace settings handler -->
+    <script src="../assets/js/ace-extra.min.js"></script>
 
-		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+    <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
 
-		<!--[if lte IE 8]>
-		<script src="../assets/js/html5shiv.min.js"></script>
-		<script src="../assets/js/respond.min.js"></script>
-		<![endif]-->
-	</head>
+    <!--[if lte IE 8]>
+    <script src="../assets/js/html5shiv.min.js"></script>
+    <script src="../assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
 
-	<body class="no-skin">
-		<!-- #section:basics/navbar.layout -->
-		<div id="navbar" class="navbar navbar-default">
-			<script type="text/javascript">
-				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
-			</script>
+<body class="no-skin">
+<!-- #section:basics/navbar.layout -->
+<div id="navbar" class="navbar navbar-default">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('navbar', 'fixed')
+        } catch (e) {
+        }
+    </script>
 
-			<div class="navbar-container" id="navbar-container">
-				<!-- #section:basics/sidebar.mobile.toggle -->
-				<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler">
-					<span class="sr-only">Toggle sidebar</span>
+    <div class="navbar-container" id="navbar-container">
+        <!-- #section:basics/sidebar.mobile.toggle -->
+        <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler">
+            <span class="sr-only">Toggle sidebar</span>
 
-					<span class="icon-bar"></span>
+            <span class="icon-bar"></span>
 
-					<span class="icon-bar"></span>
+            <span class="icon-bar"></span>
 
-					<span class="icon-bar"></span>
-				</button>
+            <span class="icon-bar"></span>
+        </button>
 
-				<!-- /section:basics/sidebar.mobile.toggle -->
-				<div class="navbar-header pull-left">
-					<!-- #section:basics/navbar.layout.brand -->
-					<a href="#" class="navbar-brand">
-						<small>
-							<i class="fa fa-leaf"></i>
-							T Intelligence Platform
-						</small>
-					</a>
+        <!-- /section:basics/sidebar.mobile.toggle -->
+        <div class="navbar-header pull-left">
+            <!-- #section:basics/navbar.layout.brand -->
+            <a href="#" class="navbar-brand">
+                <small>
+                    <i class="fa fa-leaf"></i>
+                    T Intelligence Platform
+                </small>
+            </a>
 
-					<!-- /section:basics/navbar.layout.brand -->
+            <!-- /section:basics/navbar.layout.brand -->
 
-					<!-- #section:basics/navbar.toggle -->
+            <!-- #section:basics/navbar.toggle -->
 
-					<!-- /section:basics/navbar.toggle -->
-				</div>
+            <!-- /section:basics/navbar.toggle -->
+        </div>
 
-				<!-- #section:basics/navbar.dropdown -->
-				<div class="navbar-buttons navbar-header pull-right" role="navigation">
-					<ul class="nav ace-nav">
-						<li class="green">
-							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-								<i class="ace-icon fa fa-tasks"></i>
-								<span class="badge badge-grey">4</span>
-							</a>
+        <!-- #section:basics/navbar.dropdown -->
+        <div class="navbar-buttons navbar-header pull-right" role="navigation">
+            <ul class="nav ace-nav">
+                <li class="green">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <i class="ace-icon fa fa-tasks"></i>
+                        <span class="badge badge-grey">4</span>
+                    </a>
 
-							<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-								<li class="dropdown-header">
-									<i class="ace-icon fa fa-check"></i>
-									4 Tasks to complete
-								</li>
+                    <ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+                        <li class="dropdown-header">
+                            <i class="ace-icon fa fa-check"></i>
+                            4 Tasks to complete
+                        </li>
 
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">Software Update</span>
-											<span class="pull-right">65%</span>
-										</div>
+                        <li>
+                            <a href="#">
+                                <div class="clearfix">
+                                    <span class="pull-left">Software Update</span>
+                                    <span class="pull-right">65%</span>
+                                </div>
 
-										<div class="progress progress-mini">
-											<div style="width:65%" class="progress-bar"></div>
-										</div>
-									</a>
-								</li>
+                                <div class="progress progress-mini">
+                                    <div style="width:65%" class="progress-bar"></div>
+                                </div>
+                            </a>
+                        </li>
 
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">Hardware Upgrade</span>
-											<span class="pull-right">35%</span>
-										</div>
+                        <li>
+                            <a href="#">
+                                <div class="clearfix">
+                                    <span class="pull-left">Hardware Upgrade</span>
+                                    <span class="pull-right">35%</span>
+                                </div>
 
-										<div class="progress progress-mini">
-											<div style="width:35%" class="progress-bar progress-bar-danger"></div>
-										</div>
-									</a>
-								</li>
+                                <div class="progress progress-mini">
+                                    <div style="width:35%" class="progress-bar progress-bar-danger"></div>
+                                </div>
+                            </a>
+                        </li>
 
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">Unit Testing</span>
-											<span class="pull-right">15%</span>
-										</div>
+                        <li>
+                            <a href="#">
+                                <div class="clearfix">
+                                    <span class="pull-left">Unit Testing</span>
+                                    <span class="pull-right">15%</span>
+                                </div>
 
-										<div class="progress progress-mini">
-											<div style="width:15%" class="progress-bar progress-bar-warning"></div>
-										</div>
-									</a>
-								</li>
+                                <div class="progress progress-mini">
+                                    <div style="width:15%" class="progress-bar progress-bar-warning"></div>
+                                </div>
+                            </a>
+                        </li>
 
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">Bug Fixes</span>
-											<span class="pull-right">90%</span>
-										</div>
+                        <li>
+                            <a href="#">
+                                <div class="clearfix">
+                                    <span class="pull-left">Bug Fixes</span>
+                                    <span class="pull-right">90%</span>
+                                </div>
 
-										<div class="progress progress-mini progress-striped active">
-											<div style="width:90%" class="progress-bar progress-bar-success"></div>
-										</div>
-									</a>
-								</li>
+                                <div class="progress progress-mini progress-striped active">
+                                    <div style="width:90%" class="progress-bar progress-bar-success"></div>
+                                </div>
+                            </a>
+                        </li>
 
-								<li class="dropdown-footer">
-									<a href="#">
-										See tasks with details
-										<i class="ace-icon fa fa-arrow-right"></i>
-									</a>
-								</li>
-							</ul>
-						</li>
+                        <li class="dropdown-footer">
+                            <a href="#">
+                                See tasks with details
+                                <i class="ace-icon fa fa-arrow-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
-						<!-- #section:basics/navbar.user_menu -->
-						<li class="light-blue">
-							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-								<img class="nav-user-photo" src="../assets/avatars/user.jpg" alt="Jason's Photo" />
+                <!-- #section:basics/navbar.user_menu -->
+                <li class="light-blue">
+                    <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                        <img class="nav-user-photo" src="../assets/avatars/user.jpg" alt="Jason's Photo"/>
 								<span class="user-info">
 									<small>Welcome,</small>
 									Admin
 								</span>
 
-								<i class="ace-icon fa fa-caret-down"></i>
-							</a>
-
-							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-								<li>
-									<a href="#">
-										<i class="ace-icon fa fa-cog"></i>
-										Settings
-									</a>
-								</li>
-
-								<li>
-									<a href="profile.html">
-										<i class="ace-icon fa fa-user"></i>
-										Profile
-									</a>
-								</li>
-
-								<li class="divider"></li>
-
-								<li>
-									<a href="#">
-										<i class="ace-icon fa fa-power-off"></i>
-										Logout
-									</a>
-								</li>
-							</ul>
-						</li>
-
-						<!-- /section:basics/navbar.user_menu -->
-					</ul>
-				</div>
-
-				<!-- /section:basics/navbar.dropdown -->
-			</div><!-- /.navbar-container -->
-		</div>
-
-		<!-- /section:basics/navbar.layout -->
-		<div class="main-container" id="main-container">
-			<script type="text/javascript">
-				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
-			</script>
-
-			<!-- #section:basics/sidebar -->
-			<div id="sidebar" class="sidebar                  responsive">
-				<script type="text/javascript">
-					try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
-				</script>
-
-				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
-					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-						<button class="btn btn-success">
-							<i class="ace-icon fa fa-signal"></i>
-						</button>
-
-						<button class="btn btn-info">
-							<i class="ace-icon fa fa-pencil"></i>
-						</button>
-
-						<!-- #section:basics/sidebar.layout.shortcuts -->
-						<button class="btn btn-warning">
-							<i class="ace-icon fa fa-users"></i>
-						</button>
-
-						<button class="btn btn-danger">
-							<i class="ace-icon fa fa-cogs"></i>
-						</button>
-
-						<!-- /section:basics/sidebar.layout.shortcuts -->
-					</div>
-
-					<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-						<span class="btn btn-success"></span>
-
-						<span class="btn btn-info"></span>
-
-						<span class="btn btn-warning"></span>
-
-						<span class="btn btn-danger"></span>
-					</div>
-				</div><!-- /.sidebar-shortcuts -->
-
-                <ul class="nav nav-list">
-                    <li>
-                        <a href="index.html">
-                            <i class="menu-icon fa fa-tachometer"></i>
-                            <span class="menu-text"> Dashboard </span>
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="#" class="dropdown-toggle">
-                            <i class="menu-icon fa fa-list"></i>
-                            <span class="menu-text"> Data </span>
-
-                            <b class="arrow fa fa-angle-down"></b>
-                        </a>
-
-                        <b class="arrow"></b>
-
-                        <ul class="submenu">
-                            <li class="">
-                                <a href="text.html">
-                                    <i class="menu-icon fa fa-caret-right"></i>
-                                    Text
-                                </a>
-
-                                <b class="arrow"></b>
-                            </li>
-
-                            <li class="">
-                                <a href="image.html">
-                                    <i class="menu-icon fa fa-caret-right"></i>
-                                    Image
-                                </a>
-
-                                <b class="arrow"></b>
-                            </li>
-
-                            <li class="">
-                                <a href="audio.html">
-                                    <i class="menu-icon fa fa-caret-right"></i>
-                                    Audio
-                                </a>
-
-                                <b class="arrow"></b>
-                            </li>
-
-                            <li class="">
-                                <a href="video.html">
-                                    <i class="menu-icon fa fa-caret-right"></i>
-                                    Video
-                                </a>
-
-                                <b class="arrow"></b>
-                            </li>
-
-                            <li class="">
-                                <a href="graph.html">
-                                    <i class="menu-icon fa fa-caret-right"></i>
-                                    Graph
-                                </a>
-
-                                <b class="arrow"></b>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="">
-                        <a href="#" class="">
-                            <i class="menu-icon fa fa-square-o"></i>
-                            <span class="menu-text"> Function </span>
-
-                            <b class="arrow"></b>
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="flow.html">
-                            <i class="menu-icon fa fa-exchange"></i>
-                            <span class="menu-text"> Flow </span>
-                        </a>
-                    </li>
-
-                    <li class="active">
-                        <a href="#" class="dropdown-toggle">
-                            <i class="menu-icon fa fa-eye"></i>
-                            <span class="menu-text"> Demo </span>
-
-                            <b class="arrow fa fa-angle-down"></b>
-                        </a>
-
-                        <b class="arrow"></b>
-
-                        <ul class="submenu">
-							<li class="">
-								<a href="nn.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Neural Network
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="nlp.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									NLP
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-                            <li class="">
-                                <a href="word_cloud.html">
-                                    <i class="menu-icon fa fa-caret-right"></i>
-                                    Word Cloud
-                                </a>
-
-                                <b class="arrow"></b>
-                            </li>
-
-                            <li class="">
-                                <a href="image_tag.html">
-                                    <i class="menu-icon fa fa-caret-right"></i>
-                                    Image Tagging
-                                </a>
-
-                                <b class="arrow"></b>
-                            </li>
-
-                            <li class="">
-                                <a href="ocr.html">
-                                    <i class="menu-icon fa fa-caret-right"></i>
-                                    OCR
-                                </a>
-
-                                <b class="arrow"></b>
-                            </li>
-
-                            <li class="">
-                                <a href="face.html">
-                                    <i class="menu-icon fa fa-caret-right"></i>
-                                    Face Detection
-                                </a>
-
-                                <b class="arrow"></b>
-                            </li>
-
-                            <li class="">
-                                <a href="speech.html">
-                                    <i class="menu-icon fa fa-caret-right"></i>
-                                    Speech Recognition
-                                </a>
-
-                                <b class="arrow"></b>
-                            </li>
-
-                            <li class="active">
-                                <a href="document.html">
-                                    <i class="menu-icon fa fa-caret-right"></i>
-                                    Text Categorization
-                                </a>
-
-                                <b class="arrow"></b>
-                            </li>
-
-							<li class="">
-								<a href="security.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Document Security
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-                        </ul>
-                    </li>
-
-                </ul><!-- /.nav-list -->
-
-                <!-- #section:basics/sidebar.layout.minimize -->
-				<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
-					<i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
-				</div>
-
-				<!-- /section:basics/sidebar.layout.minimize -->
-				<script type="text/javascript">
-					try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
-				</script>
-			</div>
-
-			<!-- /section:basics/sidebar -->
-			<div class="main-content">
-				<!-- #section:basics/content.breadcrumbs -->
-				<div class="breadcrumbs" id="breadcrumbs">
-					<script type="text/javascript">
-						try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
-					</script>
-
-					<ul class="breadcrumb">
-						<li>
-							<i class="ace-icon fa fa-home home-icon"></i>
-                            <a href="#">Home</a>
-						</li>
-
-						<li>
-							<a href="#">Text Categorization</a>
-						</li>
-						<!--li class="active"></li-->
-					</ul><!-- /.breadcrumb -->
-				</div>
-
-				<!-- /section:basics/content.breadcrumbs -->
-				<div class="page-content">
-					<div class="page-content-area">
-						<div class="page-header">
-							<h1>
-								Text Categorization
-								<small>
-									<i class="ace-icon fa fa-angle-double-right"></i>
-
-								</small>
-							</h1>
-						</div><!-- /.page-header -->
-
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <!-- PAGE CONTENT BEGINS -->
-                                <div class="row">
-									<div class="row">
-										<div class="col-xs-12">
-											<ol>
-												<li>Train Category</li>
-												<pre>fab news.nb_train:/data/text/news/hani/*,1.0,multinomial,/model/spark/news</pre>
-												<pre style="background-color:#38424a">
-Model Accuracy(self):  0.88198881847
-Model Accuracy(all):  0.833137644744</pre>
-												<li>Predict Category</li>
-												<pre>fab news.nb_predict:/model/spark/news,'최근 전국 아파트 분양 시장의'</pre>
-												<pre style="background-color:#38424a">economy</pre>
-											</ol>
-										</div><!-- /.span -->
-									</div><!-- /.row -->
-
-									<div class="col-xs-12 col-sm-12">
-                                        <div class="widget-box">
-                                            <div class="widget-header">
-                                                <h4 class="widget-title">TEXT</h4>
-												<span class="widget-toolbar">
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-													<a href="#" data-action="close">
-														<i class="ace-icon fa fa-times"></i>
-													</a>
-												</span>
-                                            </div>
-                                            <div class="widget-body">
-                                                <div class="widget-main" align="center">
-													<textarea id="targetText" style="width:100%;height:200px"></textarea>
-													<a href="#" class="btn btn-app btn-primary btn-xs" style="align:center" onclick="classifyText()">
-														<i class="ace-icon fa fa-refresh 160"></i>
-														Analyze
-													</a>
-
-													<button class="btn disabled btn-success" id="top1">Unknown</button>
-                                                </div>
-											</div>
-                                        </div>
-                                    </div>
-                                </div><!-- PAGE CONTENT ENDS -->
-                            </div><!-- /.col -->
-                        </div><!-- /.row -->
-					</div><!-- /.page-content-area -->
-				</div><!-- /.page-content -->
-			</div><!-- /.main-content -->
-
-			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
-			</a>
-		</div><!-- /.main-container -->
-
-		<!-- basic scripts -->
-
-		<!--[if !IE]> -->
-		<script type="text/javascript">
-			window.jQuery || document.write("<script src='../assets/js/jquery.min.js'>"+"<"+"/script>");
-		</script>
-
-		<!-- <![endif]-->
-
-		<!--[if IE]>
-<script type="text/javascript">
- window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>"+"<"+"/script>");
-</script>
-<![endif]-->
-		<script type="text/javascript">
-			if('ontouchstart' in document.documentElement) document.write("<script src='../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
-		</script>
-		<script src="../assets/js/bootstrap.min.js"></script>
-
-		<!-- ace scripts -->
-		<script src="../assets/js/ace-elements.min.js"></script>
-		<script src="../assets/js/ace.min.js"></script>
-
-		<!-- inline scripts related to this page -->
+                        <i class="ace-icon fa fa-caret-down"></i>
+                    </a>
+
+                    <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                        <li>
+                            <a href="#">
+                                <i class="ace-icon fa fa-cog"></i>
+                                Settings
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="profile.html">
+                                <i class="ace-icon fa fa-user"></i>
+                                Profile
+                            </a>
+                        </li>
+
+                        <li class="divider"></li>
+
+                        <li>
+                            <a href="#">
+                                <i class="ace-icon fa fa-power-off"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- /section:basics/navbar.user_menu -->
+            </ul>
+        </div>
+
+        <!-- /section:basics/navbar.dropdown -->
+    </div>
+    <!-- /.navbar-container -->
+</div>
+
+<!-- /section:basics/navbar.layout -->
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <!-- #section:basics/sidebar -->
+    <div id="sidebar" class="sidebar                  responsive">
         <script type="text/javascript">
-            function classifyText() {
-                var text = $('#targetText').val().replace(/['"\.,-\/#!$%\^&\*;:{}=\-_`~()\n]/g," ");
-				$('#top1').text('Precessing');
-                $.ajax({
-                    type: "GET",
-                    username:"hadoop",
-                    password:"tip",
-                    url:"http://hadoop:tip@tip:5555/api/v1/news.nb_predict/" + encodeURIComponent("/model/spark/news") + ",'" + encodeURIComponent(text) + "'",
-                    headers: {
-                        Authorization: "Basic " + btoa("hadoop:tip")
-                    }
-                }).done(function(json) {
-                    var result = json['result'].split('\n');
-                    $('#top1').text(result[0].substring(result[0].lastIndexOf(" "),result[0].length));
-                }).fail( function(xhr, textStatus, errorThrown) {
-                    alert(JSON.stringify(xhr));
-                });
+            try {
+                ace.settings.check('sidebar', 'fixed')
+            } catch (e) {
             }
         </script>
 
-		<!-- the following scripts are used in demo only for onpage help and you don't need them -->
-		<link rel="stylesheet" href="../assets/css/ace.onpage-help.css" />
-		<link rel="stylesheet" href="../docs/assets/js/themes/sunburst.css" />
+        <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+            <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+                <button class="btn btn-success">
+                    <i class="ace-icon fa fa-signal"></i>
+                </button>
 
-		<script type="text/javascript"> ace.vars['base'] = '..'; </script>
-		<script src="../assets/js/ace/elements.onpage-help.js"></script>
-		<script src="../assets/js/ace/ace.onpage-help.js"></script>
-		<script src="../docs/assets/js/rainbow.js"></script>
-		<script src="../docs/assets/js/language/generic.js"></script>
-		<script src="../docs/assets/js/language/html.js"></script>
-		<script src="../docs/assets/js/language/css.js"></script>
-		<script src="../docs/assets/js/language/javascript.js"></script>
-	</body>
+                <button class="btn btn-info">
+                    <i class="ace-icon fa fa-pencil"></i>
+                </button>
+
+                <!-- #section:basics/sidebar.layout.shortcuts -->
+                <button class="btn btn-warning">
+                    <i class="ace-icon fa fa-users"></i>
+                </button>
+
+                <button class="btn btn-danger">
+                    <i class="ace-icon fa fa-cogs"></i>
+                </button>
+
+                <!-- /section:basics/sidebar.layout.shortcuts -->
+            </div>
+
+            <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+                <span class="btn btn-success"></span>
+
+                <span class="btn btn-info"></span>
+
+                <span class="btn btn-warning"></span>
+
+                <span class="btn btn-danger"></span>
+            </div>
+        </div>
+        <!-- /.sidebar-shortcuts -->
+
+        <ul class="nav nav-list">
+            <li>
+                <a href="index.html">
+                    <i class="menu-icon fa fa-tachometer"></i>
+                    <span class="menu-text"> Dashboard </span>
+                </a>
+
+                <b class="arrow"></b>
+            </li>
+
+            <li class="">
+                <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon fa fa-list"></i>
+                    <span class="menu-text"> Data </span>
+
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+
+                <b class="arrow"></b>
+
+                <ul class="submenu">
+                    <li class="">
+                        <a href="text.html">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Text
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a href="image.html">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Image
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a href="audio.html">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Audio
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a href="video.html">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Video
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a href="graph.html">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Graph
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="">
+                <a href="#" class="">
+                    <i class="menu-icon fa fa-square-o"></i>
+                    <span class="menu-text"> Function </span>
+
+                    <b class="arrow"></b>
+                </a>
+
+                <b class="arrow"></b>
+            </li>
+
+            <li class="">
+                <a href="flow.html">
+                    <i class="menu-icon fa fa-exchange"></i>
+                    <span class="menu-text"> Flow </span>
+                </a>
+            </li>
+
+            <li class="active">
+                <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon fa fa-eye"></i>
+                    <span class="menu-text"> Demo </span>
+
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+
+                <b class="arrow"></b>
+
+                <ul class="submenu">
+                    <li class="">
+                        <a href="nn.html">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Neural Network  (R)
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a href="word_cloud.html">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Word Cloud (R + Spark)
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a href="nlp.html">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            NLP (Spark)
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a href="ocr.html">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            OCR (Caffe + DIGITS)
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a href="image_tag.html">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Image Tagging (Caffe)
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a href="face.html">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Face Detection (TBD)
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a href="speech.html">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Speech Recognition (TBD)
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="active">
+                        <a href="document.html">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Text Categorization (Spark)
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a href="security.html">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Document Security (Caffe + DIGITS)
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+                </ul>
+            </li>
+
+        </ul>
+        <!-- /.nav-list -->
+
+        <!-- #section:basics/sidebar.layout.minimize -->
+        <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+            <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left"
+               data-icon2="ace-icon fa fa-angle-double-right"></i>
+        </div>
+
+        <!-- /section:basics/sidebar.layout.minimize -->
+        <script type="text/javascript">
+            try {
+                ace.settings.check('sidebar', 'collapsed')
+            } catch (e) {
+            }
+        </script>
+    </div>
+
+    <!-- /section:basics/sidebar -->
+    <div class="main-content">
+        <!-- #section:basics/content.breadcrumbs -->
+        <div class="breadcrumbs" id="breadcrumbs">
+            <script type="text/javascript">
+                try {
+                    ace.settings.check('breadcrumbs', 'fixed')
+                } catch (e) {
+                }
+            </script>
+
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">Home</a>
+                </li>
+
+                <li>
+                    <a href="#">Text Categorization</a>
+                </li>
+                <!--li class="active"></li-->
+            </ul>
+            <!-- /.breadcrumb -->
+        </div>
+
+        <!-- /section:basics/content.breadcrumbs -->
+        <div class="page-content">
+            <div class="page-content-area">
+                <div class="page-header">
+                    <h1>
+                        Text Categorization
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+
+                        </small>
+                    </h1>
+                </div>
+                <!-- /.page-header -->
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+                        <div class="row">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <ol>
+                                        <li>Train Category</li>
+                                        <pre>fab news.nb_train:/data/text/news/hani/*,1.0,multinomial,/model/spark/news</pre>
+												<pre style="background-color:#38424a">
+Model Accuracy(self):  0.88198881847
+Model Accuracy(all):  0.833137644744</pre>
+                                        <li>Predict Category</li>
+                                        <pre>fab news.nb_predict:/model/spark/news,'최근 전국 아파트 분양 시장의'</pre>
+                                        <pre style="background-color:#38424a">economy</pre>
+                                    </ol>
+                                </div>
+                                <!-- /.span -->
+                            </div>
+                            <!-- /.row -->
+
+                            <div class="col-xs-12 col-sm-12">
+                                <div class="widget-box">
+                                    <div class="widget-header">
+                                        <h4 class="widget-title">TEXT</h4>
+												<span class="widget-toolbar">
+													<a href="#" data-action="collapse">
+                                                        <i class="ace-icon fa fa-chevron-up"></i>
+                                                    </a>
+													<a href="#" data-action="close">
+                                                        <i class="ace-icon fa fa-times"></i>
+                                                    </a>
+												</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-main" align="center">
+                                            <textarea id="targetText" style="width:100%;height:200px"></textarea>
+                                            <a href="#" class="btn btn-app btn-primary btn-xs" style="align:center"
+                                               onclick="classifyText()">
+                                                <i class="ace-icon fa fa-refresh 160"></i>
+                                                Analyze
+                                            </a>
+
+                                            <button class="btn disabled btn-success" id="top1">Unknown</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- PAGE CONTENT ENDS -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.page-content-area -->
+        </div>
+        <!-- /.page-content -->
+    </div>
+    <!-- /.main-content -->
+
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+        <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+    </a>
+</div>
+<!-- /.main-container -->
+
+<!-- basic scripts -->
+
+<!--[if !IE]> -->
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='../assets/js/jquery.min.js'>" + "<" + "/script>");
+</script>
+
+<!-- <![endif]-->
+
+<!--[if IE]>
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>" + "<" + "/script>");
+</script>
+<![endif]-->
+<script type="text/javascript">
+    if ('ontouchstart' in document.documentElement) document.write("<script src='../assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+</script>
+<script src="../assets/js/bootstrap.min.js"></script>
+
+<!-- ace scripts -->
+<script src="../assets/js/ace-elements.min.js"></script>
+<script src="../assets/js/ace.min.js"></script>
+
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    function classifyText() {
+        var text = $('#targetText').val().replace(/['"\.,-\/#!$%\^&\*;:{}=\-_`~()\n]/g, " ");
+        $('#top1').text('Precessing');
+        $.ajax({
+            type: "GET",
+            username: "hadoop",
+            password: "tip",
+            url: "http://hadoop:tip@tip:5555/api/v1/news.nb_predict/" + encodeURIComponent("/model/spark/news") + ",'" + encodeURIComponent(text) + "'",
+            headers: {
+                Authorization: "Basic " + btoa("hadoop:tip")
+            }
+        }).done(function (json) {
+            var result = json['result'].split('\n');
+            $('#top1').text(result[0].substring(result[0].lastIndexOf(" "), result[0].length));
+        }).fail(function (xhr, textStatus, errorThrown) {
+            alert(JSON.stringify(xhr));
+        });
+    }
+</script>
+
+<!-- the following scripts are used in demo only for onpage help and you don't need them -->
+<link rel="stylesheet" href="../assets/css/ace.onpage-help.css"/>
+<link rel="stylesheet" href="../docs/assets/js/themes/sunburst.css"/>
+
+<script type="text/javascript"> ace.vars['base'] = '..'; </script>
+<script src="../assets/js/ace/elements.onpage-help.js"></script>
+<script src="../assets/js/ace/ace.onpage-help.js"></script>
+<script src="../docs/assets/js/rainbow.js"></script>
+<script src="../docs/assets/js/language/generic.js"></script>
+<script src="../docs/assets/js/language/html.js"></script>
+<script src="../docs/assets/js/language/css.js"></script>
+<script src="../docs/assets/js/language/javascript.js"></script>
+</body>
 </html>
