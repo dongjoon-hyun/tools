@@ -714,14 +714,59 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-5">
-                        <div style="display:table-cell; vertical-align: middle">
+                    <div class="col-xs-4">
+                        <br><br><br><br>
+
+                        <div style="display:table-cell; vertical-align: middle">ls
                             <ul class="ace-thumbnails clearfix">
                                 <li>
-                                    <img id="target_img" width="150" height="150" alt="150x150"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/9/00020.jpg?user.name=hadoop&op=open"/>
+                                    <img id="target_img" width="280" height="280" alt="280x280"/>
                                 </li>
                             </ul>
+                        </div>
+                        <div id="box1" hidden>
+                            <div class="col-sm-12 infobox-container">
+                                <div class="infobox infobox-red" style="width:100%">
+                                    <div class="infobox-icon">
+                                        <i class="ace-icon fa fa-bar-chart-o"></i>
+                                    </div>
+
+                                    <div class="infobox-data">
+                                        <span class="infobox-data-number" id="top1"></span>
+
+                                        <div class="infobox-content" id="rate1"></div>
+                                    </div>
+                                    <div class="stat stat-success">1</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 infobox-container">
+                                <div class="infobox infobox-green" style="width:100%">
+                                    <div class="infobox-icon">
+                                        <i class="ace-icon fa fa-bar-chart-o"></i>
+                                    </div>
+
+                                    <div class="infobox-data">
+                                        <span class="infobox-data-number" id="top2"></span>
+
+                                        <div class="infobox-content" id="rate2"></div>
+                                    </div>
+                                    <div class="stat stat-success">2</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 infobox-container">
+                                <div class="infobox infobox-blue" style="width:100%">
+                                    <div class="infobox-icon">
+                                        <i class="ace-icon fa fa-bar-chart-o"></i>
+                                    </div>
+
+                                    <div class="infobox-data">
+                                        <span class="infobox-data-number" id="top3"></span>
+
+                                        <div class="infobox-content" id="rate3"></div>
+                                    </div>
+                                    <div class="stat stat-success">3</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -764,20 +809,19 @@
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
     function classifyImage(url) {
-
-        //$('#target_img').attr('src', "http://tip:14000/webhdfs/v1/sample/cat.jpg?user.name=hadoop&op=open");
-        alert($('#target_img').attr('src'));
-        $('#target_img').attr('src', $('#target_img').attr('src'));
+        $('#box1').hide();
+        $('#target_img').attr('src', url);
+        var file = url.substring(27, 60);
         $.ajax({
             type: "GET",
             username: "hadoop",
             password: "tip",
-            url: "http://hadoop:tip@tip:5555/api/v1/caffe.predict/bvlc_reference_caffenet," + encodeURIComponent(file) + ",3",
+            url: "http://hadoop:tip@tip:5555/api/v1/caffe.predict/%2Fmodel%2Fcaffe%2Fmnist_digits," + encodeURIComponent(file) + ",False,28:28,None,3",
             headers: {
                 Authorization: "Basic " + btoa("hadoop:tip")
             }
         }).done(function (json) {
-            $('#image_tag').show();
+            $('#box1').show();
             var result = json['result'].split('\n');
             $('#top1').text(result[0].substring(0, result[0].lastIndexOf(" ")));
             $('#rate1').text(result[0].substring(result[0].lastIndexOf(" ")));
