@@ -724,84 +724,84 @@
                             </ul>
                         </div>
                     </div>
-                    <!-- /.row -->
                 </div>
-                <!-- /.page-content-area -->
+                <!-- /.row -->
             </div>
-            <!-- /.page-content -->
+            <!-- /.page-content-area -->
         </div>
-        <!-- /.main-content -->
-
-        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-            <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
-        </a>
+        <!-- /.page-content -->
     </div>
-    <!-- /.main-container -->
+    <!-- /.main-content -->
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+        <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+    </a>
+</div>
+<!-- /.main-container -->
 
-    <!-- basic scripts -->
+<!-- basic scripts -->
 
-    <!--[if !IE]> -->
-    <script type="text/javascript">
-        window.jQuery || document.write("<script src='../assets/js/jquery.min.js'>" + "<" + "/script>");
-    </script>
+<!--[if !IE]> -->
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='../assets/js/jquery.min.js'>" + "<" + "/script>");
+</script>
 
-    <!-- <![endif]-->
+<!-- <![endif]-->
 
-    <!--[if IE]>
-    <script type="text/javascript">
-        window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>" + "<" + "/script>");
-    </script>
-    <![endif]-->
-    <script type="text/javascript">
-        if ('ontouchstart' in document.documentElement) document.write("<script src='../assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
-    </script>
-    <script src="../assets/js/bootstrap.min.js"></script>
+<!--[if IE]>
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>" + "<" + "/script>");
+</script>
+<![endif]-->
+<script type="text/javascript">
+    if ('ontouchstart' in document.documentElement) document.write("<script src='../assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+</script>
+<script src="../assets/js/bootstrap.min.js"></script>
 
-    <!-- ace scripts -->
-    <script src="../assets/js/ace-elements.min.js"></script>
-    <script src="../assets/js/ace.min.js"></script>
+<!-- ace scripts -->
+<script src="../assets/js/ace-elements.min.js"></script>
+<script src="../assets/js/ace.min.js"></script>
 
-    <!-- inline scripts related to this page -->
-    <script type="text/javascript">
-        function classifyImage(url) {
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    function classifyImage(url) {
 
-            //$('#target_img').attr('src', "http://tip:14000/webhdfs/v1/sample/cat.jpg?user.name=hadoop&op=open");
-            alert($('#target_img').attr('src'));
-            $('#target_img').attr('src', $('#target_img').attr('src'));
-            $.ajax({
-                type: "GET",
-                username: "hadoop",
-                password: "tip",
-                url: "http://hadoop:tip@tip:5555/api/v1/caffe.predict/bvlc_reference_caffenet," + encodeURIComponent(file) + ",3",
-                headers: {
-                    Authorization: "Basic " + btoa("hadoop:tip")
-                }
-            }).done(function (json) {
-                $('#image_tag').show();
-                var result = json['result'].split('\n');
-                $('#top1').text(result[0].substring(0, result[0].lastIndexOf(" ")));
-                $('#rate1').text(result[0].substring(result[0].lastIndexOf(" ")));
-                $('#top2').text(result[1].substring(0, result[1].lastIndexOf(" ")));
-                $('#rate2').text(result[1].substring(result[1].lastIndexOf(" ")));
-                $('#top3').text(result[2].substring(0, result[2].lastIndexOf(" ")));
-                $('#rate3').text(result[2].substring(result[2].lastIndexOf(" ")));
-            }).fail(function (xhr, textStatus, errorThrown) {
-                alert(JSON.stringify(xhr));
-            });
-        }
-    </script>
+        //$('#target_img').attr('src', "http://tip:14000/webhdfs/v1/sample/cat.jpg?user.name=hadoop&op=open");
+        alert($('#target_img').attr('src'));
+        $('#target_img').attr('src', $('#target_img').attr('src'));
+        $.ajax({
+            type: "GET",
+            username: "hadoop",
+            password: "tip",
+            url: "http://hadoop:tip@tip:5555/api/v1/caffe.predict/bvlc_reference_caffenet," + encodeURIComponent(file) + ",3",
+            headers: {
+                Authorization: "Basic " + btoa("hadoop:tip")
+            }
+        }).done(function (json) {
+            $('#image_tag').show();
+            var result = json['result'].split('\n');
+            $('#top1').text(result[0].substring(0, result[0].lastIndexOf(" ")));
+            $('#rate1').text(result[0].substring(result[0].lastIndexOf(" ")));
+            $('#top2').text(result[1].substring(0, result[1].lastIndexOf(" ")));
+            $('#rate2').text(result[1].substring(result[1].lastIndexOf(" ")));
+            $('#top3').text(result[2].substring(0, result[2].lastIndexOf(" ")));
+            $('#rate3').text(result[2].substring(result[2].lastIndexOf(" ")));
+        }).fail(function (xhr, textStatus, errorThrown) {
+            alert(JSON.stringify(xhr));
+        });
+    }
+</script>
 
-    <!-- the following scripts are used in demo only for onpage help and you don't need them -->
-    <link rel="stylesheet" href="../assets/css/ace.onpage-help.css"/>
-    <link rel="stylesheet" href="../docs/assets/js/themes/sunburst.css"/>
+<!-- the following scripts are used in demo only for onpage help and you don't need them -->
+<link rel="stylesheet" href="../assets/css/ace.onpage-help.css"/>
+<link rel="stylesheet" href="../docs/assets/js/themes/sunburst.css"/>
 
-    <script type="text/javascript"> ace.vars['base'] = '..'; </script>
-    <script src="../assets/js/ace/elements.onpage-help.js"></script>
-    <script src="../assets/js/ace/ace.onpage-help.js"></script>
-    <script src="../docs/assets/js/rainbow.js"></script>
-    <script src="../docs/assets/js/language/generic.js"></script>
-    <script src="../docs/assets/js/language/html.js"></script>
-    <script src="../docs/assets/js/language/css.js"></script>
-    <script src="../docs/assets/js/language/javascript.js"></script>
+<script type="text/javascript"> ace.vars['base'] = '..'; </script>
+<script src="../assets/js/ace/elements.onpage-help.js"></script>
+<script src="../assets/js/ace/ace.onpage-help.js"></script>
+<script src="../docs/assets/js/rainbow.js"></script>
+<script src="../docs/assets/js/language/generic.js"></script>
+<script src="../docs/assets/js/language/html.js"></script>
+<script src="../docs/assets/js/language/css.js"></script>
+<script src="../docs/assets/js/language/javascript.js"></script>
 </body>
 </html>

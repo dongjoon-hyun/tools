@@ -499,38 +499,18 @@
                         <!-- PAGE CONTENT BEGINS -->
                         <div class="row">
                             <div class="col-xs-12 col-sm-12">
-                                <div class="widget-box">
-                                    <div class="widget-header">
-                                        <h4 class="widget-title">File</h4>
-                                        <span class="widget-toolbar">
-                                        <a href="#" data-action="collapse">
-                                            <i class="ace-icon fa fa-chevron-up"></i>
-                                        </a>
+                                <h4>1. Text + Image Analysis Case</h4>
 
-                                        <a href="#" data-action="close">
-                                            <i class="ace-icon fa fa-times"></i>
-                                        </a>
-                                        </span>
-                                    </div>
-
-                                    <div class="widget-body">
-                                        <div class="widget-main">
-                                            <div>
-                                                <select class="form-control" id="select-1" onchange="classifyPDF()">
-                                                    <option value=""></option>
-                                                    <option value="/sample/normal.pdf">/sample/normal.pdf</option>
-                                                    <option value="/sample/circuit.pdf">/sample/circuit.pdf</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <img id="target_img" height="500px" style="border: 1px solid lightgrey;"
+                                     src="http://tip:14000/webhdfs/v1/sample/normal.png?user.name=hadoop&op=open"/>
+                                <img id="target_img" height="500px" style="border: 1px solid lightgrey;"
+                                     src="http://tip:14000/webhdfs/v1/sample/circuit.png?user.name=hadoop&op=open"/>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-xs-12">
-                                <h4>1. User Script</h4>
+                                <h4>2. User Script</h4>
 
                                 <div style="padding-left: 20px">
                                 <pre>
@@ -543,7 +523,7 @@ circuit 0.247732
 car 0.0570637</pre>
                                 </div>
 
-                                <h4>2. Recognizable Images </h4>
+                                <h4>3. Recognizable Images </h4>
 
                                 <div style="padding-left: 20px; ">
                                     <ul class="ace-thumbnails clearfix">
@@ -659,24 +639,6 @@ car 0.0570637</pre>
 
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
-    function classifyPDF() {
-        var text = $('#targetText').val().replace(/['"\.,-\/#!$%\^&\*;:{}=\-_`~()\n]/g, " ");
-        $('#top1').text('Precessing');
-        $.ajax({
-            type: "GET",
-            username: "hadoop",
-            password: "tip",
-            url: "http://hadoop:tip@tip:5555/api/v1/news.nb_predict/" + encodeURIComponent("/model/spark/news") + ",'" + encodeURIComponent(text) + "'",
-            headers: {
-                Authorization: "Basic " + btoa("hadoop:tip")
-            }
-        }).done(function (json) {
-            var result = json['result'].split('\n');
-            $('#top1').text(result[0].substring(result[0].lastIndexOf(" "), result[0].length));
-        }).fail(function (xhr, textStatus, errorThrown) {
-            alert(JSON.stringify(xhr));
-        });
-    }
 </script>
 
 <!-- the following scripts are used in demo only for onpage help and you don't need them -->
