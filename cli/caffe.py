@@ -125,7 +125,14 @@ mean = None
 try:
     mean=np.load('mean.npy').mean(1).mean(1)
 except:
-    pass
+    try:
+        blob = caffe.proto.caffe_pb2.BlobProto()
+        data = open('mean.binaryproto', 'rb').read()
+        blob.ParseFromString(data)
+        arr = np.array( caffe.io.blobproto_to_array(blob) )
+        mean = arr[0]
+    except:
+        pass
 
 channel_swap=(%(channel_swap)s)
 if channel_swap == ():
