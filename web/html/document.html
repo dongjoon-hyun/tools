@@ -357,7 +357,7 @@
                     <li class="">
                         <a href="nn.html">
                             <i class="menu-icon fa fa-caret-right"></i>
-                            Neural Network  (R)
+                            Neural Network (R)
                         </a>
 
                         <b class="arrow"></b>
@@ -498,23 +498,24 @@
                     <div class="col-xs-12">
                         <!-- PAGE CONTENT BEGINS -->
                         <div class="row">
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <ol>
-                                        <li>Train Category</li>
-                                        <pre>fab news.nb_train:/data/text/news/hani/*,1.0,multinomial,/model/spark/news</pre>
+                            <div class="col-xs-12">
+                                <h4>1. Train Category</h4>
+
+                                <div style="padding-left: 20px">
+                                    <pre>fab news.nb_train:/data/text/news/hani/*,1.0,multinomial,/model/spark/news</pre>
 												<pre style="background-color:#38424a">
 Model Accuracy(self):  0.88198881847
 Model Accuracy(all):  0.833137644744</pre>
-                                        <li>Predict Category</li>
-                                        <pre>fab news.nb_predict:/model/spark/news,'최근 전국 아파트 분양 시장의'</pre>
-                                        <pre style="background-color:#38424a">economy</pre>
-                                    </ol>
                                 </div>
-                                <!-- /.span -->
-                            </div>
-                            <!-- /.row -->
+                                <h4>2. Predict Category</h4>
 
+                                <div style="padding-left: 20px">
+                                    <pre>fab news.nb_predict:/model/spark/news,'최근 전국 아파트 분양 시장의'</pre>
+                                    <pre style="background-color:#38424a">economy</pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xs-12 col-sm-12">
                                 <div class="widget-box">
                                     <div class="widget-header">

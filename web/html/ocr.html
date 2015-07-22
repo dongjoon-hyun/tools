@@ -357,7 +357,7 @@
                     <li class="">
                         <a href="nn.html">
                             <i class="menu-icon fa fa-caret-right"></i>
-                            Neural Network  (R)
+                            Neural Network (R)
                         </a>
 
                         <b class="arrow"></b>
@@ -496,222 +496,226 @@
 
                 <div class="row">
                     <div class="col-xs-7">
-                        <div style="padding-left: 10px; width:300px">
-                            <ul class="ace-thumbnails clearfix">
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/0/00003.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/0/00010.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/0/00013.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/0/00025.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/0/00028.jpg?user.name=hadoop&op=open"/>
-                                </li>
+                        <div style="padding-left: 10px; width:340px">
+                            <h4>1. Number Recognition (Caffe + DIGITS)</h4>
 
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/1/00002.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/1/00005.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/1/00014.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/1/00029.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/1/00031.jpg?user.name=hadoop&op=open"/>
-                                </li>
+                            <div style="padding-left: 20px">
+                                <ul class="ace-thumbnails clearfix">
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/0/00003.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/0/00010.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/0/00013.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/0/00025.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/0/00028.jpg?user.name=hadoop&op=open"/>
+                                    </li>
 
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/2/00001.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/2/00035.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/2/00038.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/2/00043.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/2/00047.jpg?user.name=hadoop&op=open"/>
-                                </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/1/00002.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/1/00005.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/1/00014.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/1/00029.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/1/00031.jpg?user.name=hadoop&op=open"/>
+                                    </li>
 
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/3/00018.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/3/00030.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/3/00032.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/3/00044.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/3/00051.jpg?user.name=hadoop&op=open"/>
-                                </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/2/00001.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/2/00035.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/2/00038.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/2/00043.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/2/00047.jpg?user.name=hadoop&op=open"/>
+                                    </li>
 
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/4/00004.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/4/00006.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/4/00019.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/4/00024.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/4/00027.jpg?user.name=hadoop&op=open"/>
-                                </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/3/00018.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/3/00030.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/3/00032.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/3/00044.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/3/00051.jpg?user.name=hadoop&op=open"/>
+                                    </li>
 
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/5/00008.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/5/00015.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/5/00023.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/5/00045.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/5/00052.jpg?user.name=hadoop&op=open"/>
-                                </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/4/00004.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/4/00006.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/4/00019.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/4/00024.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/4/00027.jpg?user.name=hadoop&op=open"/>
+                                    </li>
 
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/6/00011.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/6/00021.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/6/00022.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/6/00050.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/6/00054.jpg?user.name=hadoop&op=open"/>
-                                </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/5/00008.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/5/00015.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/5/00023.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/5/00045.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/5/00052.jpg?user.name=hadoop&op=open"/>
+                                    </li>
 
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/7/00000.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/7/00017.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/7/00026.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/7/00034.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/7/00036.jpg?user.name=hadoop&op=open"/>
-                                </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/6/00011.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/6/00021.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/6/00022.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/6/00050.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/6/00054.jpg?user.name=hadoop&op=open"/>
+                                    </li>
 
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/8/00061.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/8/00084.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/8/00110.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/8/00128.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/8/00134.jpg?user.name=hadoop&op=open"/>
-                                </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/7/00000.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/7/00017.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/7/00026.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/7/00034.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/7/00036.jpg?user.name=hadoop&op=open"/>
+                                    </li>
 
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/9/00007.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/9/00009.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/9/00012.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/9/00016.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                                <li>
-                                    <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
-                                         src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/9/00020.jpg?user.name=hadoop&op=open"/>
-                                </li>
-                            </ul>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/8/00061.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/8/00084.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/8/00110.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/8/00128.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/8/00134.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/9/00007.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/9/00009.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/9/00012.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/9/00016.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                    <li>
+                                        <img width="50" height="50" alt="50x50" onclick="classifyImage(this.src)"
+                                             src="http://tip:14000/webhdfs/v1/data/image/mnist/jpg/9/00020.jpg?user.name=hadoop&op=open"/>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="col-xs-5">
-                        <div style="padding-left: 10px;">
+                        <div style="display:table-cell; vertical-align: middle">
                             <ul class="ace-thumbnails clearfix">
                                 <li>
                                     <img id="target_img" width="150" height="150" alt="150x150"

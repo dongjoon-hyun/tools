@@ -357,7 +357,7 @@
                     <li class="">
                         <a href="nn.html">
                             <i class="menu-icon fa fa-caret-right"></i>
-                            Neural Network  (R)
+                            Neural Network (R)
                         </a>
 
                         <b class="arrow"></b>
@@ -499,19 +499,20 @@
                         <!-- PAGE CONTENT BEGINS -->
                         <div class="row">
                             <div class="col-xs-12 col-sm-12">
+                                <h4>1. ImageNet Deep Learning using Convolutional Neural Network</h4>
+
                                 <div class="widget-box">
                                     <div class="widget-header">
                                         <h4 class="widget-title">File</h4>
+                                        <span class="widget-toolbar">
+                                            <a href="#" data-action="collapse">
+                                                <i class="ace-icon fa fa-chevron-up"></i>
+                                            </a>
 
-                                                        <span class="widget-toolbar">
-                                                            <a href="#" data-action="collapse">
-                                                                <i class="ace-icon fa fa-chevron-up"></i>
-                                                            </a>
-
-                                                            <a href="#" data-action="close">
-                                                                <i class="ace-icon fa fa-times"></i>
-                                                            </a>
-                                                        </span>
+                                            <a href="#" data-action="close">
+                                                <i class="ace-icon fa fa-times"></i>
+                                            </a>
+                                        </span>
                                     </div>
 
                                     <div class="widget-body">
@@ -520,8 +521,7 @@
                                                 <select class="form-control" id="select-1" onchange="classifyImage()">
                                                     <option value=""></option>
                                                     <option value="/sample/cat.jpg">/sample/cat.jpg</option>
-                                                    <option value="/sample/ad_sunglass.png">/sample/ad_sunglass.png
-                                                    </option>
+                                                    <option value="/sample/ad.png">/sample/ad.png</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -530,13 +530,11 @@
                             </div>
                         </div>
 
-                        <div class="vspace-12-sm"></div>
-
-                        <div>
-                            <div class="col-xs-6">
+                        <div class="row">
+                            <div class="col-xs-6" style="padding-left: 20px">
                                 <img id="target_img" src="" width="100%" height="300px">
                             </div>
-                            <div class="col-xs-6" id="image_tag" hidden>
+                            <div class="col-xs-5" id="image_tag" hidden>
                                 <div class="col-sm-12 infobox-container">
                                     <div class="infobox infobox-red" style="width:100%">
                                         <div class="infobox-icon">
@@ -638,7 +636,7 @@
             type: "GET",
             username: "hadoop",
             password: "tip",
-            url: "http://hadoop:tip@tip:5555/api/v1/caffe.predict/bvlc_reference_caffenet," + encodeURIComponent(file) + ",3",
+            url: "http://hadoop:tip@tip:5555/api/v1/caffe.predict/%2Fmodel%2Fcaffe%2Fbvlc_reference_caffenet," + encodeURIComponent(file) + ",True,256:256,2:1:0,3",
             headers: {
                 Authorization: "Basic " + btoa("hadoop:tip")
             }

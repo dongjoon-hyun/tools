@@ -519,7 +519,7 @@ Available commands:
     caffe.deploy              fab caffe.deploy:/tmp/model
     caffe.draw                TODO
     caffe.ls_lmdb             fab caffe.ls_lmdb:/tmp/mnist.lmdb
-    caffe.predict             fab caffe.predict:/model/caffe/bvlc_reference_caffenet,/sample/ad.png,True,'256;256',3
+    caffe.predict             fab caffe.predict:/model/caffe/bvlc_reference_caffenet,/sample/ad.png,True,256:256,2:1:0,3
     caffe.resize_img          TODO
     caffe.train               fab caffe.train:data/solver.prototxt,data/train_val.prototxt,/tmp/model
     cam.capture               fab cam.capture:/tmp/cam1,3

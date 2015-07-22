@@ -357,7 +357,7 @@
                     <li class="">
                         <a href="nn.html">
                             <i class="menu-icon fa fa-caret-right"></i>
-                            Neural Network  (R)
+                            Neural Network (R)
                         </a>
 
                         <b class="arrow"></b>
@@ -499,16 +499,23 @@
                         <!-- PAGE CONTENT BEGINS -->
                         <div class="row">
                             <div class="col-xs-12">
-                                <ol>
-                                    <li>Korean Morphological Analysis</li>
+                                <h4>1. Korean Morphological Analysis</h4>
+
+                                <div style="padding-left: 20px">
                                     <pre>fab nlp.kma:'삼성물산이 분양한 해운대 래미안 아파트는 지난달 25일 청약접수에 들어가 평균 364대 1의 경쟁률을 보이며 역시 뜨거운 열기를 보였다.'</pre>
                                     <pre style="background-color:#38424a">삼성물산/NNP 이/JKS 분양/NNG 하/XSV ㄴ/ETM 해운대/NNP 래미안/NNP 아파트/NNG 는/JX 지난달/NNG 25/SN 일/NNB 청약/NNG 접수/NNG 에/JKB 들어가/VV 아/EC 평균/NNG 364/SN 대/NNB 1/SN 의/JKG 경쟁/NNG 률/XSN 을/JKO 보이/VV 며/EC 역시/MAG 뜨겁/VA ㄴ/ETM 열기/NNG 를/JKO 보이/VV 었/EP 다/EF ./SF</pre>
+                                </div>
 
-                                    <li>Korean Named Entity Recognition</li>
+                                <h4>2. Korean Named Entity Recognition</h4>
+
+                                <div style="padding-left: 20px">
                                     <pre>fab nlp.kner:'삼성물산이 분양한 해운대 래미안 아파트는 지난달 25일 청약접수에 들어가 평균 364대 1의 경쟁률을 보이며 역시 뜨거운 열기를 보였다.'</pre>
                                     <pre style="background-color:#38424a">&lt;OG>삼성물산&lt;/OG>이 분양한 &lt;LC>해운대&lt;/LC> &lt;AF>래미안 아파트&lt;/AF>는 &lt;DT>지난달 25일&lt;/DT> 청약접수에 들어가 평균 &lt;QT>364대 1&lt;/QT>의 경쟁률을 보이며 역시 뜨거운 열기를 보였다.</pre>
+                                </div>
 
-                                    <li>Korean Word2Vec Test</li>
+                                <h4>3. Korean Word2Vec Test</h4>
+
+                                <div style="padding-left: 20px">
                                     <pre>fab nlp.word2vec_test:/data/sample/sample_hani_wordvec,벨기에,5</pre>
                                     <form>
                                         Query Word:
@@ -521,8 +528,11 @@
 슬로베니아: 0.8012198661329796
 노르웨이: 0.7746411038970719</pre>
                                     </form>
+                                </div>
 
-                                    <li>Korean Word2Vec QA</li>
+                                <h4>4. Korean Word2Vec QA</h4>
+
+                                <div style="padding-left: 20px">
                                     <pre>fab nlp.word2vec_qa:/data/sample/sample_hani_wordvec,프랑스,파리,태국,5</pre>
                                     <form>
                                         Hint Words:
@@ -537,8 +547,7 @@
 푸켓: 0.7069917151962726
 수라바야: 0.6874885647507958</pre>
                                     </form>
-
-                                </ol>
+                                </div>
                             </div>
                             <!-- /.span -->
                         </div>
@@ -566,7 +575,7 @@
         var question = $('#queryword').val();
         $.ajax({
             type: "GET",
-            url: "http://localhost:5666/api/v1/word2vec/test/" + encodeURIComponent(question)
+            url: "http://52.68.13.24:5666/api/v1/word2vec/test/" + encodeURIComponent(question)
         }).done(function (json) {
             var jsonobj = JSON.parse(json);
             var answer = "";
@@ -584,7 +593,7 @@
         var question = $('#hint1').val() + "," + $('#hint2').val() + "," + $('#hint3').val();
         $.ajax({
             type: "GET",
-            url: "http://localhost:5666/api/v1/word2vec/qa/" + encodeURIComponent(question)
+            url: "http://52.68.13.24:5666/api/v1/word2vec/qa/" + encodeURIComponent(question)
         }).done(function (json) {
             var jsonobj = JSON.parse(json);
             var answer = "";

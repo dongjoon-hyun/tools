@@ -357,7 +357,7 @@
                     <li class="">
                         <a href="nn.html">
                             <i class="menu-icon fa fa-caret-right"></i>
-                            Neural Network  (R)
+                            Neural Network (R)
                         </a>
 
                         <b class="arrow"></b>
@@ -531,165 +531,168 @@
 
                         <div class="row">
                             <div class="col-xs-12">
-                                <ol>
-                                    <br>
-                                    <li>User Script
-                                            <pre>
+                                <h4>1. User Script</h4>
+
+                                <div style="padding-left: 20px">
+                                <pre>
 fab pdf.text:/sample/report.pdf,/tmp/extracted
 fab pdf.image:/sample/report.pdf,/tmp/extracted
 fab caffe.predict:/model/caffe/voc,/tmp/extracted-000.jpg,True,256:256,2:1:0,3</pre>
-<pre style="background-color:#38424a">
+                                <pre style="background-color:#38424a">
 chair 0.493845
 circuit 0.247732
 car 0.0570637</pre>
-                                    <li>Recognizable Images
-                                        <div style="padding-left: 10px; ">
-                                            <ul class="ace-thumbnails clearfix">
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000001.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000002.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000003.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000004.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000005.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000006.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000007.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000008.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000009.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000010.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000011.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000012.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000013.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000014.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000015.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000016.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000017.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000018.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000019.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000020.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                                <li><img width="150" height="150" alt="150x150"
-                                                         src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000021.jpg?user.name=hadoop&op=open"/>
-                                                </li>
-                                            </ul>
-                                            <div>
-                                </ol>
+                                </div>
+
+                                <h4>2. Recognizable Images </h4>
+
+                                <div style="padding-left: 20px; ">
+                                    <ul class="ace-thumbnails clearfix">
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000001.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000002.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000003.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000004.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000005.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000006.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000007.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000008.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000009.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000010.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000011.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000012.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000013.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000014.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000015.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000016.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000017.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000018.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000019.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000020.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                        <li><img width="150" height="150" alt="150x150"
+                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000021.jpg?user.name=hadoop&op=open"/>
+                                        </li>
+                                    </ul>
+                                    <div>
+                                        </ol>
+                                    </div>
+                                    <!-- /.span -->
+                                </div>
+                                <!-- /.row -->
+
+                                <!-- PAGE CONTENT ENDS -->
                             </div>
-                            <!-- /.span -->
+                            <!-- /.col -->
                         </div>
                         <!-- /.row -->
-
-                        <!-- PAGE CONTENT ENDS -->
                     </div>
-                    <!-- /.col -->
+                    <!-- /.page-content-area -->
                 </div>
-                <!-- /.row -->
+                <!-- /.page-content -->
             </div>
-            <!-- /.page-content-area -->
+            <!-- /.main-content -->
+
+            <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+                <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+            </a>
         </div>
-        <!-- /.page-content -->
-    </div>
-    <!-- /.main-content -->
+        <!-- /.main-container -->
 
-    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-        <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
-    </a>
-</div>
-<!-- /.main-container -->
+        <!-- basic scripts -->
 
-<!-- basic scripts -->
+        <!--[if !IE]> -->
+        <script type="text/javascript">
+            window.jQuery || document.write("<script src='../assets/js/jquery.min.js'>" + "<" + "/script>");
+        </script>
 
-<!--[if !IE]> -->
-<script type="text/javascript">
-    window.jQuery || document.write("<script src='../assets/js/jquery.min.js'>" + "<" + "/script>");
-</script>
+        <!-- <![endif]-->
 
-<!-- <![endif]-->
+        <!--[if IE]>
+        <script type="text/javascript">
+            window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>" + "<" + "/script>");
+        </script>
+        <![endif]-->
+        <script type="text/javascript">
+            if ('ontouchstart' in document.documentElement) document.write("<script src='../assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+        </script>
+        <script src="../assets/js/bootstrap.min.js"></script>
 
-<!--[if IE]>
-<script type="text/javascript">
-    window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>" + "<" + "/script>");
-</script>
-<![endif]-->
-<script type="text/javascript">
-    if ('ontouchstart' in document.documentElement) document.write("<script src='../assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
-</script>
-<script src="../assets/js/bootstrap.min.js"></script>
+        <!-- ace scripts -->
+        <script src="../assets/js/ace-elements.min.js"></script>
+        <script src="../assets/js/ace.min.js"></script>
 
-<!-- ace scripts -->
-<script src="../assets/js/ace-elements.min.js"></script>
-<script src="../assets/js/ace.min.js"></script>
-
-<!-- inline scripts related to this page -->
-<script type="text/javascript">
-    function classifyPDF() {
-        var text = $('#targetText').val().replace(/['"\.,-\/#!$%\^&\*;:{}=\-_`~()\n]/g, " ");
-        $('#top1').text('Precessing');
-        $.ajax({
-            type: "GET",
-            username: "hadoop",
-            password: "tip",
-            url: "http://hadoop:tip@tip:5555/api/v1/news.nb_predict/" + encodeURIComponent("/model/spark/news") + ",'" + encodeURIComponent(text) + "'",
-            headers: {
-                Authorization: "Basic " + btoa("hadoop:tip")
+        <!-- inline scripts related to this page -->
+        <script type="text/javascript">
+            function classifyPDF() {
+                var text = $('#targetText').val().replace(/['"\.,-\/#!$%\^&\*;:{}=\-_`~()\n]/g, " ");
+                $('#top1').text('Precessing');
+                $.ajax({
+                    type: "GET",
+                    username: "hadoop",
+                    password: "tip",
+                    url: "http://hadoop:tip@tip:5555/api/v1/news.nb_predict/" + encodeURIComponent("/model/spark/news") + ",'" + encodeURIComponent(text) + "'",
+                    headers: {
+                        Authorization: "Basic " + btoa("hadoop:tip")
+                    }
+                }).done(function (json) {
+                    var result = json['result'].split('\n');
+                    $('#top1').text(result[0].substring(result[0].lastIndexOf(" "), result[0].length));
+                }).fail(function (xhr, textStatus, errorThrown) {
+                    alert(JSON.stringify(xhr));
+                });
             }
-        }).done(function (json) {
-            var result = json['result'].split('\n');
-            $('#top1').text(result[0].substring(result[0].lastIndexOf(" "), result[0].length));
-        }).fail(function (xhr, textStatus, errorThrown) {
-            alert(JSON.stringify(xhr));
-        });
-    }
-</script>
+        </script>
 
-<!-- the following scripts are used in demo only for onpage help and you don't need them -->
-<link rel="stylesheet" href="../assets/css/ace.onpage-help.css"/>
-<link rel="stylesheet" href="../docs/assets/js/themes/sunburst.css"/>
+        <!-- the following scripts are used in demo only for onpage help and you don't need them -->
+        <link rel="stylesheet" href="../assets/css/ace.onpage-help.css"/>
+        <link rel="stylesheet" href="../docs/assets/js/themes/sunburst.css"/>
 
-<script type="text/javascript"> ace.vars['base'] = '..'; </script>
-<script src="../assets/js/ace/elements.onpage-help.js"></script>
-<script src="../assets/js/ace/ace.onpage-help.js"></script>
-<script src="../docs/assets/js/rainbow.js"></script>
-<script src="../docs/assets/js/language/generic.js"></script>
-<script src="../docs/assets/js/language/html.js"></script>
-<script src="../docs/assets/js/language/css.js"></script>
-<script src="../docs/assets/js/language/javascript.js"></script>
+        <script type="text/javascript"> ace.vars['base'] = '..'; </script>
+        <script src="../assets/js/ace/elements.onpage-help.js"></script>
+        <script src="../assets/js/ace/ace.onpage-help.js"></script>
+        <script src="../docs/assets/js/rainbow.js"></script>
+        <script src="../docs/assets/js/language/generic.js"></script>
+        <script src="../docs/assets/js/language/html.js"></script>
+        <script src="../docs/assets/js/language/css.js"></script>
+        <script src="../docs/assets/js/language/javascript.js"></script>
 </body>
 </html>
