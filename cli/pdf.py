@@ -35,9 +35,8 @@ def image(inpath, outpath=None):
     basename = os.path.basename(inpath).split('.')[0]
     with cd(env.dir):
         if outpath == None:
-            print 'pdfimages -q -j /hdfs%(inpath)s %(basename)s 2> /dev/null' % locals()
-            run('pdfimages -q -j /hdfs%(inpath)s %(basename)s 2> /dev/null' % locals())
+            run('pdfimages -q /hdfs%(inpath)s %(basename)s 2> /dev/null' % locals())
         else:
-            run('pdfimages -q -j /hdfs%(inpath)s %(basename)s 2> /dev/null' % locals())
+            run('pdfimages -q /hdfs%(inpath)s %(basename)s 2> /dev/null' % locals())
             run('mkdir /hdfs%(outpath)s' % locals())
             run('for f in `ls *.ppm`; do ppm2tiff $f /hdfs%(outpath)s/${f/.ppm/.jpg}; done' % locals())
