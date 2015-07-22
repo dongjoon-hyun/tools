@@ -480,9 +480,9 @@
 									<div class="col-xs-12">
                                         <ol>
                                             <li>Korean Term Frequency</li>
-                                            <pre>fab tf_ko:/data/text/news/hani/*,/user/hadoop/tf_result</pre>
+                                            <pre>fab spark.tf_ko:/data/text/news/hani/*,/user/hadoop/tf_result</pre>
                                             <li>Word Cloud for Top 100</li>
-                                            <pre>fab word_cloud:/user/hadoop/tf_result/part-00000,100,/user/hadoop/wordcloud.png</pre>
+                                            <pre>fab r.word_cloud:/user/hadoop/tf_result/part-00000,100,/user/hadoop/wordcloud.png</pre>
                                             <img src="http://tip:14000/webhdfs/v1/user/hadoop/wordcloud.png?user.name=hadoop&op=open">
                                         </ol>
 									</div><!-- /.span -->

@@ -760,9 +760,10 @@
     <!-- inline scripts related to this page -->
     <script type="text/javascript">
         function classifyImage(url) {
-            alert($('#target_img').attr('src'));
             
-            $('#target_img').attr('src', "http://tip:14000/webhdfs/v1/sample/cat.jpg?user.name=hadoop&op=open");
+            //$('#target_img').attr('src', "http://tip:14000/webhdfs/v1/sample/cat.jpg?user.name=hadoop&op=open");
+            alert($('#target_img').attr('src'));
+            $('#target_img').attr('src', $('#target_img').attr('src'));
             $.ajax({
                 type: "GET",
                 username: "hadoop",
