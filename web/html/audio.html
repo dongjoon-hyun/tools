@@ -473,7 +473,7 @@
                         </div><!-- /.span -->
 
                         <!-- #section:plugins/fuelux.treeview -->
-                        <div class="col-xs-12">
+                        <!--div class="col-xs-12">
                             <div class="widget-box widget-color-green2">
                                 <div class="widget-header">
                                     <h4 class="widget-title lighter smaller">Browse Files</h4>
@@ -485,7 +485,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div><!-- /.col -->
+                        </div--><!-- /.col -->
                         </div><!-- /.row -->
                         <script type="text/javascript">
                             var $assets = "../assets";//this will be used in fuelux.tree-sampledata.js
@@ -571,12 +571,12 @@
                 }
 
                 $.ajax({
-                    url:"http://tip:14000/webhdfs/v1/data/audio/speech?user.name=hadoop&op=liststatus",
+                    url:"http://tip:14000/webhdfs/v1/data/audio/speech/podcast/esl?user.name=hadoop&op=liststatus",
                 }).done(function(json) {
                     var result = json['FileStatuses']['FileStatus'];
-                    alert(JSON.stringify(result));
+                    //alert(JSON.stringify(result));
                 }).fail( function(xhr, textStatus, errorThrown) {
-                    alert(JSON.stringify(xhr));
+                    //alert(JSON.stringify(xhr));
                 });
 
                 tree_data_2['podcast']['additionalParameters'] = {
