@@ -14,7 +14,7 @@ from fabric.api import *
 @hosts('50.1.100.101')
 def word2vec(inpath,positive,negative):
 	'''
-	fab deepdist.word2vec:/data/sample/sample_enwiki.head,woman:king,man
+	fab deepdist.word2vec:/sample/sample_enwiki.head,woman:king,man
 	'''
 	positive = "'" + positive.replace(":","','") + "'"
 	negative = "'" + negative.replace(":","','") + "'"

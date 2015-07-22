@@ -39,6 +39,7 @@ def train(solver='data/solver.prototxt',net='data/train_val.prototxt',data='/tmp
 @hosts('50.1.100.101')
 def draw(net,imgpath):
     """
+    TODO
     """
 
 @task
@@ -90,10 +91,11 @@ EOF''' % locals())
 
 @task
 @hosts('50.1.100.101')
-def predict(name, path, color='True',dims='(256,256)',topk=3):
+def predict(name, path, color='True',dims='256:256',topk=3):
     """
-    fab caffe.predict:/model/caffe/bvlc_reference_caffenet,/data/sample/ad_sunglass.png,True,'(256\,256)',3
+    fab caffe.predict:/model/caffe/bvlc_reference_caffenet,/sample/ad.png,True,256:256,3
     """
+    dims = dims.replace(':',',')
     run('mkdir %s' % env.dir)
     with cd(env.dir):
         img = os.path.basename(path)
@@ -106,14 +108,13 @@ def predict(name, path, color='True',dims='(256,256)',topk=3):
 # -*- coding: utf-8 -*-
 import sys
 import numpy as np
-import pydoop.hdfs as hdfs
 sys.path.insert(0, '/home/hadoop/caffe/distribute/python')
 import caffe
 caffe.set_mode_gpu()
 
 labels = []
 try:
-    with hdfs.open('%(name)s/labels.txt') as f:
+    with open('labels.txt') as f:
         for line in f:
             labels.append(' '.join(line.split()[1:]))
 except:
@@ -133,7 +134,7 @@ net = caffe.Classifier('deploy.prototxt', 'pretrained.caffemodel', \
         mean=mean, \
         channel_swap=channel_swap, \
         raw_scale=255, \
-        image_dims=%(dims)s)
+        image_dims=(%(dims)s))
 input_image = caffe.io.load_image('%(img)s',%(color)s)
 prediction = net.predict([input_image])
 predicted_top_classes = list(reversed(prediction[0].argsort()[-%(topk)s:]))

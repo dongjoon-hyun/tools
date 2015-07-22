@@ -20,6 +20,8 @@ import deepdist
 import news
 import cuda
 import cam
+import pdf
+import json
 
 import os
 import datetime
