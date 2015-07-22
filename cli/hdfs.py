@@ -13,7 +13,7 @@ from fabric.api import *
 @task
 def ls(inpath='/'):
 	'''
-	fab hdfs.ls:/data/sample
+	fab hdfs.ls:/sample
 	'''
 	cmd = '/usr/bin/hadoop fs -ls %(inpath)s 2> /dev/null' % locals()
 	run(cmd)
@@ -29,7 +29,7 @@ def count(inpath):
 @task
 def du(inpath):
 	'''
-	fab hdfs.du:/data/sample
+	fab hdfs.du:/sample
 	'''
 	cmd = '/usr/bin/hadoop fs -du -h %(inpath)s 2> /dev/null' % locals()
 	run(cmd)
@@ -37,7 +37,7 @@ def du(inpath):
 @task
 def text(inpath, count=5):
 	'''
-	fab hdfs.text:/data/sample/hani_news.head.txt.gz,5
+	fab hdfs.text:/sample/hani_news.head.txt.gz,5
 	'''
 	cmd = '/usr/bin/hadoop fs -text %(inpath)s 2> /dev/null | head -n %(count)s' % locals()
 	run(cmd)

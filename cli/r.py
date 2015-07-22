@@ -28,7 +28,7 @@ EOF''' % locals())
 @task
 def sql(inpath,sql):
 	'''
-	fab r.sql:/data/sample/people.json,'SELECT name FROM people WHERE age <\= 19'
+	fab r.sql:/sample/people.json,'SELECT name FROM people WHERE age <\= 19'
 	'''
 	import os
 	table = os.path.splitext(os.path.basename(inpath))[0]
@@ -49,7 +49,7 @@ EOF''' % locals())
 @task
 def summary(inpath):
 	'''
-	fab r.summary:/data/sample/people.json
+	fab r.summary:/sample/people.json
 	'''
 	import os
 	table = os.path.splitext(os.path.basename(inpath))[0]

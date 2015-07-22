@@ -14,7 +14,7 @@ from fabric.api import *
 @hosts('50.1.100.98')
 def text(inpath, outpath=None):
     '''
-    fab pdf.text:/data/sample/report.pdf
+    fab pdf.text:/sample/report.pdf
     '''
     run('mkdir %s' % env.dir)
     with cd(env.dir):
@@ -28,7 +28,7 @@ def text(inpath, outpath=None):
 @hosts('50.1.100.98')
 def image(inpath, outpath=None):
     '''
-    fab pdf.image:/data/sample/report.pdf,/tmp/extracted
+    fab pdf.image:/sample/report.pdf,/tmp/extracted
     '''
     run('mkdir %s' % env.dir)
     import os

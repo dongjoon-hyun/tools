@@ -170,7 +170,7 @@ EOF''' % locals())
 @task
 def word2vec(inpath, queryword):
     """
-    fab spark.word2vec:/data/sample/sample_hani_kma,대통령
+    fab spark.word2vec:/sample/sample_hani_kma,대통령
     """
     cmd = '/opt/spark/bin/spark-submit /hdfs/user/hadoop/demo/nlp/SparkWord2Vec.py %(inpath)s %(queryword)s 2> /dev/null' % locals()
     run(cmd)
@@ -178,7 +178,7 @@ def word2vec(inpath, queryword):
 @task
 def naivebayes_train(inpath, lambda_, outpath):
     """
-    fab spark.naivebayes_train:/data/sample/sample_naive_bayes_data.txt,1.0,/tmp/nb.model
+    fab spark.naivebayes_train:/sample/sample_naive_bayes_data.txt,1.0,/tmp/nb.model
     """
     run('''cat <<EOF > /home/hadoop/demo/spark.naivebayes_train.py
 # -*- coding: utf-8 -*-
@@ -204,7 +204,7 @@ EOF''' % locals())
 @task
 def naivebayes_predict(model, inpath, outpath):
     """
-    fab spark.naivebayes_predict:/tmp/nb.model,/data/sample/sample_naive_bayes_test.txt,/tmp/nb.result
+    fab spark.naivebayes_predict:/tmp/nb.model,/sample/naive_bayes_test.txt,/tmp/nb.result
     """
     run('''cat <<EOF > /home/hadoop/demo/spark.naivebayes_test.py
 # -*- coding: utf-8 -*-
@@ -227,7 +227,7 @@ EOF''' % locals())
 @task
 def sample(inpath,replacement,fraction,seed,outpath):
     """
-    fab spark.sample:/data/sample/sample_movielens_movies.txt,False,0.5,0,/tmp/sampled_movielens
+    fab spark.sample:/sample/sample_movielens_movies.txt,False,0.5,0,/tmp/sampled_movielens
     """
     run('''cat <<EOF > /home/hadoop/demo/spark.sample.py
 # -*- coding: utf-8 -*-
