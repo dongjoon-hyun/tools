@@ -91,11 +91,11 @@ EOF''' % locals())
 
 @task
 @hosts('50.1.100.101')
-def predict(name, path, color='True',dims='256;256',topk=3):
+def predict(name, path, color='True',dims='256:256',topk=3):
     """
-    fab caffe.predict:/model/caffe/bvlc_reference_caffenet,/sample/ad.png,True,'256;256',3
+    fab caffe.predict:/model/caffe/bvlc_reference_caffenet,/sample/ad.png,True,256:256,3
     """
-    dims = dims.replace(';',',')
+    dims = dims.replace(':',',')
     run('mkdir %s' % env.dir)
     with cd(env.dir):
         img = os.path.basename(path)

@@ -87,7 +87,7 @@ EOF''' % locals())
 @task
 def select(inpath, outpath, columns='*', sep='\01'):
     """
-    fab spark.select:/data/text/news/hani/*,/user/hadoop/selected,'1;0'
+    fab spark.select:/data/text/news/hani/*,/user/hadoop/selected,1:0
     """
     run('''cat <<EOF > /home/hadoop/demo/spark.select.py
 # -*- coding: utf-8 -*-
@@ -99,9 +99,9 @@ def select(alist, cols):
     blist = [alist[c] for c in cols]
     return ('%%c' %% (1)).join(blist)
 if '*' == columns:
-    cols = xrange(len(columns.split(';')))
+    cols = xrange(len(columns.split(':')))
 else:
-    cols = [int(i) for i in columns.split(';')]
+    cols = [int(i) for i in columns.split(':')]
 sc.textFile('%(inpath)s').map(lambda line: select(re.split('%%c' %% (1),line), cols)).saveAsTextFile('%(outpath)s')
 EOF''' % locals())
     cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.select.py 2> /dev/null'

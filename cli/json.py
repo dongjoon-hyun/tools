@@ -53,11 +53,11 @@ EOF''' % locals())
 @task
 def select(inpath,columns,outpath):
     '''
-    fab json.select:/data/text/twitter/20150721_22.json,'created_at;text',/tmp/result
+    fab json.select:/data/text/twitter/20150721_22.json,created_at:text,/tmp/result
     '''
     run('mkdir %s' % env.dir)
     with cd(env.dir):
-        columns = ','.join(map(lambda x: "'%s'" % x, columns.split(';')))
+        columns = ','.join(map(lambda x: "'%s'" % x, columns.split(':')))
         run('''cat <<EOF > json.select.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
