@@ -91,11 +91,12 @@ EOF''' % locals())
 
 @task
 @hosts('50.1.100.101')
-def predict(name, path, color='True',dims='256:256',topk=3):
+def predict(name, path, color='True',dims='256:256',channel_swap='2:1:0',topk=3):
     """
-    fab caffe.predict:/model/caffe/bvlc_reference_caffenet,/sample/ad.png,True,256:256,3
+    fab caffe.predict:/model/caffe/bvlc_reference_caffenet,/sample/ad.png,True,256:256,2:1:0,3
     """
     dims = dims.replace(':',',')
+    channel_swap = channel_swap.replace(':',',')
     run('mkdir %s' % env.dir)
     with cd(env.dir):
         img = os.path.basename(path)
@@ -126,9 +127,9 @@ try:
 except:
     pass
 
-channel_swap=None
-if True:
-    channel_swap=(2,1,0)
+channel_swap=(%(channel_swap)s)
+if channel_swap == ():
+    channel_swap = None
 
 net = caffe.Classifier('deploy.prototxt', 'pretrained.caffemodel', \
         mean=mean, \
