@@ -383,7 +383,7 @@ argtopn = int('%(topn)s')
 fread = open(argmodelfile, 'r')
 wordvectors = {}
 for f in fread.readlines():
-    tok = f.split(" ")
+    tok = f.strip().split(" ")
     w = tok[0].strip()
     if '/N' in w:
         wordvectors[w] = [double(d) for d in tok[1:]]
@@ -424,7 +424,7 @@ argtopn = int('%(topn)s')
 fread = open(argmodelfile, 'r')
 wordvectors = {}
 for f in fread.readlines():
-    tok = f.split(" ")
+    tok = f.strip().split(" ")
     w = tok[0].strip()
     if '/N' in w:
         wordvectors[w] = [double(d) for d in tok[1:]]
