@@ -34,6 +34,12 @@ app.get('/webhdfs/v1/:a/:b/:c', function(req, res) {
    res.end()
 });
 
+app.get('/webhdfs/v1/:a/:b', function(req, res) {
+   res.writeHead(200, {'Content-Type': 'image/jpeg'});
+   res.write(fs.readFileSync('/hdfs/' + req.params.a + '/' + req.params.b));
+   res.end()
+});
+
 app.get('/webhdfs/v1/:op/', function(req, res) {
     child = child_process.exec('ls /hdfs/' + req.params.op,
         function (error, stdout, stderr) {
