@@ -1,0 +1,4 @@
+fab pdf.image:/sample/circuit.pdf,/tmp/circuit
+fab pdf.text:/sample/circuit.pdf,/tmp/circuit/report.txt
+fab spark.count_line_with:/tmp/circuit/*.txt,대외비:보안:회로:도면
+fab caffe.predict:/model/caffe/voc,/tmp/circuit/circuit-000.jpg,True,256:256,2:1:0,3
