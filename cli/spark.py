@@ -15,22 +15,26 @@ def head(inpath, count=5):
     """
     fab spark.head:/data/image/imagenet/*.txt,5
     """
-    run('''cat <<EOF > /home/hadoop/demo/spark.head.py
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > spark.head.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
 sc = SparkContext(appName='Head')
 for x in sc.textFile('%(inpath)s').take(%(count)s):
     print x.encode('utf8')
 EOF''' % locals())
-    cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.head.py 2> /dev/null'
-    run(cmd)
+        cmd = '/opt/spark/bin/spark-submit --num-executors 300 spark.head.py 2> /dev/null'
+        run(cmd)
 
 @task
 def sql(sql):
     """
     fab spark.sql:'select count(*) from data.news'
     """
-    run('''cat <<EOF > /home/hadoop/demo/spark.sql.py
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > spark.sql.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
 from pyspark.sql import HiveContext
@@ -39,57 +43,72 @@ sqlContext = HiveContext(sc)
 for x in sqlContext.sql('%(sql)s').collect():
     print x
 EOF''' % locals())
-    cmd = 'HADOOP_CONF_DIR=/etc/hive/conf /opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.sql.py 2> /dev/null'
-    run(cmd)
+        cmd = 'HADOOP_CONF_DIR=/etc/hive/conf /opt/spark/bin/spark-submit --num-executors 300 spark.sql.py 2> /dev/null'
+        run(cmd)
 
 @task
 def count_line(inpath):
     """
     fab spark.count_line:/data/image/imagenet/*.txt
     """
-    run('''cat <<EOF > /home/hadoop/demo/spark.count_line.py
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > spark.count_line.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
 sc = SparkContext(appName='Count Line')
 print sc.textFile('%(inpath)s').count()
 EOF''' % locals())
-    cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.count_line.py 2> /dev/null'
-    run(cmd)
+        cmd = '/opt/spark/bin/spark-submit --num-executors 300 spark.count_line.py 2> /dev/null'
+        run(cmd)
 
 @task
 def count_line_with(inpath, keyword):
     """
     fab spark.count_line_with:/data/text/wikipedia/ko*,'<page>'
     """
-    run('''cat <<EOF > /home/hadoop/demo/spark.count_line_with.py
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > spark.count_line_with.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
-sc = SparkContext(appName='Grep')
-print sc.textFile('%(inpath)s').filter(lambda line: '%(keyword)s' in line).count()
+sc = SparkContext(appName='Count Line With')
+words = '%(keyword)s'.split(':')
+def isIn(line):
+    line = line.encode('utf8')
+    for w in words:
+        if w in line:
+            return True
+    return False
+print sc.textFile('%(inpath)s').filter(isIn).count()
 EOF''' % locals())
-    cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.count_line_with.py 2> /dev/null'
-    run(cmd)
+        cmd = '/opt/spark/bin/spark-submit --num-executors 300 spark.count_line_with.py 2> /dev/null'
+        run(cmd)
 
 @task
 def grep(inpath, outpath, keyword):
     """
     fab spark.grep:/data/text/wikipedia/ko*,/user/hadoop/grep_result,'<page>'
     """
-    run('''cat <<EOF > /home/hadoop/demo/spark.grep.py
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > spark.grep.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
 sc = SparkContext(appName='Grep')
 sc.textFile('%(inpath)s').filter(lambda line: '%(keyword)s' in line).saveAsTextFile('%(outpath)s')
 EOF''' % locals())
-    cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.grep.py 2> /dev/null'
-    run(cmd)
+        cmd = '/opt/spark/bin/spark-submit --num-executors 300 spark.grep.py 2> /dev/null'
+        run(cmd)
 
 @task
 def select(inpath, outpath, columns='*', sep='\01'):
     """
     fab spark.select:/data/text/news/hani/*,/user/hadoop/selected,1:0
     """
-    run('''cat <<EOF > /home/hadoop/demo/spark.select.py
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > spark.select.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
 import re
@@ -104,8 +123,8 @@ else:
     cols = [int(i) for i in columns.split(':')]
 sc.textFile('%(inpath)s').map(lambda line: select(re.split('%%c' %% (1),line), cols)).saveAsTextFile('%(outpath)s')
 EOF''' % locals())
-    cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.select.py 2> /dev/null'
-    run(cmd)
+        cmd = '/opt/spark/bin/spark-submit --num-executors 300 spark.select.py 2> /dev/null'
+        run(cmd)
 
 @task
 def tf_ko(inpath,outpath,sep='\01'):
@@ -115,7 +134,9 @@ def tf_ko(inpath,outpath,sep='\01'):
     if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
         print 'Unauthorized path: %(outpath)s' % locals()
         return
-    run('''cat <<EOF > /home/hadoop/demo/spark.tf_ko.py
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > spark.tf_ko.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
 import re
@@ -134,8 +155,8 @@ counts = sc.textFile('%(inpath)s') \
         .map(lambda (a,b): '%%s%%c%%s' %% (b,1,a))
 counts.saveAsTextFile('%(outpath)s')
 EOF''' % locals())
-    cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.tf_ko.py 2> /dev/null'
-    run(cmd)
+        cmd = '/opt/spark/bin/spark-submit --num-executors 300 spark.tf_ko.py 2> /dev/null'
+        run(cmd)
 
 @task
 def ngram_ko(n,min,inpath,outpath,sep='\01'):
@@ -145,7 +166,9 @@ def ngram_ko(n,min,inpath,outpath,sep='\01'):
     if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
         print 'Unauthorized path: %(outpath)s' % locals()
         return
-    run('''cat <<EOF > /home/hadoop/demo/spark.ngram_ko.py
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > spark.ngram_ko.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
 import re
@@ -164,8 +187,8 @@ counts = sc.textFile('%(inpath)s') \
         .map(lambda (a,b): '%%s%%c%%s' %% (b,1,a))
 counts.saveAsTextFile('%(outpath)s')
 EOF''' % locals())
-    cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.ngram_ko.py 2> /dev/null'
-    run(cmd)
+        cmd = '/opt/spark/bin/spark-submit --num-executors 300 spark.ngram_ko.py 2> /dev/null'
+        run(cmd)
 
 @task
 def word2vec(inpath, queryword):
@@ -180,7 +203,9 @@ def naivebayes_train(inpath, lambda_, outpath):
     """
     fab spark.naivebayes_train:/sample/sample_naive_bayes_data.txt,1.0,/tmp/nb.model
     """
-    run('''cat <<EOF > /home/hadoop/demo/spark.naivebayes_train.py
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > spark.naivebayes_train.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
 from pyspark.mllib.classification import NaiveBayes
@@ -198,15 +223,17 @@ data = sc.textFile('%(inpath)s').map(parseLine)
 model = NaiveBayes.train(data, %(lambda_)s)
 model.save(sc, '%(outpath)s')
 EOF''' % locals())
-    cmd = '/opt/spark/bin/spark-submit /home/hadoop/demo/spark.naivebayes_train.py 2> /dev/null'
-    run(cmd)
+        cmd = '/opt/spark/bin/spark-submit spark.naivebayes_train.py 2> /dev/null'
+        run(cmd)
 
 @task
 def naivebayes_predict(model, inpath, outpath):
     """
     fab spark.naivebayes_predict:/tmp/nb.model,/sample/naive_bayes_test.txt,/tmp/nb.result
     """
-    run('''cat <<EOF > /home/hadoop/demo/spark.naivebayes_test.py
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > spark.naivebayes_test.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
 from pyspark.mllib.classification import NaiveBayesModel
@@ -221,19 +248,21 @@ sc = SparkContext(appName='Naive Bayes Predict')
 model = NaiveBayesModel.load(sc, '%(model)s')
 sc.textFile('%(inpath)s').map(parseLine).map(model.predict).saveAsTextFile('%(outpath)s')
 EOF''' % locals())
-    cmd = '/opt/spark/bin/spark-submit /home/hadoop/demo/spark.naivebayes_test.py 2> /dev/null'
-    run(cmd)
+        cmd = '/opt/spark/bin/spark-submit spark.naivebayes_test.py 2> /dev/null'
+        run(cmd)
 
 @task
 def sample(inpath,replacement,fraction,seed,outpath):
     """
     fab spark.sample:/sample/sample_movielens_movies.txt,False,0.5,0,/tmp/sampled_movielens
     """
-    run('''cat <<EOF > /home/hadoop/demo/spark.sample.py
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > spark.sample.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
 sc = SparkContext(appName='Sampling')
 sc.textFile('%(inpath)s').sample(%(replacement)s,%(fraction)s,%(seed)s).saveAsTextFile('%(outpath)s')
 EOF''' % locals())
-    cmd = '/opt/spark/bin/spark-submit --num-executors 300 /home/hadoop/demo/spark.sample.py 2> /dev/null'
-    run(cmd)
+        cmd = '/opt/spark/bin/spark-submit --num-executors 300 spark.sample.py 2> /dev/null'
+        run(cmd)
