@@ -600,7 +600,7 @@ Model Accuracy(all):  0.813659237458</pre>
 <script type="text/javascript">
     function classifyText() {
         var text = $('#targetText').val().replace(/['"\.,-\/#!$%\^&\*;:{}=\-_`~()\n]/g, " ");
-        $('#top1').text('Precessing');
+        $('#top1').text('Processing');
         $.ajax({
             type: "GET",
             username: "hadoop",
