@@ -28,6 +28,12 @@ app.use(cors());
 
 var usage = '<html>HDFS</html>';
 
+app.get('/webhdfs/v1/:a/:b/:c/:d', function(req, res) {
+   res.writeHead(200, {'Content-Type': 'image/jpeg'});
+   res.write(fs.readFileSync('/hdfs/' + req.params.a + '/' + req.params.b + '/' + req.params.c + '/' + req.params.d));
+   res.end()
+});
+
 app.get('/webhdfs/v1/:a/:b/:c', function(req, res) {
    res.writeHead(200, {'Content-Type': 'image/jpeg'});
    res.write(fs.readFileSync('/hdfs/' + req.params.a + '/' + req.params.b + '/' + req.params.c));
