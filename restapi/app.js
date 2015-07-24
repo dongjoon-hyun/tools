@@ -9,26 +9,26 @@ app.set('view engine', 'jade');
 var user = 'nobody';
 
 /*
-app.use(function(req, res, next) {
-    var auth;
+ app.use(function(req, res, next) {
+ var auth;
 
-    if (req.headers.authorization) {
-      auth = new Buffer(req.headers.authorization.substring(6), 'base64').toString().split(':');
-    }
+ if (req.headers.authorization) {
+ auth = new Buffer(req.headers.authorization.substring(6), 'base64').toString().split(':');
+ }
 
-    if (!auth || auth[0] !== 'hadoop' || auth[1] !== 'tip') {
-        res.statusCode = 401;
-        res.setHeader('WWW-Authenticate', 'Basic realm="T Intelligence Platform"');
-        res.end('Unauthorized');
-    } else {
-        user = auth[0];
-        next();
-    }
-});
-*/
+ if (!auth || auth[0] !== 'hadoop' || auth[1] !== 'tip') {
+ res.statusCode = 401;
+ res.setHeader('WWW-Authenticate', 'Basic realm="T Intelligence Platform"');
+ res.end('Unauthorized');
+ } else {
+ user = auth[0];
+ next();
+ }
+ });
+ */
 app.use(cors());
 
-app.get('/api/v1/:op/:param', function(req, res) {
+app.get('/api/v1/:op/:param', function (req, res) {
     console.log(user + "@" + req.ip + ": " + req.originalUrl);
     console.log('/usr/local/bin/fab -f ../cli/fabfile.py ' + req.params.op + ':' + req.params.param);
 
@@ -37,11 +37,11 @@ app.get('/api/v1/:op/:param', function(req, res) {
             console.log('stdout: ' + stdout);
             console.log('stderr: ' + stderr);
             res.setHeader('Access-Control-Allow-Origin', '*');
-            res.json({ 
+            res.json({
                 "user": user,
                 "ip": req.ip,
                 "request": req.originalUrl,
-                "result": stdout.toString() 
+                "result": stdout.toString()
             });
             if (error !== null) {
                 console.log('exec error: ' + error);
@@ -49,29 +49,29 @@ app.get('/api/v1/:op/:param', function(req, res) {
         });
 });
 
-app.get('/api/v1/:op', function(req, res) {
-  res.redirect('/api/v1/');
+app.get('/api/v1/:op', function (req, res) {
+    res.redirect('/api/v1/');
 });
 
-app.get('/api/v1/', function(req, res) {
-	var fs = require('fs');
-	var fab_help = fs.readFileSync('./fab_help.txt', 'utf8');
-	var fab_modules = new Array();
+app.get('/api/v1/', function (req, res) {
+    var fs = require('fs');
+    var fab_help = fs.readFileSync('./fab_help.txt', 'utf8');
+    var fab_modules = new Array();
     var fab_lines = fab_help.split("\n");
-    
-    for	(index = 2; index < fab_lines.length; index++) {
-    	var fab_line = fab_lines[index].trim().split("fab ");
-    	var fab_command = String(fab_line[0]).trim();
-    	var fab_parameter = String(fab_line[1]).replace(fab_command + ":", "").trim();
-    	var fab_url = "/api/v1/" + fab_command + "/" + encodeURIComponent(fab_parameter); 
+
+    for (index = 2; index < fab_lines.length; index++) {
+        var fab_line = fab_lines[index].trim().split("fab ");
+        var fab_command = String(fab_line[0]).trim();
+        var fab_parameter = String(fab_line[1]).replace(fab_command + ":", "").trim();
+        var fab_url = "/api/v1/" + fab_command + "/" + encodeURIComponent(fab_parameter);
         console.log(fab_command + " --> " + fab_parameter);
-        
+
         if (fab_command.length > 0) {
-        	fab_modules.push({'name': fab_command, 'parameter': fab_parameter, 'url': fab_url});
+            fab_modules.push({'name': fab_command, 'parameter': fab_parameter, 'url': fab_url});
         }
     }
-    
-	res.render('index', { fab_modules: fab_modules });
+
+    res.render('index', {fab_modules: fab_modules});
 });
 
 app.listen(process.env.PORT || 5555);
