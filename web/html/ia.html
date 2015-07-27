@@ -326,7 +326,7 @@
             </li>
 
             <li class="">
-                <a href="#" class="">
+                <a href="function.html" class="">
                     <i class="menu-icon fa fa-square-o"></i>
                     <span class="menu-text"> Function </span>
 
@@ -372,7 +372,7 @@
                         <b class="arrow"></b>
                     </li>
 
-                    <li class="">
+                    <li class="active">
                         <a href="ia.html">
                             <i class="menu-icon fa fa-caret-right"></i>
                             Interactive Analysis (Spark)
@@ -435,7 +435,7 @@
                         <b class="arrow"></b>
                     </li>
 
-                    <li class="active">
+                    <li class="">
                         <a href="security.html">
                             <i class="menu-icon fa fa-caret-right"></i>
                             Document Security (Caffe + DIGITS)
@@ -482,7 +482,7 @@
                 </li>
 
                 <li>
-                    <a href="#">Document Security</a>
+                    <a href="#">Search</a>
                 </li>
                 <!--li class="active"></li-->
             </ul>
@@ -494,7 +494,7 @@
             <div class="page-content-area">
                 <div class="page-header">
                     <h1>
-                        Document Security
+                        Interactive Analysis (Spark)
                         <small>
                             <i class="ace-icon fa fa-angle-double-right"></i>
 
@@ -507,107 +507,29 @@
                     <div class="col-xs-12">
                         <!-- PAGE CONTENT BEGINS -->
                         <div class="row">
-                            <div class="col-xs-12 col-sm-12">
-                                <h4>1. Text + Image Analysis Case</h4>
-
-                                <img id="target_img" height="500px" style="border: 1px solid lightgrey;"
-                                     src="http://tip:14000/webhdfs/v1/sample/normal.png?user.name=hadoop&op=open"/>
-                                <img id="target_img" height="500px" style="border: 1px solid lightgrey;"
-                                     src="http://tip:14000/webhdfs/v1/sample/circuit.png?user.name=hadoop&op=open"/>
-                            </div>
-                        </div>
-
-                        <div class="row">
                             <div class="col-xs-12">
-                                <h4>2. User Script</h4>
-
-                                <div style="padding-left: 20px">
-                                <pre>
-fab pdf.image:/sample/circuit.pdf,/tmp/circuit
-fab pdf.text:/sample/circuit.pdf,/tmp/circuit/report.txt
-fab spark.count_line_with:/tmp/circuit/*.txt,대외비:보안:회로:도면
-fab caffe.predict:/model/caffe/voc,/tmp/circuit/circuit-000.jpg,True,256:256,2:1:0,3</pre>
-                                <pre style="background-color:#38424a">
-2
-chair 0.493845
-circuit 0.247732
-car 0.0570637</pre>
-                                </div>
-
-                                <h4>3. Recognizable Images </h4>
-
-                                <div style="padding-left: 20px; ">
-                                    <ul class="ace-thumbnails clearfix">
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000001.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000002.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000003.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000004.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000005.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000006.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000007.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000008.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000009.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000010.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000011.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000012.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000013.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000014.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000015.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000016.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000017.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000018.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000019.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000020.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                        <li><img width="150" height="150" alt="150x150"
-                                                 src="http://tip:14000/webhdfs/v1/data/image/voc/circuit/00000021.jpg?user.name=hadoop&op=open"/>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <h4>1. Chart (Twitter people distribution by the number of friends)</h4>
+                                <pre>%scala
+val twitter = sqlContext.read.json("hdfs://50.1.100.95/data/text/twitter")
+twitter.registerTempTable("twitter")</pre>
+                                <pre>%sql
+SELECT int(log(user.friends_count)) friends_cound, int(count(*)) count
+FROM twitter GROUP BY int(log(user.friends_count))</pre>
+                                <iframe src="http://gnn-f05-04:8088/#/notebook/2AVXEEQRT/paragraph/20150724-150928_1184493459?asIframe"
+                                        width="90%" height="300px" frameborder="None">
+                                </iframe>
+                                <h4>2. Search (Twitter Content Search)</h4>
+                                <pre>%scala
+sqlContext.udf.register("clean", (s: String) => s.replace("\n",""))</pre>
+                                <pre>%sql
+%sql select clean(text) text from twitter where text like "%${Keyword}%" limit 5</pre>
+                                <iframe src="http://gnn-f05-04:8088/#/notebook/2AVXEEQRT/paragraph/20150724-144216_1617102129?asIframe"
+                                        width="90%" height="350px" frameborder="None">
+                                </iframe>
                             </div>
+                            <!-- /.span -->
                         </div>
                         <!-- /.row -->
-
-                        <!-- PAGE CONTENT ENDS -->
                     </div>
                     <!-- /.col -->
                 </div>
@@ -644,12 +566,81 @@ car 0.0570637</pre>
 </script>
 <script src="../assets/js/bootstrap.min.js"></script>
 
+<!-- page specific plugin scripts -->
+<script src="../assets/js/jquery.dataTables.min.js"></script>
+<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
+
 <!-- ace scripts -->
 <script src="../assets/js/ace-elements.min.js"></script>
 <script src="../assets/js/ace.min.js"></script>
 
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
+    jQuery(function ($) {
+        var oTable1 =
+                $('#sample-table-2')
+                    //.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
+                        .dataTable({
+                            bAutoWidth: false,
+                            "aoColumns": [
+                                {"bSortable": false},
+                                null, null, null, null, null,
+                                {"bSortable": false}
+                            ],
+                            "aaSorting": [],
+
+                            //,
+                            //"sScrollY": "200px",
+                            //"bPaginate": false,
+
+                            //"sScrollX": "100%",
+                            //"sScrollXInner": "120%",
+                            //"bScrollCollapse": true,
+                            //Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+                            //you may want to wrap the table inside a "div.dataTables_borderWrap" element
+
+                            //"iDisplayLength": 50
+                        });
+        /**
+         var tableTools = new $.fn.dataTable.TableTools( oTable1, {
+					"sSwfPath": "../../copy_csv_xls_pdf.swf",
+			        "buttons": [
+			            "copy",
+			            "csv",
+			            "xls",
+						"pdf",
+			            "print"
+			        ]
+			    } );
+         $( tableTools.fnContainer() ).insertBefore('#sample-table-2');
+         */
+
+
+        $(document).on('click', 'th input:checkbox', function () {
+            var that = this;
+            $(this).closest('table').find('tr > td:first-child input:checkbox')
+                    .each(function () {
+                        this.checked = that.checked;
+                        $(this).closest('tr').toggleClass('selected');
+                    });
+        });
+
+
+        $('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+        function tooltip_placement(context, source) {
+            var $source = $(source);
+            var $parent = $source.closest('table')
+            var off1 = $parent.offset();
+            var w1 = $parent.width();
+
+            var off2 = $source.offset();
+            //var w2 = $source.width();
+
+            if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2)) return 'right';
+            return 'left';
+        }
+
+    })
 </script>
 
 <!-- the following scripts are used in demo only for onpage help and you don't need them -->

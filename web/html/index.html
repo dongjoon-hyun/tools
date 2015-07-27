@@ -369,6 +369,15 @@
                     </li>
 
                     <li class="">
+                        <a href="ia.html">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Interactive Analysis (Spark)
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
                         <a href="nlp.html">
                             <i class="menu-icon fa fa-caret-right"></i>
                             NLP (Spark)
@@ -564,24 +573,16 @@ Available commands:
     snu.pagerank              fab snu.pagerank:/sample/sample_pagerank,/user/hadoop/pagerank_result,0.01,10,0.85
     spark.count_line          fab spark.count_line:/data/image/imagenet/*.txt
     spark.count_line_with     fab spark.count_line_with:/data/text/wikipedia/ko*,'<page>'
-                                                spark.grep fab
-                                                spark.grep:/data/text/wikipedia/ko*,/user/hadoop/grep_result,'
-                                                <page>'
-                                                    spark.head fab spark.head:/data/image/imagenet/*.txt,5
-                                                    spark.naivebayes_predict fab
-                                                    spark.naivebayes_predict:/tmp/nb.model,/sample/naive_bayes_test.txt,/tmp/nb.result
-                                                    spark.naivebayes_train fab
-                                                    spark.naivebayes_train:/sample/sample_naive_bayes_data.txt,1.0,/tmp/nb.model
-                                                    spark.ngram_ko fab
-                                                    spark.ngram_ko:2,1000,/user/hadoop/tf_result,/user/hadoop/ngram_result
-                                                    spark.sample fab
-                                                    spark.sample:/sample/sample_movielens_movies.txt,False,0.5,0,/tmp/sampled_movielens
-                                                    spark.select fab
-                                                    spark.select:/data/text/news/hani/*,/user/hadoop/selected,'1;0'
-                                                    spark.sql fab spark.sql:'select count(*) from data.news'
-                                                    spark.tf_ko fab
-                                                    spark.tf_ko:/data/text/news/hani/*,/user/hadoop/tf_result
-                                                    spark.word2vec fab spark.word2vec:/sample/sample_hani_kma,대통령
+    spark.grep                fab spark.grep:/data/text/wikipedia/ko*,/user/hadoop/grep_result,'<page>'
+    spark.head                fab spark.head:/data/image/imagenet/*.txt,5
+    spark.naivebayes_predict  fab spark.naivebayes_predict:/tmp/nb.model,/sample/naive_bayes_test.txt,/tmp/nb.result
+    spark.naivebayes_train    fab spark.naivebayes_train:/sample/sample_naive_bayes_data.txt,1.0,/tmp/nb.model
+    spark.ngram_ko            fab spark.ngram_ko:2,1000,/user/hadoop/tf_result,/user/hadoop/ngram_result
+    spark.sample              fab spark.sample:/sample/sample_movielens_movies.txt,False,0.5,0,/tmp/sampled_movielens
+    spark.select              fab spark.select:/data/text/news/hani/*,/user/hadoop/selected,'1;0'
+    spark.sql                 fab spark.sql:'select count(*) from data.news'
+    spark.tf_ko               fab spark.tf_ko:/data/text/news/hani/*,/user/hadoop/tf_result
+    spark.word2vec            fab spark.word2vec:/sample/sample_hani_kma,대통령
                                 </li>
                             </ol>
                         </div>
