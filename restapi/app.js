@@ -6,6 +6,8 @@ var path = require('path');
 var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+var nodecache = require('node-cache');
+var cache = new nodecache();
 var user = 'nobody';
 
 /*
@@ -32,21 +34,36 @@ app.get('/api/v1/:op/:param', function (req, res) {
     console.log(user + "@" + req.ip + ": " + req.originalUrl);
     console.log('/usr/local/bin/fab -f ../cli/fabfile.py ' + req.params.op + ':' + req.params.param);
 
-    child = child_process.exec('/usr/local/bin/fab -f ../cli/fabfile.py ' + req.params.op + ':' + req.params.param,
-        function (error, stdout, stderr) {
-            console.log('stdout: ' + stdout);
-            console.log('stderr: ' + stderr);
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.json({
-                "user": user,
-                "ip": req.ip,
-                "request": req.originalUrl,
-                "result": stdout.toString()
+    value = cache.get( req.originalUrl );
+    if (value == undefined) {
+        child = child_process.exec('/usr/local/bin/fab -f ../cli/fabfile.py ' + req.params.op + ':' + req.params.param,
+            function (error, stdout, stderr) {
+                console.log('stdout: ' + stdout);
+                console.log('stderr: ' + stderr);
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.json({
+                    "user": user,
+                    "ip": req.ip,
+                    "request": req.originalUrl,
+                    "result": stdout.toString()
+                });
+                if (error !== null) {
+                    console.log('exec error: ' + error);
+                } else {
+                    obj = { my: "Special", variable: 42 };
+                    success = cache.set( req.originalUrl, stdout.toString(), 10000 );
+                }
             });
-            if (error !== null) {
-                console.log('exec error: ' + error);
-            }
+    } else {
+        console.log('Use Cache: ' + value);
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.json({
+            "user": user,
+            "ip": req.ip,
+            "request": req.originalUrl,
+            "result": value
         });
+    }
 });
 
 app.get('/api/v1/:op', function (req, res) {
