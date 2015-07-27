@@ -526,10 +526,8 @@ Available commands:
     caffe.build_db            fab caffe.build_db:/data/image/mnist/jpg/labeled_list.txt,/tmp/mnist
     caffe.classify            fab caffe.classify:/tmp/model,/data/image/mnist/jpg/0/00003.jpg
     caffe.deploy              fab caffe.deploy:/tmp/model
-    caffe.draw                TODO
     caffe.ls_lmdb             fab caffe.ls_lmdb:/tmp/mnist.lmdb
-    caffe.predict             fab caffe.predict:/model/caffe/bvlc_reference_caffenet,/sample/ad.png,True,256:256,2:1:0,3
-    caffe.resize_img          TODO
+    caffe.predict             fab caffe.predict:/model/caffe/imagenet,/sample/ad.png
     caffe.train               fab caffe.train:data/solver.prototxt,data/train_val.prototxt,/tmp/model
     cam.capture               fab cam.capture:/tmp/cam1,3
     cam.view                  fab cam.view

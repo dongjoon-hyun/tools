@@ -93,7 +93,7 @@ EOF''' % locals())
 @hosts('50.1.100.101')
 def predict(name, path, color='True',dims='256:256',channel_swap='2:1:0',topk=3):
     """
-    fab caffe.predict:/model/caffe/bvlc_reference_caffenet,/sample/ad.png,True,256:256,2:1:0,3
+    fab caffe.predict:/model/caffe/imagenet,/sample/ad.png
     """
     dims = dims.replace(':',',')
     channel_swap = channel_swap.replace(':',',')
