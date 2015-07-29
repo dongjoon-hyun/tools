@@ -1,8 +1,8 @@
 #!/usr/local/bin/python2.7
 # -*- coding: utf-8 -*-
-'''
+"""
 Intelligence Platform CLI Fabric File
-'''
+"""
 
 __author__    = 'Dongjoon Hyun (dongjoon@apache.org)'
 __license__   = 'Apache License'
@@ -10,7 +10,7 @@ __version__   = '0.2'
 
 from fabric.api import *
 
-'''
+"""
 Hani Label
 [(u'society', 229445),
  (u'opinion', 35368),
@@ -32,13 +32,13 @@ We use the following lable map.
  3 = sports (60769)
  4 = international (59557)
  5 = culture (57530)
-'''
+"""
 
 @task
 def tid(inpath, outpath, col=0):
-	'''
+	"""
 	fab news.tid:/data/text/news/hani,/tmp/hani/tid,1
-	'''
+	"""
 	run('''cat <<EOF > /home/hadoop/demo/news.tid.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
@@ -64,9 +64,9 @@ EOF''' % locals())
 
 @task
 def nb_train(inpath, lambda_, model, outpath):
-	'''
+	"""
 	fab news.nb_train:/data/text/news/hani/*,1.0,multinomial,/tmp/news
-	'''
+	"""
 	run('''cat <<EOF > /home/hadoop/demo/news.nb_train.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
@@ -140,9 +140,9 @@ EOF''' % locals())
 
 @task
 def nb_predict(model, text):
-	'''
+	"""
 	fab news.nb_predict:/model/spark/news,'최근 전국 아파트 분양 시장의'
-	'''
+	"""
 	run('''cat <<EOF > /home/hadoop/demo/news.nb_predict.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
@@ -188,9 +188,9 @@ EOF''' % locals())
 
 @task
 def svm_train(inpath, iteration, outpath):
-	'''
+	"""
 	fab news.svm_train:/data/text/news/hani/*,100,/tmp/svm2
-	'''
+	"""
         run('''cat <<EOF > /home/hadoop/demo/news.svm_train.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext

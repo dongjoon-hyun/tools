@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-'''
+"""
 TED Script Crawler
-'''
+"""
 
 __author__    = 'Dongjoon Hyun (dongjoon@apache.org)'
 __copyright__ = 'Copyright (c) 2015'
@@ -18,7 +18,7 @@ import urllib2
 from bs4 import BeautifulSoup
 
 class TED:
-	'''TED'''
+	"""TED"""
 
 	def __init__(self):
 		pass

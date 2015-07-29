@@ -1,8 +1,8 @@
 #!/usr/local/bin/python2.7
 # -*- coding: utf-8 -*-
-'''
+"""
 Intelligence Platform CLI Fabric File
-'''
+"""
 
 __author__    = 'Soonwoong Lee (soonwoong.lee@gmail.com)'
 __license__   = 'Apache License'
@@ -12,9 +12,9 @@ from fabric.api import *
 
 @task
 def doc2sent(inpath, outpath):
-    '''
+    """
     fab nlp.doc2sent:/sample/sample_hani_doc,/user/hadoop/sample_hani_sent
-    '''
+    """
     if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
 	print 'Unauthorized path: %(outpath)s' % locals()
 	return
@@ -51,9 +51,9 @@ EOF''' % locals())
 
 @task
 def doc2kma(inpath, outpath, numpartitions, numthreads, sep = '\01'):
-    '''
+    """
     fab nlp.doc2kma:/sample/sample_hani,/user/hadoop/sample_hani_kma,20,4
-    '''
+    """
     if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
         print 'Unauthorized path: %(outpath)s' % locals()
         return 
@@ -116,9 +116,9 @@ EOF''' % locals())
     
 @task
 def doc2ner(inpath, outpath, numpartitions, numthreads, sep = '\01'):
-    '''
+    """
     fab nlp.doc2ner:/sample/sample_hani,/user/hadoop/sample_hani_ner,20,4
-    '''
+    """
     if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
         print 'Unauthorized path: %(outpath)s' % locals()
         return 
@@ -181,9 +181,9 @@ EOF''' % locals())
 
 @task
 def sent2kma(inpath, outpath, numpartitions, numthreads):
-    '''
+    """
     fab nlp.sent2kma:/sample/sample_hani_sent,/user/hadoop/sample_hani_kma,20,4
-    '''
+    """
     if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
 	print 'Unauthorized path: %(outpath)s' % locals()
 	return
@@ -238,9 +238,9 @@ EOF''' % locals())
 
 @task
 def sent2ner(inpath, outpath, numpartitions, numthreads):
-    '''
+    """
     fab nlp.sent2ner:/sample/sample_hani_sent,/user/hadoop/sample_hani_ner,20,4
-    '''
+    """
     if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
 	print 'Unauthorized path: %(outpath)s' % locals()
 	return
@@ -295,9 +295,9 @@ EOF''' % locals())
     
 @task
 def kma(inputText, formatter):
-    '''
+    """
     fab nlp.kma:'서울의 인구는 1000만명이다.',kma(or cls)
-    '''
+    """
     run('''cat <<EOF > /home/hadoop/demo/nlp.kma.py
 # -*- encoding: utf-8 -*-
 import sys
@@ -324,9 +324,9 @@ EOF''' % locals())
 
 @task
 def kner(inputText, formatter):
-    '''
+    """
     fab nlp.kner:'서울의 인구는 1000만명이다.',ner(or cls)
-    '''
+    """
     run('''cat <<EOF > /home/hadoop/demo/nlp.kner.py
 # -*- encoding: utf-8 -*-
 import sys
@@ -353,9 +353,9 @@ EOF''' % locals())
 
 @task
 def word2vec_train(inpath, outpath, numpartitions, mincount, numiterations, vectorsize):
-    '''
+    """
     fab nlp.word2vec_train:/sample/sample_hani_kma,/user/hadoop/sample_hani_wordvec,20,5,3,100
-    '''
+    """
     if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
         print 'Unauthorized path: %(outpath)s' % locals()
         return
@@ -366,12 +366,12 @@ def word2vec_train(inpath, outpath, numpartitions, mincount, numiterations, vect
 
 @task
 def word2vec_test(modelpath, queryword, topn):
-    '''
+    """
     fab nlp.word2vec_test:/sample/sample_hani_wordvec,서울,10
-    '''
+    """
 #     cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --class SparkWord2VecTest --num-executors 30 --driver-memory 4G --executor-memory 4G --conf spark.akka.frameSize=200 /hdfs/user/hadoop/demo/nlp/sparkword2vec_2.10-1.0.jar %(modelpath)s %(queryword)s %(topn)s 2> /dev/null' % locals()
 #     run(cmd)
-    run('''cat <<EOF > /home/hadoop/demo/nlp.word2vec_test.py
+    run("""cat <<EOF > /home/hadoop/demo/nlp.word2vec_test.py
 # -*- encoding: utf-8 -*-
 from numpy import *
 from numpy.linalg import *
@@ -402,16 +402,16 @@ c = [e / norm(vectors[i]) / norm(qvector) for i, e in enumerate(c)]
 synonyms = [(words[i], c[i]) for i in argsort(c)[::-1][1:argtopn + 1] ]
 for s in synonyms:
     print s[0], s[1]
-EOF''' % locals())
+EOF""" % locals())
     cmd = 'python2.7 /home/hadoop/demo/nlp.word2vec_test.py'
     run(cmd)
     
     
 @task
 def word2vec_qa(modelpath, hint1, hint2, hint3, topn):
-    '''
+    """
     fab nlp.word2vec_qa:/sample/sample_hani_wordvec,프랑스,파리,태국,5
-    '''
+    """
     run('''cat <<EOF > /home/hadoop/demo/nlp.word2vec_qa.py
 # -*- encoding: utf-8 -*-
 from numpy import *
@@ -452,9 +452,9 @@ EOF''' % locals())
     
 @task
 def word2vec_draw(modelpath, outpath, topn):
-    '''
+    """
     fab nlp.word2vec_draw:/sample/sample_hani_wordvec,/tmp/word2vec_draw.png,100
-    '''
+    """
     if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
         print 'Unauthorized path: %(outpath)s' % locals()
         return

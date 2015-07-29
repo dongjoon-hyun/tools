@@ -1,8 +1,8 @@
 #!/usr/local/bin/python2.7
 # -*- coding: utf-8 -*-
-'''
+"""
 Intelligence Platform CLI Fabric File
-'''
+"""
 
 __author__    = 'Dongjoon Hyun (dongjoon@apache.org)'
 __license__   = 'Apache License'
@@ -12,9 +12,9 @@ from fabric.api import *
 
 @task
 def sql(sql='show tables'):
-	'''
+	"""
 	fab hive.sql:'select count(*) from data.news'
-	'''
+	"""
 	run('''cat <<EOF > /home/hadoop/demo/hive.sql
 %(sql)s
 EOF''' % locals())

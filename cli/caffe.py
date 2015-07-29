@@ -9,12 +9,13 @@ __license__ = 'Apache License'
 __version__ = '0.3'
 
 import os
-import pydoop.hdfs as hdfs
+
 from fabric.api import *
+
 
 @task
 @hosts('50.1.100.101')
-def train(solver='data/solver.prototxt',net='data/train_val.prototxt',data='/tmp/mnist',model='/tmp/model'):
+def train(solver='data/solver.prototxt', net='data/train_val.prototxt', data='/tmp/mnist', model='/tmp/model'):
     """
     fab caffe.train:data/solver.prototxt,data/train_val.prototxt,/tmp/model
     """
@@ -24,8 +25,8 @@ def train(solver='data/solver.prototxt',net='data/train_val.prototxt',data='/tmp
         run('mkdir val_db')
         put(solver, 'solver.prototxt')
         put(net, 'train_val.prototxt')
-        run("sed -i 's/__DIR__/%s/' solver.prototxt" % env.dir.replace('/','\/'))
-        run("sed -i 's/__DIR__/%s/' train_val.prototxt" % env.dir.replace('/','\/'))
+        run("sed -i 's/__DIR__/%s/' solver.prototxt" % env.dir.replace('/', '\/'))
+        run("sed -i 's/__DIR__/%s/' train_val.prototxt" % env.dir.replace('/', '\/'))
         run('hadoop fs -get %s/train_db/data.mdb train_db/' % data, quiet=True)
         run('hadoop fs -get %s/val_db/data.mdb val_db/' % data, quiet=True)
         run('hadoop fs -get %s/labels.txt' % data, quiet=True)
@@ -35,12 +36,14 @@ def train(solver='data/solver.prototxt',net='data/train_val.prototxt',data='/tmp
         run('hadoop fs -put train_val.prototxt %s' % model, quiet=True)
         run('hadoop fs -put *.caffemodel %s/pretrained.caffemodel' % model, quiet=True)
 
+
 @task
 @hosts('50.1.100.101')
-def draw(net,imgpath):
+def draw(net, imgpath):
     """
     TODO
     """
+
 
 @task
 def deploy(model):
@@ -89,14 +92,15 @@ EOF''' % locals())
         run(cmd)
         run('hadoop fs -put deploy.prototxt %s' % model, quiet=True)
 
+
 @task
 @hosts('50.1.100.101')
-def predict(name, path, color='True',dims='256:256',channel_swap='2:1:0',topk=3):
+def predict(name, path, color='True', dims='256:256', channel_swap='2:1:0', topk=3):
     """
     fab caffe.predict:/model/caffe/imagenet,/sample/ad.png
     """
-    dims = dims.replace(':',',')
-    channel_swap = channel_swap.replace(':',',')
+    dims = dims.replace(':', ',')
+    channel_swap = channel_swap.replace(':', ',')
     run('mkdir %s' % env.dir)
     with cd(env.dir):
         img = os.path.basename(path)
@@ -155,14 +159,16 @@ EOF''' % locals())
         cmd = '/usr/local/bin/python2.7 caffe.predict.py 2> /dev/null'
         run(cmd)
 
+
 @task
-def resize_img(inpath,height,width,outpath):
+def resize_img(inpath, height, width, outpath):
     """
     TODO
     """
 
+
 @task
-def build_db(imgpath,dbpath,val=0.1):
+def build_db(imgpath, dbpath, val=0.1):
     """
     fab caffe.build_db:/data/image/mnist/jpg/labeled_list.txt,/tmp/mnist
     """
@@ -261,7 +267,7 @@ for k,v in sorted(labels.items()):
     f.write("%%s\t%%s\\n" %% (k, v))
 f.close()
 EOF''' % locals())
-        #cmd = '/usr/local/bin/python2.7 caffe.build_db.py 2> /dev/null'
+        # cmd = '/usr/local/bin/python2.7 caffe.build_db.py 2> /dev/null'
         cmd = '/usr/local/bin/python2.7 caffe.build_db.py'
         run(cmd)
         run('hadoop fs -mkdir -p %(dbpath)s/train_db' % locals())
@@ -269,6 +275,7 @@ EOF''' % locals())
         run('hadoop fs -put -f train_db/data.mdb %(dbpath)s/train_db' % locals())
         run('hadoop fs -put -f val_db/data.mdb %(dbpath)s/val_db' % locals())
         run('hadoop fs -put -f labels.txt %(dbpath)s/' % locals())
+
 
 @task
 def ls_lmdb(dbpath):
@@ -295,8 +302,9 @@ EOF''' % locals())
     cmd = '/usr/local/bin/python2.7 /home/hadoop/demo/caffe.ls_lmdb.py'
     run(cmd)
 
+
 @task
-def classify(model,image):
+def classify(model, image):
     """
     fab caffe.classify:/tmp/model,/data/image/mnist/jpg/0/00003.jpg
     """

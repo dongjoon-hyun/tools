@@ -1,21 +1,22 @@
 #!/usr/local/bin/python2.7
 # -*- coding: utf-8 -*-
-'''
+"""
 Intelligence Platform CLI Fabric File
-'''
+"""
 
-__author__    = 'Dongjoon Hyun (dongjoon@apache.org)'
-__license__   = 'Apache License'
-__version__   = '0.3'
+__author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
+__license__ = 'Apache License'
+__version__ = '0.3'
 
 from fabric.api import *
+
 
 @task
 @hosts('50.1.100.101')
 def show():
-    '''
+    """
     fab cuda.show
-    '''
+    """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
         run('''cat <<'EOF' > cuda.show.py
@@ -32,12 +33,13 @@ EOF''' % locals())
         cmd = '/usr/local/bin/python2.7 cuda.show.py 2> /dev/null'
         run(cmd)
 
+
 @task
 @hosts('50.1.100.101')
-def limit(gpuid,name='MAX_THREADS_PER_BLOCK'):
-    '''
+def limit(gpuid, name='MAX_THREADS_PER_BLOCK'):
+    """
     fab cuda.limit:0,max_threads_per_block
-    '''
+    """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
         name = name.upper()
@@ -53,12 +55,13 @@ EOF''' % locals())
         cmd = '/usr/local/bin/python2.7 /home/hadoop/demo/cuda.limit.py 2> /dev/null'
         run(cmd)
 
+
 @task
 @hosts('50.1.100.101')
-def sdot(gpuid,file1,file2,outfile):
-    '''
+def sdot(gpuid, file1, file2, outfile):
+    """
     fab cuda.sdot:0,/sample/m1.txt,/sample/m2.txt,/tmp/m3.txt
-    '''
+    """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
         name1 = file1.split('/')[-1]
@@ -90,11 +93,12 @@ EOF''' % locals())
         run(cmd)
         run('hadoop fs -put cuda.tmp %(outfile)s 2> /dev/null' % locals())
 
+
 # working
 def sgemm_c(gpuid, file1, file2, outfile):
-    '''
+    """
     fab cuda.sgemm:0,/sample/m1.txt,/sample/m2.txt,/tmp/m3.txt
-    '''
+    """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
         name1 = file1.split('/')[-1]
@@ -124,11 +128,12 @@ EOF''' % locals())
         run(cmd)
         run('hadoop fs -put cuda.tmp %(outfile)s 2> /dev/null' % locals())
 
+
 # working
 def sgemm_(gpuid, file1, file2, outfile):
-    '''
+    """
     fab cuda.sgemm:0,/sample/m1.txt,/sample/m2.txt,/tmp/m3.txt
-    '''
+    """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
         name1 = file1.split('/')[-1]

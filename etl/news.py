@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-'''
+"""
 News Feed Crawler
-'''
+"""
 from twisted.protocols.ftp import FileNotFoundError
 
 __author__    = 'Dongjoon Hyun (dongjoon@apache.org)'
@@ -26,13 +26,13 @@ from bs4 import BeautifulSoup
 import StringIO
 
 class News:
-	'''News'''
+	"""News"""
 
 	def __init__(self):
 		pass
 
 	def crawl(self, feed_list_file, verbose=False):
-		'''Read feed list file and call crawl_feed for each feed'''
+		"""Read feed list file and call crawl_feed for each feed"""
 		f = open(feed_list_file,'r')
 		feeds = f.readlines()
 		f.close()	
@@ -42,7 +42,7 @@ class News:
 			time.sleep(1)
 
 	def crawl_feed(self, url, verbose):
-		'''Crawl a single feed'''
+		"""Crawl a single feed"""
 		domain = tldextract.extract(url).domain
 		day = date.today().isoformat()
 		try:
@@ -101,7 +101,7 @@ class News:
 		print "TOTAL: %s pages" % len(rows)
 
 	def parse(self, input=sys.stdin, verbose=False):
-		'''Parse news article with opengraph protocol'''
+		"""Parse news article with opengraph protocol"""
 		html = ''.join(input.readlines())
 		soup = BeautifulSoup(html)
 		url = self.get_url(soup)

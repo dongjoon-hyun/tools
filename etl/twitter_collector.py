@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
-'''
+"""
 Public Tweet Collector
-'''
+"""
 
 __author__    = 'Dongjoon Hyun (dongjoon@apache.org)'
 __copyright__ = 'Copyright (c) 2015'

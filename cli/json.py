@@ -1,8 +1,8 @@
 #!/usr/local/bin/python2.7
 # -*- coding: utf-8 -*-
-'''
+"""
 Intelligence Platform CLI Fabric File
-'''
+"""
 
 __author__    = 'Dongjoon Hyun (dongjoon@apache.org)'
 __license__   = 'Apache License'
@@ -12,9 +12,9 @@ from fabric.api import *
 
 @task
 def schema(inpath):
-    '''
+    """
     fab json.schema:/data/text/twitter
-    '''
+    """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
         run('''cat <<EOF > json.schema.py
@@ -32,9 +32,9 @@ EOF''' % locals())
 
 @task
 def filter(inpath,field,value,outpath):
-    '''
+    """
     fab json.filter:/data/text/twitter/20150721_22.json,lang,ko,/tmp/ko
-    '''
+    """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
         run('''cat <<EOF > json.filter.py
@@ -52,9 +52,9 @@ EOF''' % locals())
 
 @task
 def select(inpath,columns,outpath):
-    '''
+    """
     fab json.select:/data/text/twitter/20150721_22.json,created_at:text,/tmp/result
-    '''
+    """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
         columns = ','.join(map(lambda x: "'%s'" % x, columns.split(':')))
