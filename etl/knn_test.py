@@ -9,23 +9,23 @@ __license__ = 'Apache License'
 __version__ = '0.3'
 
 import unittest
-import a
+import knn
 
 
 class TestStringMethods(unittest.TestCase):
     def test_dist(self):
-        self.assertEqual(a.jaccard_dist([1], [1]), 0)
-        self.assertEqual(a.jaccard_dist([1], [2]), 1)
-        self.assertAlmostEqual(a.jaccard_dist([1, 2], [2, 3]), 2.0 / 3.0)
+        self.assertEqual(knn.jaccard_dist([1], [1]), 0)
+        self.assertEqual(knn.jaccard_dist([1], [2]), 1)
+        self.assertAlmostEqual(knn.jaccard_dist([1, 2], [2, 3]), 2.0 / 3.0)
 
     def test_ngram(self):
-        self.assertEqual([], a.ngram(u'한', 2))
-        self.assertEqual([u'한글'], a.ngram(u'한글', 2))
-        self.assertEqual([u'대한', u'한민', u'민국'], a.ngram(u'대한민국', 2))
-        self.assertEqual([u'대한민', u'한민국'], a.ngram(u'대한민국', 3))
+        self.assertEqual([], knn.ngram(u'한', 2))
+        self.assertEqual([u'한글'], knn.ngram(u'한글', 2))
+        self.assertEqual([u'대한', u'한민', u'민국'], knn.ngram(u'대한민국', 2))
+        self.assertEqual([u'대한민', u'한민국'], knn.ngram(u'대한민국', 3))
 
     def test_knn(self):
-        news = a.News()
+        news = knn.News()
         news.read_data()
         self.assertEqual((u'건강', u'병원/의료'), news.knn(u"허술한 방역·부실한 대응…'의료선진국' 정부 민낯 드러나"))
         self.assertEqual((u'정부/정책', u'정당/국회'), news.knn(u"대통령 국정 긍정평가 한 달여 전과 비슷한 40% 중반 대"))
