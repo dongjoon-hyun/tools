@@ -11,17 +11,34 @@ __version__   = '0.2'
 from fabric.api import *
 
 @task
-@hosts('tip@54.64.24.132')
-def send_message(id, msg):
+def send_message(msg, id=-36901391):
     """
-    fab tg.send_message:Soonwoong_Lee,'안녕하세요. 반갑습니다.'
+    fab tg.send_message:'안녕하세요. TIP Bot 입니다.'
     """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
-        run('''cat <<EOF > tg_run.sh
-#!/bin/bash
-(echo "contact_list"; sleep 7; echo "msg %(id)s %(msg)s"; echo "safe_quit") | /home/tip/tg/bin/telegram-cli -k /home/tip/tg/tg-server.pub -W 2> /dev/null
+        run('''cat <<EOF > tg_bot_request.py
+# -*- coding: utf-8 -*-
+import telegram
+bot = telegram.Bot(token='112152357:AAGBdO_TGBagwQCsoGWm4EcZNv1CRwhJ0JA')
+bot.sendMessage(chat_id=%(id)s, text='%(msg)s')
 EOF''' % locals())
-        run('chmod +x ./tg_run.sh')
-        cmd = './tg_run.sh > /dev/null 2>&1'
+        cmd = 'python2.7 ./tg_bot_request.py 2>/dev/null'
         run(cmd)
+        
+@task
+def send_photo(photo_path, id=-36901391):
+    """
+    fab tg.send_photo:https://telegram.org/img/t_logo.png
+    """
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > tg_bot_request.py
+# -*- coding: utf-8 -*-
+import telegram
+bot = telegram.Bot(token='112152357:AAGBdO_TGBagwQCsoGWm4EcZNv1CRwhJ0JA')
+bot.sendPhoto(chat_id=%(id)s, photo='%(photo_path)s')
+EOF''' % locals())
+        cmd = 'python2.7 ./tg_bot_request.py 2>/dev/null'
+        run(cmd)
+    
