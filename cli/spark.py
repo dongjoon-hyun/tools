@@ -266,3 +266,32 @@ sc.textFile('%(inpath)s').sample(%(replacement)s,%(fraction)s,%(seed)s).saveAsTe
 EOF''' % locals())
         cmd = '/opt/spark/bin/spark-submit --num-executors 300 spark.sample.py 2> /dev/null'
         run(cmd)
+
+@task
+def lm(inpath, outpath, step, maxiter):
+    """
+    fab spark.lm:/sample/sample_regression,/user/hadoop/lm_result,0.1,1000
+    """
+    if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
+        print 'Unauthorized path: %(outpath)s' % locals()
+        return
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<'EOF' > spark.lm.py
+# -*- coding: utf-8 -*-
+from pyspark import SparkContext
+from pyspark.mllib.linalg import Vectors
+from pyspark.mllib.feature import StandardScaler
+from pyspark.mllib.regression import LabeledPoint, LinearRegressionWithSGD
+sc = SparkContext(appName='Linear Regression')
+
+data = sc.textFile('%(inpath)s').filter(lambda x: not x.startswith('#')).map(lambda x: x.split())
+label = data.map(lambda x: x[-1])
+feature = data.map(lambda x: x[0:-1])
+scaler = StandardScaler().fit(feature)
+feature = scaler.transform(feature)
+model = LinearRegressionWithSGD.train(label.zip(feature).map(lambda (x,y): LabeledPoint(x,y)), intercept=True, iterations=%(maxiter)s, step=%(step)s)
+print model
+EOF''' % locals())
+        cmd = '/opt/spark/bin/spark-submit spark.lm.py 2> /dev/null'
+        run(cmd)
