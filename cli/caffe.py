@@ -161,6 +161,94 @@ EOF''' % locals())
 
 
 @task
+@hosts('50.1.100.101')
+def video_indexing(modelpath, videopath, skip_frame = 500, color='True', dims='256:256', channel_swap='2:1:0', topk=3):
+    """
+    fab caffe.video_indexing:/model/caffe/imagenet,/hdfs/sample/ted_sample.mp4,500
+    """
+    dims = dims.replace(':', ',')
+    channel_swap = channel_swap.replace(':', ',')
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        img = os.path.basename(videopath)
+        run('hadoop fs -get %(modelpath)s/deploy.prototxt' % locals(), quiet=True)
+        run('hadoop fs -get %(modelpath)s/pretrained.caffemodel' % locals(), quiet=True)
+        run('hadoop fs -get %(modelpath)s/mean.*' % locals(), quiet=True)
+        run('hadoop fs -get %(videopath)s %(img)s' % locals(), quiet=True)
+        run('hadoop fs -get %(modelpath)s/labels.txt' % locals(), quiet=True)
+        run('mkdir ./snapshots')
+        run('''cat <<EOF > caffe.video_indexing.py
+# -*- coding: utf-8 -*-
+import sys
+import math
+import numpy as np
+sys.path.insert(0, '/home/hadoop/caffe/distribute/python')
+import imageio
+from skimage.transform import resize
+import caffe
+caffe.set_mode_gpu()
+
+labels = []
+try:
+    with open('labels.txt') as f:
+        for line in f:
+            labels.append(' '.join(line.split()[1:]))
+except:
+    pass
+
+mean = None
+try:
+    mean=np.load('mean.npy').mean(1).mean(1)
+except:
+    try:
+        blob = caffe.proto.caffe_pb2.BlobProto()
+        data = open('mean.binaryproto', 'rb').read()
+        blob.ParseFromString(data)
+        arr = np.array( caffe.io.blobproto_to_array(blob) )
+        mean = arr[0]
+    except:
+        pass
+
+channel_swap=(%(channel_swap)s)
+if channel_swap == ():
+    channel_swap = None
+
+net = caffe.Classifier('deploy.prototxt', 'pretrained.caffemodel', \
+        mean=mean, \
+        channel_swap=channel_swap, \
+        raw_scale=255, \
+        image_dims=(%(dims)s))
+
+reader = imageio.get_reader('%(videopath)s')
+skipframe = int(%(skip_frame)s)
+totalframes = int(reader._meta['nframes'])
+print totalframes
+
+for i, im in enumerate(reader):
+    if math.fmod(i, skipframe) == 0.0:
+        resized_im = resize(im, (%(dims)s))
+        jpgname = './snapshots/' + str(i) + '.jpg'
+        print 'Frame: ' + str(i) + ' -> ' + jpgname
+        imageio.imwrite(jpgname, resized_im)
+        prediction = net.predict([resized_im])
+        predicted_top_classes = list(reversed(prediction[0].argsort()[-%(topk)s:]))
+        for c in predicted_top_classes:            
+            if len(labels) == 0:
+                print '\t', c, prediction[0][c]
+            else:
+                print '\t', labels[c], prediction[0][c]
+        print
+    elif i == totalframes - 3:
+        print 'Lets stop here!'
+        break
+        
+reader.close()
+EOF''' % locals())
+        cmd = '/usr/local/bin/python2.7 caffe.video_indexing.py'
+        run(cmd)
+        
+
+@task
 def resize_img(inpath, height, width, outpath):
     """
     TODO
