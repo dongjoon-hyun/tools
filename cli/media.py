@@ -17,6 +17,6 @@ def download(url, outpath=None):
     """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
-        run('youtube-dl -k --all-subs --write-all-thumbnails --restrict-filenames -q %(url)s' % locals(), quiet=True)
+        run('youtube-dl -k --all-subs --write-all-thumbnails --write-description --write-info-json --restrict-filenames -q %(url)s' % locals(), quiet=True)
         run('hadoop fs -mkdir -p %s' % outpath)
         run('hadoop fs -copyFromLocal * %s' % outpath)
