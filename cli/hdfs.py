@@ -39,9 +39,12 @@ def du(inpath):
 
 
 @task
-def text(inpath, count=5):
+def text(inpath, count=0):
     """
     fab hdfs.text:/sample/hani_news.head.txt.gz,5
     """
-    cmd = '/usr/bin/hadoop fs -text %(inpath)s 2> /dev/null | head -n %(count)s' % locals()
+    if count == 0:
+        cmd = '/usr/bin/hadoop fs -text %(inpath)s 2> /dev/null' % locals()
+    else:
+        cmd = '/usr/bin/hadoop fs -text %(inpath)s 2> /dev/null | head -n %(count)s' % locals()
     run(cmd)
