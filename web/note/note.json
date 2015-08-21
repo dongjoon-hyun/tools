@@ -1,0 +1,397 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n# This dashboard is used as a iframes in TIP homepage. \n# Please do not change.",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1440072310072_1566373237",
+      "id": "20150820-210510_1491048155",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch1\u003eThis dashboard is used as a iframes in TIP homepage.\u003c/h1\u003e\n\u003ch1\u003ePlease do not change.\u003c/h1\u003e\n"
+      },
+      "dateCreated": "Aug 20, 2015 9:05:10 PM",
+      "dateStarted": "Aug 20, 2015 9:05:19 PM",
+      "dateFinished": "Aug 20, 2015 9:05:19 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val twitter \u003d sqlContext.read.json(\"hdfs://50.1.100.96/data/text/twitter\")\ntwitter.registerTempTable(\"twitter\")",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "tableHide": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1437716410601_-796659395",
+      "id": "20150724-144010_2057334885",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "twitter: org.apache.spark.sql.DataFrame \u003d [contributors: string, coordinates: struct\u003ccoordinates:array\u003cdouble\u003e,type:string\u003e, created_at: string, entities: struct\u003chashtags:array\u003cstruct\u003cindices:array\u003cbigint\u003e,text:string\u003e\u003e,media:array\u003cstruct\u003cdisplay_url:string,expanded_url:string,id:bigint,id_str:string,indices:array\u003cbigint\u003e,media_url:string,media_url_https:string,sizes:struct\u003clarge:struct\u003ch:bigint,resize:string,w:bigint\u003e,medium:struct\u003ch:bigint,resize:string,w:bigint\u003e,small:struct\u003ch:bigint,resize:string,w:bigint\u003e,thumb:struct\u003ch:bigint,resize:string,w:bigint\u003e\u003e,source_status_id:bigint,source_status_id_str:string,type:string,url:string\u003e\u003e,symbols:array\u003cstruct\u003cindices:array\u003cbigint\u003e,text:string\u003e\u003e,trends:array\u003cstring\u003e,urls:array\u003cstruct\u003cdisplay_url:string,expanded_url:string,indices:array\u003cbigint\u003e,..."
+      },
+      "dateCreated": "Jul 24, 2015 2:40:10 PM",
+      "dateStarted": "Aug 19, 2015 2:28:07 PM",
+      "dateFinished": "Aug 19, 2015 2:29:13 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "sqlContext.udf.register(\"clean\", (s: String) \u003d\u003e if (s \u003d\u003d null) { \"\" } else { s.replace(\"\\n\",\"\")} )",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "tableHide": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1437719261250_-1351223243",
+      "id": "20150724-152741_1307904911",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res108: org.apache.spark.sql.UserDefinedFunction \u003d UserDefinedFunction(\u003cfunction1\u003e,StringType)\n"
+      },
+      "dateCreated": "Jul 24, 2015 3:27:41 PM",
+      "dateStarted": "Aug 21, 2015 2:25:34 PM",
+      "dateFinished": "Aug 21, 2015 2:25:35 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql select clean(text) text from twitter where text like \"%${Keyword}%\" limit 5",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "text",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "text",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "tableHide": false,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {
+          "aa": "1",
+          "lang": "#SK텔레콤",
+          "Keyword": "#음악"
+        },
+        "forms": {
+          "Keyword": {
+            "name": "Keyword",
+            "defaultValue": "",
+            "hidden": false
+          }
+        }
+      },
+      "jobName": "paragraph_1437716536172_2028703376",
+      "id": "20150724-144216_1617102129",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "text\nRT @SONAMOO_Nahyun: 빠밤✨ 안녕하세요 오랜만에 나현이가 찾아왔습니다 :)#음악중심 대기실이에요 오늘도 #소나무 본방사수!! 부탁드려요 그럼 #나현 2는 20000❤️ #SONAMOO_DejaVu http://t.co/X2BNV1mm…\nRT @Oncelime: 내방에 새로생긴 장난감 이제 진짜 방에만 있겠구나나아아아 gta5사러감 #xbox #게임기 #선물 #고마워 #일순위 #음악 #엑박 https://t.co/aAYRPRgq5P\nRT @seongnamcity: \"잠시 함께 앉았다 갈래요?\"음악이 흐르고분수가 솟아오르면자전거 타던 아이들도 발길을 멈춥니다.#성남시청 #너른못 #음악분수 http://t.co/06eEeEg00H\n세팅 즁_참 두근거리고 그렇습미다 😎by amumu-#음악문화개척단 #음문개 #ㅇㅁㄱ #Ride #슈게이징 #안산밸리 #락페 #여름 #페스티벌 #음악 #음스타그램 http://t.co/6o0mdIBBQt\nRT @Official_IFNT: [#INFINITE] #마주보며_서_있어 와 #Bad 무대 잘 보셨나요? #성열 군의 셀카 보시면서 즐거운 금요일 보내시고, 내일 #음악중심 무대도 기대해주세요! http://t.co/Ba5LhWRcOK\n"
+      },
+      "dateCreated": "Jul 24, 2015 2:42:16 PM",
+      "dateStarted": "Aug 21, 2015 2:25:41 PM",
+      "dateFinished": "Aug 21, 2015 2:26:21 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql select int(log(user.friends_count)) friends_cound, int(count(*)) count from twitter group by int(log(user.friends_count))",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "stackedAreaChart",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "friends_cound",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "yAxis": {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "tableHide": false,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1437718168931_-72462394",
+      "id": "20150724-150928_1184493459",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "friends_cound\tcount\n0\t107829\nnull\t144966\n1\t174000\n2\t238227\n3\t562280\n4\t1408344\n5\t2779799\n6\t2474068\n7\t1330026\n8\t323345\n9\t166354\n10\t97987\n11\t30017\n12\t4093\n13\t269\n14\t8\n"
+      },
+      "dateCreated": "Jul 24, 2015 3:09:28 PM",
+      "dateStarted": "Aug 19, 2015 2:30:31 PM",
+      "dateFinished": "Aug 19, 2015 2:31:11 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql select * from twitter limit 1",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 294.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "contributors",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "contributors",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "tableHide": false,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1437716464927_66191182",
+      "id": "20150724-144104_205175991",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "contributors\tcoordinates\tcreated_at\tentities\textended_entities\tfavorite_count\tfavorited\tfilter_level\tgeo\tid\tid_str\tin_reply_to_screen_name\tin_reply_to_status_id\tin_reply_to_status_id_str\tin_reply_to_user_id\tin_reply_to_user_id_str\tlang\tplace\tpossibly_sensitive\tquoted_status\tquoted_status_id\tquoted_status_id_str\tretweet_count\tretweeted\tretweeted_status\tscopes\tsource\ttext\ttimestamp_ms\ttruncated\tuser\twithheld_copyright\twithheld_in_countries\nnull\tnull\tTue Jul 21 14:34:41 +0000 2015\t[List(),null,List(),List(),List(),List([2597755008,2597755008,List(0, 10),(반동결)하이,_Magic_hy])]\tnull\t0\tfalse\tlow\tnull\t623501354498035712\t623501354498035712\t_Magic_hy\t623500436914372609\t623500436914372609\t2597755008\t2597755008\tko\tnull\tfalse\tnull\tnull\tnull\t0\tfalse\tnull\tnull\t\u003ca href\u003d\"http://twitter.com/download/android\" rel\u003d\"nofollow\"\u003eTwitter for Android\u003c/a\u003e\t@_Magic_hy 헤ㅣ헤 쓰담ㅁ쓰담////!!\t1437489281664\tfalse\t[false,Sat Oct 18 12:36:54 +0000 2014,true,false,2014. 10. 18~ / @byeol_for_karma ♡! / 프로필 페이지 읽어주세요!! / 윤별님 합작은?,9604,null,333,null,266,false,2862506478,2862506478,false,ko,3,,윤별님 합작 그리시길,null,C0DEED,http://abs.twimg.com/images/themes/theme1/bg.png,https://abs.twimg.com/images/themes/theme1/bg.png,false,https://pbs.twimg.com/profile_banners/2862506478/1436790258,http://pbs.twimg.com/profile_images/621877764220522497/TmH6ctvi_normal.jpg,https://pbs.twimg.com/profile_images/621877764220522497/TmH6ctvi_normal.jpg,0084B4,C0DEED,DDEEF6,333333,true,false,younByeol,41085,null,http://twpf.jp/younbyeol,null,false]\tnull\tnull\n"
+      },
+      "dateCreated": "Jul 24, 2015 2:41:04 PM",
+      "dateStarted": "Aug 11, 2015 2:23:02 PM",
+      "dateFinished": "Aug 11, 2015 2:23:09 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val video \u003d sqlContext.read.json(\"hdfs://50.1.100.96/data/video/youtube/*/meta.json\")\nvideo.registerTempTable(\"video\")",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "pieChart",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "lang",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "lang",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "tableHide": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1437716427100_1556110778",
+      "id": "20150724-144027_993211848",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "video: org.apache.spark.sql.DataFrame \u003d [_filename: string, abr: bigint, acodec: string, age_limit: bigint, annotations: string, average_rating: double, categories: array\u003cstring\u003e, description: string, dislike_count: bigint, display_id: string, duration: bigint, end_time: string, ext: string, extractor: string, extractor_key: string, format: string, format_id: string, formats: array\u003cstruct\u003cabr:bigint,acodec:string,asr:bigint,container:string,ext:string,filesize:bigint,format:string,format_id:string,format_note:string,fps:bigint,height:bigint,http_headers:struct\u003cAccept:string,Accept-Charset:string,Accept-Encoding:string,Accept-Language:string,User-Agent:string\u003e,player_url:string,preference:bigint,tbr:bigint,url:string,vcodec:string,width:bigint\u003e\u003e, fps: bigint, fulltitle: string, height: b..."
+      },
+      "dateCreated": "Jul 24, 2015 2:40:27 PM",
+      "dateStarted": "Aug 21, 2015 2:07:15 PM",
+      "dateFinished": "Aug 21, 2015 2:07:15 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql \nselect \n    clean(fulltitle) title, \n    clean(description) desc, \n    clean(script.en[0].text) en, \n    clean(script.ko[0].text) kr, \n    \u0027TBD\u0027 imagetag, \n    \u0027TBD\u0027 ocr\nfrom video \nwhere fulltitle like \"%${Keyword}%\" \n   or tags like \u0027%${Keyword}%\u0027\n   or script.en like \u0027%${Keyword}%\u0027\n   or script.ko like \u0027%${Keyword}%\u0027 \nlimit 5",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "title",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "desc",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "title",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "editorHide": false,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {
+          "Keyword": ""
+        },
+        "forms": {
+          "Keyword": {
+            "name": "Keyword",
+            "defaultValue": "",
+            "hidden": false
+          }
+        }
+      },
+      "jobName": "paragraph_1437716914135_529490154",
+      "id": "20150724-144834_1521841618",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "title\tdesc\ten\tkr\timagetag\tocr\nCosmin Mihaiu: Physical therapy is boring — play a game instead\tYou’ve just been injured, and you’re on the way home from an hour of physical therapy. The last thing you want to do on your own is confusing exercises that take too long to show results. TED Fellow Cosmin Mihaiu demos a fun, cheap solution that turns boring physical therapy exercises into a video game with crystal-clear instructions.TEDTalks is a daily video podcast of the best talks and performances from the TED Conference, where the world\u0027s leading thinkers and doers give the talk of their lives in 18 minutes (or less). Look for talks on Technology, Entertainment and Design -- plus science, business, global issues, the arts and much more.Find closed captions and translated subtitles in many languages at http://www.ted.com/talks/cosmin_mihaiu_physical_therapy_is_boring_play_a_game_insteadFollow TED news on Twitter: http://www.twitter.com/tednewsLike TED on Facebook: https://www.facebook.com/TEDSubscribe to our channel: http://www.youtube.com/user/TEDtalksDirector\tWhen I was growing up, I reallyliked playing hide-and-seek a lot.\t번역: Gemma Lee검토: Jihyeon J. Kim\tTBD\tTBD\n150816 KBO리그 에이핑크 윤보미 야구 멋진,완벽한,깜짝놀란 시구 컷 KBO LEAGUE APINK BOMI BASEBALL PERFECT OPENING PITCH CUT\tKBO리그 에이핑크 보미 야구 멋진, 완벽한, 깜짝 놀라는 시구 컷KBO LEAGUE APINK YOON BOMI BASEBALL PERFECT OPENING PITCHMUSIC고업(GO UP)-씨스타(SISTAR)\t\t\tTBD\tTBD\nGoogle Express | Operation Backpack\tGoogle Express is partnering with Operation Backpack to help kids in need get school supplies to start the new school year with confidence. To learn more about Operation Backpack, go here: g.co/express/backpack\tOperation Backpack Video Transcript [1:22]\t\tTBD\tTBD\nWhat is the difference between bandwidth and throughput?\tWhat is the difference between bandwidth and throughput when evaluating the speed of your broadband connection.Internet speeds including Upload and download speed is also explained.We often like to test out internet speed and determine how to increase bandwidth to get a better broadband speed.This video can explore the limits that prevent us from doing this.\ttakeitonboard.com...bandwidth and throughputso when we are evaluating our experience of\t\tTBD\tTBD\n"
+      },
+      "dateCreated": "Jul 24, 2015 2:48:34 PM",
+      "dateStarted": "Aug 21, 2015 2:27:50 PM",
+      "dateFinished": "Aug 21, 2015 2:27:50 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1440072402044_2065806608",
+      "id": "20150820-210642_1437661500",
+      "dateCreated": "Aug 20, 2015 9:06:42 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "SQL Example",
+  "id": "2AVXEEQRT",
+  "angularObjects": {
+    "2AU576NAW": [],
+    "2ARCJ66K7": [],
+    "2AT1DZXZR": [],
+    "2ATD3P7DX": [],
+    "2ATCSMPUT": [],
+    "2AUEPPY28": [],
+    "2ASN5SJWJ": [],
+    "2ASFNSR3W": [],
+    "2AUXNAQ5M": []
+  },
+  "config": {
+    "looknfeel": "simple"
+  },
+  "info": {}
+}
