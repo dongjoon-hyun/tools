@@ -73,6 +73,6 @@ for lang in ['en','ko']:
 dic['script'] = script
 
 with open('/hdfs%(inpath)s/meta.json', 'w') as outfile:
-    json.dump(dic, outfile, sort_keys=True, indent=4, separators=(',', ': '))
+    json.dump(dic, outfile)
 EOF''' % locals())
         run('python2.7 gen_meta.py', quiet=True)
