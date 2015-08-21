@@ -516,7 +516,10 @@
                             <div class="col-xs-8">
                                 <h4>1. Analyze Video</h4>
                                 <select class="form-control" id="select-1">
-                                    <option value="https://www.youtube.com/watch?v=XLVoMd2pnIs" selected>
+                                    <option value="https://www.youtube.com/watch?v=3_AZ5R2SC88" selected>
+                                        https://www.youtube.com/watch?v=3_AZ5R2SC88
+                                    </option>
+                                    <option value="https://www.youtube.com/watch?v=XLVoMd2pnIs">
                                         https://www.youtube.com/watch?v=XLVoMd2pnIs
                                     </option>
                                     <option value="https://www.youtube.com/watch?v=PyU0PvgVk8o">
@@ -524,9 +527,6 @@
                                     </option>
                                     <option value="https://www.youtube.com/watch?v=mxhBaG-1cRc">
                                         https://www.youtube.com/watch?v=mxhBaG-1cRc
-                                    </option>
-                                    <option value="https://www.youtube.com/watch?v=3_AZ5R2SC88">
-                                        https://www.youtube.com/watch?v=3_AZ5R2SC88
                                     </option>
                                 </select>
 
@@ -575,8 +575,14 @@
                                     <tr>
                                         <td>Script</td>
                                         <td>
-                                                <pre id="script1" class="prettyprint linenums"
+                                            <div class="col-xs-6">
+                                                <pre id="script_en" class="prettyprint linenums"
                                                      style="font-size: 10px;background-color: transparent; color: black; border:0px"></pre>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <pre id="script_kr" class="prettyprint linenums"
+                                                     style="font-size: 10px;background-color: transparent; color: black; border:0px"></pre>
+                                            </div>
                                         </td>
                                     </tr>
                                 </table>
@@ -716,7 +722,7 @@
                 if (path.indexOf('.description') > 0) {
                     desc = path;
                 }
-                if (path.indexOf('.srt') > 0) {
+                if (path.indexOf('.en.srt') > 0) {
                     script = path;
                 }
                 if (path.indexOf('.m4a') > 0) {
@@ -747,9 +753,14 @@
             $('#desc1').empty();
             showScript('#desc1', desc);
 
-            $('#script1').empty();
+            $('#script_en').empty();
             if (script.length > 0) {
-                showScript('#script1', script);
+                showScript('#script_en', script);
+            }
+
+            $('#script_kr').empty();
+            if (script.length > 0) {
+                showScript('#script_kr', script.replace('.en.','.ko.'));
             }
         }).fail(function (xhr, textStatus, errorThrown) {
             alert(JSON.stringify(xhr));
