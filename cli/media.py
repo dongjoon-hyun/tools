@@ -51,7 +51,7 @@ def gen_meta(inpath):
     """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
-        run('rm /hdfs%(inpath)s/meta.json' % locals())
+        run('rm /hdfs%(inpath)s/meta.json' % locals(), quiet=True)
         run('''cat <<EOF > gen_meta.py
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
