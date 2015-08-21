@@ -529,7 +529,7 @@
                                     <a href="http://hadoop:tip@tip:5555/api/v1">http://tip:5555/api/v1</a>
                                 </li>
                                 <li> FUNCTION CLI
-                                            <pre>
+                                            <pre style="font-size: 10px">
 Available commands:
 
     caffe.build_db            fab caffe.build_db:/data/image/mnist/jpg/labeled_list.txt,/tmp/mnist
@@ -538,6 +538,7 @@ Available commands:
     caffe.ls_lmdb             fab caffe.ls_lmdb:/tmp/mnist.lmdb
     caffe.predict             fab caffe.predict:/model/caffe/imagenet,/sample/ad.png
     caffe.train               fab caffe.train:data/solver.prototxt,data/train_val.prototxt,/tmp/model
+    caffe.video_indexing      fab caffe.video_indexing:/model/caffe/imagenet,/hdfs/sample/ted_sample.mp4,500
     cam.capture               fab cam.capture:/tmp/cam1,3
     cam.view                  fab cam.view
     cuda.limit                fab cuda.limit:0,max_threads_per_block
@@ -552,6 +553,7 @@ Available commands:
     json.filter               fab json.filter:/data/text/twitter/20150721_22.json,lang,ko,/tmp/ko
     json.schema               fab json.schema:/data/text/twitter
     json.select               fab json.select:/data/text/twitter/20150721_22.json,'created_at;text',/tmp/result
+    media.download            fab media.download:'https://www.youtube.com/watch?v\=XLVoMd2pnIs',/tmp/youtube/XLVoMd2pnIs
     news.nb_predict           fab news.nb_predict:/model/spark/news,'최근 전국 아파트 분양 시장의'
     news.nb_train             fab news.nb_train:/data/text/news/hani/*,1.0,multinomial,/tmp/news
     news.svm_train            fab news.svm_train:/data/text/news/hani/*,100,/tmp/svm2
@@ -582,6 +584,7 @@ Available commands:
     spark.count_line_with     fab spark.count_line_with:/data/text/wikipedia/ko*,'<page>'
     spark.grep                fab spark.grep:/data/text/wikipedia/ko*,/user/hadoop/grep_result,'<page>'
     spark.head                fab spark.head:/data/image/imagenet/*.txt,5
+    spark.lm                  fab spark.lm:/sample/sample_regression,/user/hadoop/lm_result,0.1,1000
     spark.naivebayes_predict  fab spark.naivebayes_predict:/tmp/nb.model,/sample/naive_bayes_test.txt,/tmp/nb.result
     spark.naivebayes_train    fab spark.naivebayes_train:/sample/sample_naive_bayes_data.txt,1.0,/tmp/nb.model
     spark.ngram_ko            fab spark.ngram_ko:2,1000,/user/hadoop/tf_result,/user/hadoop/ngram_result
@@ -590,6 +593,8 @@ Available commands:
     spark.sql                 fab spark.sql:'select count(*) from data.news'
     spark.tf_ko               fab spark.tf_ko:/data/text/news/hani/*,/user/hadoop/tf_result
     spark.word2vec            fab spark.word2vec:/sample/sample_hani_kma,대통령
+    tg.send_message           fab tg.send_message:'안녕하세요. TIP Bot 입니다.'
+    tg.send_photo             fab tg.send_photo:https://telegram.org/img/t_logo.png
                                 </li>
                             </ol>
                         </div>
