@@ -162,10 +162,15 @@ EOF''' % locals())
 
 @task
 @hosts('50.1.100.101')
-def video_indexing(modelpath, videopath, skip_frame = 500, color='True', dims='256:256', channel_swap='2:1:0', topk=3):
+def video_indexing(modelpath, videopath, outpath, span_times=1, color='True', dims='256:256', channel_swap='2:1:0', topk=3):
     """
-    fab caffe.video_indexing:/model/caffe/imagenet,/hdfs/sample/ted_sample.mp4,500
+    fab caffe.video_indexing:/model/caffe/imagenet,/hdfs/sample/ted_sample.mp4,/tmp/video_index.txt,1
     """
+    if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
+        print 'Unauthorized path: %(outpath)s' % locals()
+        return 
+    run('hadoop fs -rm -r -f -skipTrash %(outpath)s &> /dev/null' % locals())
+    
     dims = dims.replace(':', ',')
     channel_swap = channel_swap.replace(':', ',')
     run('mkdir %s' % env.dir)
@@ -220,29 +225,48 @@ net = caffe.Classifier('deploy.prototxt', 'pretrained.caffemodel', \
         image_dims=(%(dims)s))
 
 reader = imageio.get_reader('%(videopath)s')
-skipframe = int(%(skip_frame)s)
 totalframes = int(reader._meta['nframes'])
+duration = int(reader._meta['duration'])
+fps = int(reader._meta['fps'])
+span_frames = int('%(span_times)s') * fps
+outfile = '%(outpath)s'
 print totalframes
 
+def sec_to_time(s):
+    m, s = divmod(s, 60)
+    h, m = divmod(m, 60)
+    return h, m, s
+
+count = 0
+result = []
 for i, im in enumerate(reader):
-    if math.fmod(i, skipframe) == 0.0:
+    if i %% span_frames == 0:
         resized_im = resize(im, (%(dims)s))
         jpgname = './snapshots/' + str(i) + '.jpg'
-        print 'Frame: ' + str(i) + ' -> ' + jpgname
+        # print 'Frame: ' + str(i) + ' -> ' + jpgname
         imageio.imwrite(jpgname, resized_im)
         prediction = net.predict([resized_im])
         predicted_top_classes = list(reversed(prediction[0].argsort()[-%(topk)s:]))
+        current_sec = i / fps
+        next_sec = min(current_sec + int('%(span_times)s'), duration)
+        count += 1
+                        
+        result.append('%%i' %% (count))
+        result.append('%%02i:%%02i:%%02i --> %%02i:%%02i:%%02i' %% (sec_to_time(current_sec) + sec_to_time(next_sec)))
         for c in predicted_top_classes:            
             if len(labels) == 0:
-                print '\t', c, prediction[0][c]
+                result.append('%%s : %%f' %% (c, prediction[0][c]))
             else:
-                print '\t', labels[c], prediction[0][c]
-        print
+                result.append('%%s : %%f' %% (labels[c], prediction[0][c]))
+        result.append('')
+        print '\\n'.join(result[-3 - %(topk)s:])
     elif i == totalframes - 3:
         print 'Lets stop here!'
         break
         
 reader.close()
+with open('/hdfs' + outfile, 'wt') as f_write:
+    f_write.write('\\n'.join(result))
 EOF''' % locals())
         cmd = '/usr/local/bin/python2.7 caffe.video_indexing.py'
         run(cmd)
