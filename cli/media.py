@@ -76,3 +76,23 @@ with open('/hdfs%(inpath)s/meta.json', 'w') as outfile:
     json.dump(dic, outfile)
 EOF''' % locals())
         run('python2.7 gen_meta.py', quiet=True)
+
+@task
+def resize(inpath, outpath, width, height):
+    """
+    fab media.resize:/sample/ad.png,/tmp/ad_1024_768.png,1024,768
+    """
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > resize.py
+#!/usr/bin/env python2.7
+# -*- coding: utf-8 -*-
+import os
+from PIL import Image
+
+im = Image.open('/hdfs%(inpath)s')
+im2 = im.resize((%(width)s,%(height)s), Image.ANTIALIAS)
+im2.save('/hdfs%(outpath)s')
+EOF''' % locals())
+        cmd = 'python resize.py'
+        run(cmd, quiet=False)
