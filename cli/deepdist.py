@@ -6,7 +6,7 @@ Intelligence Platform CLI Fabric File
 
 __author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
 __license__ = 'Apache License'
-__version__ = '0.2'
+__version__ = '0.3'
 
 from fabric.api import *
 
@@ -16,9 +16,11 @@ def word2vec(inpath, positive, negative):
     """
     fab deepdist.word2vec:/sample/sample_enwiki.head,woman:king,man
     """
-    positive = "'" + positive.replace(":", "','") + "'"
-    negative = "'" + negative.replace(":", "','") + "'"
-    run('''cat <<EOF > /home/hadoop/demo/deepdist.word2vec.py
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        positive = "'" + positive.replace(":", "','") + "'"
+        negative = "'" + negative.replace(":", "','") + "'"
+        run('''cat <<EOF > deepdist.word2vec.py
 # -*- coding: utf-8 -*-
 from deepdist import DeepDist
 from gensim.models.word2vec import Word2Vec
@@ -40,6 +42,5 @@ with DeepDist(Word2Vec(corpus.collect()), '50.1.100.98:5000') as dd:
     dd.train(corpus, gradient, descent)
     print dd.model.most_similar(positive=[%(positive)s], negative=[%(negative)s])
 EOF''' % locals())
-    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --driver-memory 4G --executor-memory 4G /home/hadoop/demo/deepdist.word2vec.py 2> /dev/null | tail -n 1'
-#     cmd = '/opt/spark/bin/spark-submit --master local[8] --driver-memory 2G --executor-memory 4G /home/hadoop/demo/deepdist.word2vec.py 2> /dev/null | tail -n 1'
-    run(cmd)
+        cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --driver-memory 4G --executor-memory 4G /home/hadoop/demo/deepdist.word2vec.py 2> /dev/null | tail -n 1'
+        run(cmd)
