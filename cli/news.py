@@ -1,15 +1,14 @@
-#!/usr/local/bin/python2.7
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 """
 Intelligence Platform CLI Fabric File
 """
 
-__author__    = 'Dongjoon Hyun (dongjoon@apache.org)'
-__license__   = 'Apache License'
-__version__   = '0.2'
+__author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
+__license__ = 'Apache License'
+__version__ = '0.3'
 
 from fabric.api import *
-
 """
 Hani Label
 [(u'society', 229445),
@@ -34,24 +33,30 @@ We use the following lable map.
  5 = culture (57530)
 """
 
+
 @task
 def tid(inpath, outpath, col=0):
-	"""
-	fab news.tid:/data/text/news/hani,/tmp/hani/tid,1
-	"""
-	run('''cat <<EOF > /home/hadoop/demo/news.tid.py
+    """
+    fab news.tid:/data/text/news/hani,/tmp/hani/tid,1
+    """
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > news.tid.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
 import re
 import string
-regex = re.compile(r'[%%s\s0-9a-zA-Z~·]+' %% re.escape(string.punctuation))
+
+def normalize(str):
+    chars = [u'N' if c.isdigit() else c for c in str]
+    chars = [c for c in chars if c.isspace() or c == u'.' or c == u'N' or (44032 <= ord(c) and ord(c)<=55215)]
+    return ''.join(chars)
 
 sc = SparkContext(appName='Term ID')
 data = sc.textFile('%(inpath)s')
 tid = data.map(lambda line: line.split('%%c' %% 1)[%(col)s]) \
-    .map(lambda line: line.replace(u"‘"," ").replace(u"’"," ").replace(u"“"," ").replace(u"”"," ").replace(u"△"," ").replace(u"◇"," ").replace(u"ㆍ"," ")) \
-    .flatMap(lambda line: regex.split(line)) \
-    .filter(lambda word: len(word.strip())>1) \
+    .map(normalize) \
+    .flatMap(lambda line: line.split()) \
     .map(lambda word: (word,1)) \
     .reduceByKey(lambda x,y: x+y) \
     .filter(lambda (word,count): count>100) \
@@ -59,24 +64,23 @@ tid = data.map(lambda line: line.split('%%c' %% 1)[%(col)s]) \
     .map(lambda ((word,count),index): '%%s%%c%%s%%c%%s' %% (index+1,1,word,1,count)) \
     .saveAsTextFile('%(outpath)s')
 EOF''' % locals())
-	cmd = '/opt/spark/bin/spark-submit /home/hadoop/demo/news.tid.py 2> /dev/null'
-	run(cmd)
+        cmd = '/opt/spark/bin/spark-submit news.tid.py 2> /dev/null'
+        run(cmd)
+
 
 @task
 def nb_train(inpath, lambda_, model, outpath):
-	"""
-	fab news.nb_train:/data/text/news/hani/*,1.0,multinomial,/tmp/news
-	"""
-	run('''cat <<EOF > /home/hadoop/demo/news.nb_train.py
+    """
+    fab news.nb_train:/data/text/news/hani/*,1.0,multinomial,/tmp/news
+    """
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > news.nb_train.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
 from pyspark.mllib.classification import NaiveBayes
 from pyspark.mllib.linalg import Vectors
 from pyspark.mllib.regression import LabeledPoint
-
-import re
-import string
-regex = re.compile(r'[%%s\s0-9a-zA-Z~·]+' %% re.escape(string.punctuation))
 
 catDic = { 'society' : 0.0, 'economy' : 1.0, 'politics': 2.0, 'sports' : 3.0, 'international' : 4.0, 'culture' : 5.0 }
 def getLabel(url):
@@ -86,12 +90,16 @@ def getLabel(url):
     else:
         return 99
 
+def normalize(str):
+    chars = [u'N' if c.isdigit() else c for c in str]
+    chars = [c for c in chars if c.isspace() or c == u'.' or c == u'N' or (44032 <= ord(c) and ord(c)<=55215)]
+    return ''.join(chars)
+
 sc = SparkContext(appName='Naive Bayes Train')
 data = sc.textFile('%(inpath)s').filter(lambda line: getLabel(line.split('%%c' %% 1)[0]) != 99).cache()
 terms = data.map(lambda line: line.split('%%c' %% 1)[1]) \
-    .map(lambda line: line.replace(u"‘"," ").replace(u"’"," ").replace(u"“"," ").replace(u"”"," ").replace(u"△"," ").replace(u"◇"," ").replace(u"ㆍ"," ")) \
-    .flatMap(lambda line: regex.split(line)) \
-    .filter(lambda word: len(word.strip())>1) \
+    .map(normalize) \
+    .flatMap(lambda line: line.split()) \
     .map(lambda word: (word,1)) \
     .reduceByKey(lambda x,y: x+y) \
     .filter(lambda (word,count): count>100) \
@@ -111,7 +119,7 @@ def getTermID(word):
 def parseLine(line):
     parts = line.split('%%c' %% 1)
     label = getLabel(parts[0])
-    words = regex.split(parts[1].replace(u"‘"," ").replace(u"’"," ").replace(u"“"," ").replace(u"”"," ").replace(u"△"," ").replace(u"◇"," ").replace(u"ㆍ"," "))
+    words = normalize(parts[1]).split()
     tids = sorted(set([getTermID(x) for x in words]))
     values = [1] * len(tids)
     features = Vectors.sparse(maxID, tids, values)
@@ -135,29 +143,33 @@ predictedAll = data.map(parseLine).map(lambda p: (p.label, model.predict(p.featu
 accuracy = 1.0 * predictedAll.filter(lambda (x,y): x == y).count() / predictedAll.count()
 print 'Model Accuracy(all): ', accuracy
 EOF''' % locals())
-	cmd = '/opt/spark/bin/spark-submit --driver-memory 2G --executor-memory 2G --conf spark.akka.frameSize=200 /home/hadoop/demo/news.nb_train.py 2> /dev/null'
-	run(cmd)
+        cmd = '/opt/spark/bin/spark-submit --driver-memory 2G --executor-memory 2G news.nb_train.py 2> /dev/null'
+        run(cmd)
+
 
 @task
 def nb_predict(model, text):
-	"""
-	fab news.nb_predict:/model/spark/news,'최근 전국 아파트 분양 시장의'
-	"""
-	run('''cat <<EOF > /home/hadoop/demo/news.nb_predict.py
+    """
+    fab news.nb_predict:/model/spark/news,'최근 전국 아파트 분양 시장의'
+    """
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > news.nb_predict.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
 from pyspark.mllib.classification import NaiveBayesModel
 from pyspark.mllib.linalg import Vectors
-
-import re
-import string
-regex = re.compile(r'[%%s\s0-9a-zA-Z~·]+' %% re.escape(string.punctuation))
 
 def parseMap(line):
     parts = line.split('%%c' %% 1)
     index = int(parts[0])
     word = parts[1]
     return (word,index)
+
+def normalize(str):
+    chars = [u'N' if c.isdigit() else c for c in str]
+    chars = [c for c in chars if c.isspace() or c == u'.' or c == u'N' or (44032 <= ord(c) and ord(c)<=55215)]
+    return ''.join(chars)
 
 sc = SparkContext(appName='Naive Bayes Predict')
 model = NaiveBayesModel.load(sc, '%(model)s/model')
@@ -171,7 +183,7 @@ def getTermID(word):
         return 0
 
 def parseLine(line):
-    words = regex.split(line.replace(u"‘"," ").replace(u"’"," ").replace(u"“"," ").replace(u"”"," ").replace(u"△"," ").replace(u"◇"," ").replace(u"ㆍ"," "))
+    words = normalize(line).split()
     tids = sorted(set([getTermID(x) for x in words]))
     values = [1] * len(tids)
     features = Vectors.sparse(maxID, tids, values)
@@ -183,15 +195,18 @@ for k,v in catDic.iteritems():
     if label == v:
         print k
 EOF''' % locals())
-	cmd = '/opt/spark/bin/spark-submit --driver-memory 2G --executor-memory 2G /home/hadoop/demo/news.nb_predict.py 2> /dev/null'
-	run(cmd)
+        cmd = '/opt/spark/bin/spark-submit --driver-memory 2G --executor-memory 2G news.nb_predict.py 2> /dev/null'
+        run(cmd)
+
 
 @task
 def svm_train(inpath, iteration, outpath):
-	"""
-	fab news.svm_train:/data/text/news/hani/*,100,/tmp/svm2
-	"""
-        run('''cat <<EOF > /home/hadoop/demo/news.svm_train.py
+    """
+    fab news.svm_train:/data/text/news/hani/*,100,/tmp/svm2
+    """
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<EOF > news.svm_train.py
 # -*- coding: utf-8 -*-
 from pyspark import SparkContext
 from pyspark.mllib.classification import SVMWithSGD, SVMModel
@@ -210,12 +225,16 @@ def getLabel(url):
     else:
         return 99
 
+def normalize(str):
+    chars = [u'N' if c.isdigit() else c for c in str]
+    chars = [c for c in chars if c.isspace() or c == u'.' or c == u'N' or (44032 <= ord(c) and ord(c)<=55215)]
+    return ''.join(chars)
+
 sc = SparkContext(appName='SVM Train')
 data = sc.textFile('%(inpath)s').filter(lambda line: getLabel(line.split('%%c' %% 1)[0]) != 99).cache()
 terms = data.map(lambda line: line.split('%%c' %% 1)[1]) \
-    .map(lambda line: line.replace(u"‘"," ").replace(u"’"," ").replace(u"“"," ").replace(u"”"," ").replace(u"△"," ").replace(u"◇"," ").replace(u"ㆍ"," ")) \
-    .flatMap(lambda line: regex.split(line)) \
-    .filter(lambda word: len(word.strip())>1) \
+    .map(normalize) \
+    .flatMap(lambda line: line.split()) \
     .map(lambda word: (word,1)) \
     .reduceByKey(lambda x,y: x+y) \
     .filter(lambda (word,count): count>100) \
@@ -235,7 +254,7 @@ def getTermID(word):
 def parseLine(line):
     parts = line.split('%%c' %% 1)
     label = getLabel(parts[0])
-    words = regex.split(parts[1].replace(u"‘"," ").replace(u"’"," ").replace(u"“"," ").replace(u"”"," ").replace(u"△"," ").replace(u"◇"," ").replace(u"ㆍ"," "))
+    words = normalize(parts[1]).split()
     tids = sorted(set([getTermID(x) for x in words]))
     values = [1] * len(tids)
     features = Vectors.sparse(maxID, tids, values)
@@ -249,5 +268,5 @@ trainErr = labelsAndPreds.filter(lambda (v, p): v != p).count() / float(labeledP
 print("Training Error = " + str(trainErr))
 model.save(sc, '%(outpath)s/model')
 EOF''' % locals())
-	cmd = '/opt/spark/bin/spark-submit /home/hadoop/demo/news.svm_train.py 2> /dev/null'
-	run(cmd)
+        cmd = '/opt/spark/bin/spark-submit news.svm_train.py 2> /dev/null'
+        run(cmd)
