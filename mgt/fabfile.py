@@ -20,6 +20,13 @@ env.roledefs['nn'] = nn
 dn = []
 for i in range(101,131):
 	dn.append('50.1.100.'+str(i))
+dn.append('50.1.100.141')
+dn.append('50.1.100.151')
+dn.append('50.1.100.161')
+dn.append('50.1.100.171')
+dn.append('50.1.100.181')
+for i in range(191,201):
+	dn.append('50.1.100.'+str(i))
 env.roledefs['dn'] = dn
 
 print "\n\n", "-"*80, "\n\n# of IPs: ", len(nn + dn)
@@ -372,4 +379,12 @@ def gpu_temp():
 	GPU Temperature
 	"""
 	cmd = "nvidia-smi -q -d TEMPERATURE | grep 'GPU Current Temp'"
+	run(cmd)
+	
+@roles('dn')
+def gpu_usage():
+	"""
+	GPU Usage
+	"""
+	cmd = "nvidia-smi --query-gpu=utilization.gpu --format=csv | tail -2"
 	run(cmd)
