@@ -23,9 +23,7 @@ for i in range(101,131):
 dn.append('50.1.100.141')
 dn.append('50.1.100.151')
 dn.append('50.1.100.161')
-dn.append('50.1.100.171')
-dn.append('50.1.100.181')
-for i in range(191,201):
+for i in range(171,201):
 	dn.append('50.1.100.'+str(i))
 env.roledefs['dn'] = dn
 
