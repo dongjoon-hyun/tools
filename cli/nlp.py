@@ -34,9 +34,9 @@ conf = SparkConf()
 conf.setAppName('doc2sent')
 sc = SparkContext(conf=conf)
 
-docs = sc.textFile(inputFileName)
+docs = sc.textFile(inputFileName).cache()
 numDocs = docs.count()
-sents = docs.flatMap(lambda line: line.split('.'))
+sents = docs.flatMap(lambda line: line.split('.')).cache()
 numSents = sents.count()
 sents.saveAsTextFile(outputFileName)
 for s in sents.take(5):
@@ -91,22 +91,21 @@ def runNLP(pindex, lines):
     results = nlp.runBatch(sents, scNumThreads.value, scNLPModuleName.value)
     return [tuple(list(t[0]) + [t[1]]) for t in zip(others, results)]
    
-for f in sc.wholeTextFiles(inputFileName).map(lambda (f,c): f).collect():
-    print f
-    sents = sc.textFile(f) \
-        .map(lambda line: line.split('%%c' %% (1))) \
-        .map(lambda line: tuple(list(line[:-1]) + ['.\\n'.join(t.strip() for t in line[-1].split('.'))]))
+sents = sc.textFile(inputFileName) \
+    .map(lambda line: line.split('%%c' %% (1))) \
+    .map(lambda line: tuple(list(line[:-1]) + ['.\\n'.join(t.strip() for t in line[-1].split('.'))])) \
+    .cache()
+print 'NumPartitions: ' + str(sents.getNumPartitions())
+if numPartitions >= 1 and numPartitions <= 300:
+    print 'Repartition: ' + str(numPartitions)
+    sents = sents.repartition(numPartitions).cache()
+else:
+    sents = sents.cache()
     
-    if numPartitions >= 1 and numPartitions <= 60:
-        print 'Repartition: ' + str(numPartitions)
-        sents = sents.repartition(numPartitions).cache()
-    else:
-        print 'NumPartitions: ' + str(sents.getNumPartitions())
-    
-    results = sents.mapPartitionsWithIndex(runNLP)
-    results.cache()
-    print results.count()
-    results.map(lambda line: tuple(list(line[:-1]) + [' '.join(line[-1].split('\\n'))])).map(lambda line: ('%%c' %% (1)).join(line)).repartition(1).saveAsTextFile(outputFileName + '/' + f.split('/')[-1])
+results = sents.mapPartitionsWithIndex(runNLP).cache()
+print results.count()
+results.map(lambda line: tuple(list(line[:-1]) + [' '.join(line[-1].split('\\n'))])).map(lambda line: ('%%c' %% (1)).join(line)).saveAsTextFile(outputFileName)
+
 print 'Completed: ' + outputFileName
 EOF''' % locals())
 
@@ -156,22 +155,21 @@ def runNLP(pindex, lines):
     results = nlp.runBatch(sents, scNumThreads.value, scNLPModuleName.value)
     return [tuple(list(t[0]) + [t[1]]) for t in zip(others, results)]
    
-for f in sc.wholeTextFiles(inputFileName).map(lambda (f,c): f).collect():
-    print f
-    sents = sc.textFile(f) \
-        .map(lambda line: line.split('%%c' %% (1))) \
-        .map(lambda line: tuple(list(line[:-1]) + ['.\\n'.join(t.strip() for t in line[-1].split('.'))]))
+sents = sc.textFile(inputFileName) \
+    .map(lambda line: line.split('%%c' %% (1))) \
+    .map(lambda line: tuple(list(line[:-1]) + ['.\\n'.join(t.strip() for t in line[-1].split('.'))])) \
+    .cache()
+print 'NumPartitions: ' + str(sents.getNumPartitions())
+if numPartitions >= 1 and numPartitions <= 300:
+    print 'Repartition: ' + str(numPartitions)
+    sents = sents.repartition(numPartitions).cache()
+else:
+    sents = sents.cache()
     
-    if numPartitions >= 1 and numPartitions <= 60:
-        print 'Repartition: ' + str(numPartitions)
-        sents = sents.repartition(numPartitions).cache()
-    else:
-        print 'NumPartitions: ' + str(sents.getNumPartitions())
+results = sents.mapPartitionsWithIndex(runNLP).cache()
+print results.count()
+results.map(lambda line: tuple(list(line[:-1]) + [' '.join(line[-1].split('\\n'))])).map(lambda line: ('%%c' %% (1)).join(line)).saveAsTextFile(outputFileName)
     
-    results = sents.mapPartitionsWithIndex(runNLP)
-    results.cache()
-    print results.count()
-    results.map(lambda line: tuple(list(line[:-1]) + [' '.join(line[-1].split('\\n'))])).map(lambda line: ('%%c' %% (1)).join(line)).repartition(1).saveAsTextFile(outputFileName + '/' + f.split('/')[-1])
 print 'Completed: ' + outputFileName
 EOF''' % locals())
 
@@ -211,9 +209,12 @@ scNLPModuleName = sc.broadcast(nlpModuleName)
 scNumThreads = sc.broadcast(numThreads)
 
 sents = sc.textFile(inputFileName)
-if numPartitions >= 1 and numPartitions <= 30:
+print 'NumPartitions: ' + str(sents.getNumPartitions())
+if numPartitions >= 1 and numPartitions <= 300:
     print 'Repartition: ' + str(numPartitions)
-    sents = sents.repartition(numPartitions)
+    sents = sents.repartition(numPartitions).cache()
+else:
+    sents = sents.cache()
 
 def runKMA(pindex, lines):
     import sys
@@ -224,15 +225,14 @@ def runKMA(pindex, lines):
     new_lines = nlp.runBatch(list(lines), scNumThreads.value, scNLPModuleName.value)
     return new_lines
 
-
-results = sents.mapPartitionsWithIndex(runKMA)
+results = sents.mapPartitionsWithIndex(runKMA).cache()
 results.saveAsTextFile(outputFileName)
 for s in results.take(5):
     print s.encode('utf-8')
 print 'Completed: ' + outputFileName
 EOF''' % locals())
 
-    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --driver-memory 4G --executor-memory 4G  --conf spark.executor.extraLibraryPath=/hdfs/user/hadoop/javisnlp/ /home/hadoop/demo/nlp.sent2kma.py 2> /dev/null'
+    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --driver-memory 4G --executor-memory 4G --conf spark.cores.max=240 --conf spark.eventLog.enabled=true --conf spark.executor.extraLibraryPath=/hdfs/user/hadoop/javisnlp/ /home/hadoop/demo/nlp.sent2kma.py 2> /dev/null'
     run(cmd)
 
 
@@ -268,9 +268,12 @@ scNLPModuleName = sc.broadcast(nlpModuleName)
 scNumThreads = sc.broadcast(numThreads)
 
 sents = sc.textFile(inputFileName)
-if numPartitions >= 1 and numPartitions <= 30:
+print 'NumPartitions: ' + str(sents.getNumPartitions())
+if numPartitions >= 1 and numPartitions <= 300:
     print 'Repartition: ' + str(numPartitions)
-    sents = sents.repartition(numPartitions)
+    sents = sents.repartition(numPartitions).cache()
+else:
+    sents = sents.cache()
 
 def runNER(pindex, lines):
     import sys
@@ -281,8 +284,7 @@ def runNER(pindex, lines):
     new_lines = nlp.runBatch(list(lines), scNumThreads.value, scNLPModuleName.value)
     return new_lines
 
-
-results = sents.mapPartitionsWithIndex(runNER)
+results = sents.mapPartitionsWithIndex(runNER).cache()
 results.saveAsTextFile(outputFileName)
 for s in results.take(5):
     print s.encode('utf-8')
