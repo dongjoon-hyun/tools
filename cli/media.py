@@ -1,14 +1,15 @@
-#!/usr/local/bin/python2.7
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 """
 Intelligence Platform CLI Fabric File
 """
 
-__author__    = 'Dongjoon Hyun (dongjoon@apache.org)'
-__license__   = 'Apache License'
-__version__   = '0.3'
+__author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
+__license__ = 'Apache License'
+__version__ = '0.3'
 
 from fabric.api import *
+
 
 @task
 def download(url, outpath=None):
@@ -17,9 +18,11 @@ def download(url, outpath=None):
     """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
-        run('youtube-dl -k --all-subs --write-all-thumbnails --write-description --write-info-json --restrict-filenames -q %(url)s' % locals(), quiet=True)
+        run('youtube-dl -k --all-subs --write-all-thumbnails --write-description --write-info-json \
+--restrict-filenames -q %(url)s' % locals(), quiet=True)
         run('hadoop fs -mkdir -p %s' % outpath)
         run('hadoop fs -copyFromLocal * %s' % outpath)
+
 
 @task
 def srt_to_json(inpath, outpath):
@@ -44,6 +47,7 @@ with open('/hdfs%(outpath)s', 'w') as outfile:
 EOF''' % locals())
         run('python2.7 srt_to_json.py')
 
+
 @task
 def gen_meta(inpath):
     """
@@ -64,18 +68,22 @@ dic = None
 info = glob.glob('/hdfs%(inpath)s/*.info.json')
 dic = json.load(open(info[0]))
 
+def parse(x):
+    return {'index':x.index,'start':str(x.start.to_time()),'end':str(x.end.to_time()),'text':x.text}
+
 script = {}
 for lang in ['en','ko']:
     file = glob.glob('/hdfs%(inpath)s/*.%%s.srt' %% lang)
     if len(file) > 0:
         srt = pysrt.open(file[0])
-        script[lang] = map(lambda x: {'index':x.index,'start':str(x.start.to_time()),'end':str(x.end.to_time()),'text':x.text}, srt)
+        script[lang] = map(parse, srt)
 dic['script'] = script
 
 with open('/hdfs%(inpath)s/meta.json', 'w') as outfile:
     json.dump(dic, outfile)
 EOF''' % locals())
         run('python2.7 gen_meta.py', quiet=True)
+
 
 @task
 def resize(inpath, outpath, width, height):

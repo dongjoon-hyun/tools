@@ -1,14 +1,15 @@
-#!/usr/local/bin/python2.7
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 """
 Intelligence Platform CLI Fabric File
 """
 
-__author__    = 'Soonwoong Lee (soonwoong.lee@gmail.com)'
-__license__   = 'Apache License'
-__version__   = '0.2'
-
 from fabric.api import *
+
+__author__ = 'Soonwoong Lee (soonwoong.lee@gmail.com)'
+__license__ = 'Apache License'
+__version__ = '0.2'
+
 
 @task
 def doc2sent(inpath, outpath):
@@ -16,8 +17,8 @@ def doc2sent(inpath, outpath):
     fab nlp.doc2sent:/sample/sample_hani_doc,/user/hadoop/sample_hani_sent
     """
     if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
-	print 'Unauthorized path: %(outpath)s' % locals()
-	return
+        print 'Unauthorized path: %(outpath)s' % locals()
+        return
     run('hadoop fs -rm -r -f -skipTrash %(outpath)s &> /dev/null' % locals())
     run('''cat <<EOF > /home/hadoop/demo/nlp.doc2sent.py
 # -*- encoding: utf-8 -*-
@@ -50,13 +51,13 @@ EOF''' % locals())
 
 
 @task
-def doc2kma(inpath, outpath, numpartitions, numthreads, sep = '\01'):
+def doc2kma(inpath, outpath, numpartitions, numthreads, sep='\01'):
     """
     fab nlp.doc2kma:/sample/sample_hani,/user/hadoop/sample_hani_kma,20,4
     """
     if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
         print 'Unauthorized path: %(outpath)s' % locals()
-        return 
+        return
     run('hadoop fs -rm -r -f -skipTrash %(outpath)s &> /dev/null' % locals())
     run('''cat <<EOF > /home/hadoop/demo/nlp.doc2kma.py
 # -*- encoding: utf-8 -*-
@@ -104,23 +105,26 @@ else:
     
 results = sents.mapPartitionsWithIndex(runNLP).cache()
 print results.count()
-results.map(lambda line: tuple(list(line[:-1]) + [' '.join(line[-1].split('\\n'))])).map(lambda line: ('%%c' %% (1)).join(line)).saveAsTextFile(outputFileName)
+results.map(lambda line: tuple(list(line[:-1]) + [' '.join(line[-1].split('\\n'))]))
+    .map(lambda line: ('%%c' %% (1)).join(line))
+    .saveAsTextFile(outputFileName)
 
 print 'Completed: ' + outputFileName
 EOF''' % locals())
 
-    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --driver-memory 4G --executor-memory 4G --conf spark.cores.max=240 --conf spark.executor.extraLibraryPath=/hdfs/user/hadoop/javisnlp/ /home/hadoop/demo/nlp.doc2kma.py 2> /dev/null'
+    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --executor-memory 4G \
+--conf spark.executor.extraLibraryPath=/hdfs/user/hadoop/javisnlp/ /home/hadoop/demo/nlp.doc2kma.py 2> /dev/null'
     run(cmd)
-    
-    
+
+
 @task
-def doc2ner(inpath, outpath, numpartitions, numthreads, sep = '\01'):
+def doc2ner(inpath, outpath, numpartitions, numthreads, sep='\01'):
     """
     fab nlp.doc2ner:/sample/sample_hani,/user/hadoop/sample_hani_ner,20,4
     """
     if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
         print 'Unauthorized path: %(outpath)s' % locals()
-        return 
+        return
     run('hadoop fs -rm -r -f -skipTrash %(outpath)s &> /dev/null' % locals())
     run('''cat <<EOF > /home/hadoop/demo/nlp.doc2ner.py
 # -*- encoding: utf-8 -*-
@@ -168,14 +172,17 @@ else:
     
 results = sents.mapPartitionsWithIndex(runNLP).cache()
 print results.count()
-results.map(lambda line: tuple(list(line[:-1]) + [' '.join(line[-1].split('\\n'))])).map(lambda line: ('%%c' %% (1)).join(line)).saveAsTextFile(outputFileName)
+results.map(lambda line: tuple(list(line[:-1]) + [' '.join(line[-1].split('\\n'))]))
+    .map(lambda line: ('%%c' %% (1)).join(line))
+    .saveAsTextFile(outputFileName)
     
 print 'Completed: ' + outputFileName
 EOF''' % locals())
 
-    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --driver-memory 4G --executor-memory 4G --conf spark.cores.max=240 --conf spark.executor.extraLibraryPath=/hdfs/user/hadoop/javisnlp/ /home/hadoop/demo/nlp.doc2ner.py 2> /dev/null'
+    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --executor-memory 4G \
+--conf spark.executor.extraLibraryPath=/hdfs/user/hadoop/javisnlp/ /home/hadoop/demo/nlp.doc2ner.py 2> /dev/null'
     run(cmd)
-    
+
 
 @task
 def sent2kma(inpath, outpath, numpartitions, numthreads):
@@ -183,8 +190,8 @@ def sent2kma(inpath, outpath, numpartitions, numthreads):
     fab nlp.sent2kma:/sample/sample_hani_sent,/user/hadoop/sample_hani_kma,20,4
     """
     if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
-	print 'Unauthorized path: %(outpath)s' % locals()
-	return
+        print 'Unauthorized path: %(outpath)s' % locals()
+        return
     run('hadoop fs -rm -r -f -skipTrash %(outpath)s &> /dev/null' % locals())
     run('''cat <<EOF > /home/hadoop/demo/nlp.sent2kma.py
 # -*- encoding: utf-8 -*-
@@ -232,7 +239,9 @@ for s in results.take(5):
 print 'Completed: ' + outputFileName
 EOF''' % locals())
 
-    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --driver-memory 4G --executor-memory 4G --conf spark.cores.max=240 --conf spark.eventLog.enabled=true --conf spark.executor.extraLibraryPath=/hdfs/user/hadoop/javisnlp/ /home/hadoop/demo/nlp.sent2kma.py 2> /dev/null'
+    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --executor-memory 4G \
+--conf spark.eventLog.enabled=true --conf spark.executor.extraLibraryPath=/hdfs/user/hadoop/javisnlp/ \
+/home/hadoop/demo/nlp.sent2kma.py 2> /dev/null'
     run(cmd)
 
 
@@ -242,8 +251,8 @@ def sent2ner(inpath, outpath, numpartitions, numthreads):
     fab nlp.sent2ner:/sample/sample_hani_sent,/user/hadoop/sample_hani_ner,20,4
     """
     if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
-	print 'Unauthorized path: %(outpath)s' % locals()
-	return
+        print 'Unauthorized path: %(outpath)s' % locals()
+        return
     run('hadoop fs -rm -r -f -skipTrash %(outpath)s &> /dev/null' % locals())
     run('''cat <<EOF > /home/hadoop/demo/nlp.sent2ner.py
 # -*- encoding: utf-8 -*-
@@ -291,10 +300,11 @@ for s in results.take(5):
 print 'Completed: ' + outputFileName
 EOF''' % locals())
 
-    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --driver-memory 4G --executor-memory 4G  --conf spark.executor.extraLibraryPath=/hdfs/user/hadoop/javisnlp/ /home/hadoop/demo/nlp.sent2ner.py 2> /dev/null'
+    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --executor-memory 4G \
+--conf spark.executor.extraLibraryPath=/hdfs/user/hadoop/javisnlp/ /home/hadoop/demo/nlp.sent2ner.py 2> /dev/null'
     run(cmd)
-    
-    
+
+
 @task
 def kma(inputText, formatter):
     """
@@ -320,8 +330,9 @@ result = runNLP(input, '%(formatter)s')
 print result
 EOF''' % locals())
 
-    cmd = 'export LD_LIBRARY_PATH=/hdfs/user/hadoop/javisnlp/:$LD_LIBRARY_PATH && python2.7 /home/hadoop/demo/nlp.kma.py 2> /dev/null'
-    run(cmd)    
+    cmd = 'export LD_LIBRARY_PATH=/hdfs/user/hadoop/javisnlp/:$LD_LIBRARY_PATH && \
+python2.7 /home/hadoop/demo/nlp.kma.py 2> /dev/null'
+    run(cmd)
 
 
 @task
@@ -349,7 +360,8 @@ result = runNLP(input, '%(formatter)s')
 print result
 EOF''' % locals())
 
-    cmd = 'export LD_LIBRARY_PATH=/hdfs/user/hadoop/javisnlp/:$LD_LIBRARY_PATH && python2.7 /home/hadoop/demo/nlp.kner.py 2> /dev/null'
+    cmd = 'export LD_LIBRARY_PATH=/hdfs/user/hadoop/javisnlp/:$LD_LIBRARY_PATH && \
+python2.7 /home/hadoop/demo/nlp.kner.py 2> /dev/null'
     run(cmd)
 
 
@@ -362,17 +374,18 @@ def word2vec_train(inpath, outpath, numpartitions, mincount, numiterations, vect
         print 'Unauthorized path: %(outpath)s' % locals()
         return
     run('hadoop fs -rm -r -f -skipTrash %(outpath)s &> /dev/null' % locals())
-    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --class SparkWord2VecTrain2 --num-executors 120 --driver-memory 8G --executor-memory 8G --conf spark.akka.frameSize=200 --conf spark.driver.maxResultSize=2g /hdfs/user/hadoop/demo/nlp/sparkword2vec_2.10-1.0.jar %(inpath)s %(outpath)s %(numpartitions)s %(mincount)s %(numiterations)s %(vectorsize)s' % locals()
+    cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --class SparkWord2VecTrain2 \
+--driver-memory 8G --executor-memory 8G --conf spark.akka.frameSize=200 --conf spark.driver.maxResultSize=2g \
+/hdfs/user/hadoop/demo/nlp/sparkword2vec_2.10-1.0.jar %(inpath)s %(outpath)s %(numpartitions)s %(mincount)s \
+%(numiterations)s %(vectorsize)s' % locals()
     run(cmd)
-    
+
 
 @task
 def word2vec_test(modelpath, queryword, topn):
     """
     fab nlp.word2vec_test:/sample/sample_hani_wordvec,서울,10
     """
-#     cmd = '/opt/spark/bin/spark-submit --master spark://50.1.100.98:7077 --class SparkWord2VecTest --num-executors 30 --driver-memory 4G --executor-memory 4G --conf spark.akka.frameSize=200 /hdfs/user/hadoop/demo/nlp/sparkword2vec_2.10-1.0.jar %(modelpath)s %(queryword)s %(topn)s 2> /dev/null' % locals()
-#     run(cmd)
     run("""cat <<EOF > /home/hadoop/demo/nlp.word2vec_test.py
 # -*- encoding: utf-8 -*-
 from numpy import *
@@ -407,8 +420,8 @@ for s in synonyms:
 EOF""" % locals())
     cmd = 'python2.7 /home/hadoop/demo/nlp.word2vec_test.py'
     run(cmd)
-    
-    
+
+
 @task
 def word2vec_qa(modelpath, hint1, hint2, hint3, topn):
     """
@@ -450,8 +463,8 @@ for s in synonyms:
 EOF''' % locals())
     cmd = 'python2.7 /home/hadoop/demo/nlp.word2vec_qa.py'
     run(cmd)
-    
-    
+
+
 @task
 def word2vec_draw(modelpath, outpath, topn):
     """

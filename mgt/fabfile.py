@@ -1,4 +1,5 @@
-#!/usr/local/bin/python2.7
+#!/usr/bin/env python2.7
+# -*- coding: utf-8 -*-
 
 """
 Cluster Doctor Fabric File
@@ -6,28 +7,28 @@ Cluster Doctor Fabric File
 Check configuration & status of all nodes in a cluster.
 """
 
-__author__    = 'Dongjoon Hyun (dongjoon@apache.org)'
-__license__   = 'Apache License'
-__version__   = '0.2'
-
 from fabric.api import *
+
+__author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
+__license__ = 'Apache License'
+__version__ = '0.2'
 
 env.roledefs = {}
 nn = []
-for i in range(95,99):
-    nn.append('50.1.100.'+str(i))
+for i in range(95, 99):
+    nn.append('50.1.100.' + str(i))
 env.roledefs['nn'] = nn
 dn = []
-for i in range(101,131):
-    dn.append('50.1.100.'+str(i))
+for i in range(101, 131):
+    dn.append('50.1.100.' + str(i))
 dn.append('50.1.100.141')
 dn.append('50.1.100.151')
 dn.append('50.1.100.161')
-for i in range(171,201):
-    dn.append('50.1.100.'+str(i))
+for i in range(171, 201):
+    dn.append('50.1.100.' + str(i))
 env.roledefs['dn'] = dn
 
-print "\n\n", "-"*80, "\n\n# of IPs: ", len(nn + dn)
+print "\n\n", "-" * 80, "\n\n# of IPs: ", len(nn + dn)
 
 env.warn_only = True
 env.skip_bad_hosts = True
@@ -42,7 +43,8 @@ output['stdout'] = True
 output['warnings'] = False
 output['running'] = False
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def os():
     """
     OS Version: CentOS release 6.5
@@ -51,7 +53,8 @@ def os():
     expected = '6.5'
     run("""[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")""" % locals())
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def os_info():
     """
     Display OS Version
@@ -59,7 +62,8 @@ def os_info():
     cmd = '/usr/bin/lsb_release -r'
     run(cmd)
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def kernel():
     """
     Kernel Version: 2.6.32-431.el6.x86_64
@@ -68,7 +72,8 @@ def kernel():
     expected = '2.6.32-431.el6.x86_64'
     run('''[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")''' % locals())
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def selinux():
     """
     SELINUX : disabled
@@ -77,7 +82,8 @@ def selinux():
     expected = 'SELINUX=disabled'
     run('''[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")''' % locals())
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def sys():
     """
     Sys Parameter: /proc/sys/kernel/hung_task_timeout_secs == 0
@@ -90,7 +96,8 @@ def sys():
     expected = '2'
     run('''[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")''' % locals())
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def os_hugepage_enabled():
     """
     OS Parameter: /sys/kernel/mm/redhat_transparent_hugepage/enabled == always [never]
@@ -103,7 +110,8 @@ def os_hugepage_enabled():
     expected = '2'
     run('''[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")''' % locals())
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def os_hugepage_defrag():
     """
     OS Parameter: cat /sys/kernel/mm/redhat_transparent_hugepage/defrag
@@ -116,7 +124,8 @@ def os_hugepage_defrag():
     expected = '2'
     run('''[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")''' % locals())
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def date():
     """
     System Time: time gap < 1 minute
@@ -126,7 +135,8 @@ def date():
     expected = datetime.now().isoformat()[0:16]
     run('''[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")''' % locals())
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def service_gmond():
     """
     gmond Installation: chkconfig --list | grep gmond
@@ -135,7 +145,8 @@ def service_gmond():
     expected = '1'
     run('''[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")''' % locals())
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def service_gmond_on():
     """
     gmond Running: telnet $host 8649
@@ -144,14 +155,16 @@ def service_gmond_on():
     expected = '1'
     run('''[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")''' % locals())
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def disk():
     """
     #, Usage of Disks (TODO): remaining space > 20%
     """
     run("df -a -h | awk '{print $5}'")
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def disk_info():
     """
     Display Disk Info
@@ -162,6 +175,7 @@ def disk_info():
     cmd = "fdisk -l 2> /dev/null | grep '^Disk /dev/sd' | awk '{print $2,$3}' | sort"
     run(cmd)
 
+
 @roles('dn')
 def disk_size():
     """
@@ -170,12 +184,14 @@ def disk_size():
     cmd = "df | grep data | awk '{print $2}' | grep -v 1171964464"
     run(cmd)
 
+
 @roles('dn')
 def disk_ext4():
     """
     noatime: /data* should have 'ext4'
     """
     run("grep '/data' /etc/fstab | grep -v ext4")
+
 
 @roles('dn')
 def disk_noatime():
@@ -184,7 +200,8 @@ def disk_noatime():
     """
     run("grep '/data' /etc/fstab | grep -v noatime")
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def hadoop():
     """
     Hadoop: /usr/lib/hadoop
@@ -193,7 +210,8 @@ def hadoop():
     expected = '1'
     run('''[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")''' % locals())
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def sensors():
     """
     Sensors : Chip `Intel digital thermal sensor' (confidence: 9)
@@ -202,7 +220,8 @@ def sensors():
     cmd = "sensors | awk '{print $3}' | grep '+[0-9]' | sort -r | head -1"
     run(cmd)
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def fan():
     """
     Fan Speed
@@ -210,7 +229,8 @@ def fan():
     cmd = "ipmi-sensors | grep Fan | grep RPM | awk -F '|' '{print $4}' | sort -r | head -1"
     run(cmd)
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def netstat():
     """
     Task Tracker CLOSE_WAIT Bug Check 
@@ -218,7 +238,8 @@ def netstat():
     cmd = "netstat -n | grep CLOSE_WAIT | wc -l | grep '[0-9][0-9][0-9][0-9]'"
     run(cmd)
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def overruns():
     """
     Network Packket Overrun Check
@@ -226,7 +247,8 @@ def overruns():
     cmd = "ifconfig bond0 | grep overruns | grep -v 'overruns:0'"
     run(cmd)
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def errors():
     """
     Network Packket Overrun Check
@@ -234,7 +256,8 @@ def errors():
     cmd = "ifconfig bond0 | grep errors | grep -v 'errors:0'"
     run(cmd)
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def mtu():
     """
     Network MTU Check
@@ -242,7 +265,8 @@ def mtu():
     cmd = "ifconfig bond0 | grep MTU | grep -v 1500"
     run(cmd)
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def serial_info():
     """
     Display Serial Number
@@ -250,7 +274,8 @@ def serial_info():
     cmd = "dmidecode | grep 'Serial Number:' | head -n 1 | awk '{print $3}'"
     run(cmd)
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def model_info():
     """
     Display HW Model Number
@@ -258,7 +283,8 @@ def model_info():
     cmd = "dmidecode | grep 'Product Name: ' | head -n 1 | awk '{print $3,$4,$5,$6}'"
     run(cmd)
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def cpu_info():
     """
     Display CPU
@@ -266,12 +292,14 @@ def cpu_info():
     cmd = "dmidecode | grep 'CPU' | grep 'Version'"
     run(cmd)
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def ram_info():
     """
     Display RAM
     """
-    cmd = "dmidecode | grep 'Size: ' | grep -v 'Range' | grep MB | awk '{print $2}' | awk '{sum+=$1} END {print sum/1024}'"
+    cmd = "dmidecode | grep 'Size: ' | grep -v 'Range' | grep MB | awk '{print $2}' | \
+awk '{sum+=$1} END {print sum/1024}'"
     run(cmd)
 
     cmd = "dmidecode | grep 'Size: ' | grep -v 'Range' | grep MB | awk '{print $2}' | wc -l"
@@ -280,7 +308,8 @@ def ram_info():
     cmd = "dmidecode | grep 'Size: ' | grep -v 'Range' | grep MB | awk '{print $2}'"
     run(cmd)
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def log():
     """
     Job Tracker & Task Tracker Log
@@ -288,7 +317,8 @@ def log():
     cmd = "df /log/hadoop 2> /dev/null | tail -n 1 | awk '{print $5}' | grep '[5-9][0-9]%'"
     run(cmd)
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def log_mapred():
     """
     Non-DFS Used Data Check
@@ -296,7 +326,8 @@ def log_mapred():
     cmd = "du -s -c -h /data*/mapred/local/userlogs | tail -n 1"
     run(cmd)
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def height():
     """
     Height
@@ -304,7 +335,8 @@ def height():
     cmd = "dmidecode | grep Height | awk '{print $2}'"
     run(cmd)
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def uptime():
     """
     Uptime
@@ -312,7 +344,8 @@ def uptime():
     cmd = "uptime"
     run(cmd)
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def hostname():
     """
     Hostname
@@ -320,14 +353,17 @@ def hostname():
     cmd = "hostname"
     run(cmd)
 
+
 @roles('dn')
 def gpu():
     """
     GPU: 84:00.0 3D controller: NVIDIA Corporation GK210GL [Tesla K80] (rev a1)
     """
     cmd = "lspci | grep -i nvidia | tr -d '[:space:]'"
-    expected = '84:00.03Dcontroller:NVIDIACorporationGK210GL[TeslaK80](reva1)' + '85:00.03Dcontroller:NVIDIACorporationGK210GL[TeslaK80](reva1)'
+    expected = '84:00.03Dcontroller:NVIDIACorporationGK210GL[TeslaK80](reva1)' + \
+               '85:00.03Dcontroller:NVIDIACorporationGK210GL[TeslaK80](reva1)'
     run('''[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")''' % locals())
+
 
 @roles('dn')
 def gpu_uuid_info():
@@ -336,6 +372,7 @@ def gpu_uuid_info():
     """
     cmd = "nvidia-smi -L"
     run(cmd)
+
 
 @roles('dn')
 def r():
@@ -346,6 +383,7 @@ def r():
     expected = '3.1.3'
     run('''[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")''' % locals())
 
+
 @roles('dn')
 def sge_execd():
     """
@@ -355,6 +393,7 @@ def sge_execd():
     expected = '1'
     run('''[ "`%(cmd)s`" != "%(expected)s" ] && (echo "Expected: %(expected)s, Actual: `%(cmd)s`")''' % locals())
 
+
 @roles('dn')
 def hmount():
     """
@@ -363,13 +402,15 @@ def hmount():
     cmd = "ls /hdfs"
     run(cmd)
 
-@roles('nn','dn')
+
+@roles('nn', 'dn')
 def alive():
     """
     Check server are alive
     """
     cmd = "echo alive"
     run(cmd)
+
 
 @roles('dn')
 def gpu_temp():
@@ -378,6 +419,7 @@ def gpu_temp():
     """
     cmd = "nvidia-smi -q -d TEMPERATURE | grep 'GPU Current Temp'"
     run(cmd)
+
 
 @roles('dn')
 def gpu_usage():

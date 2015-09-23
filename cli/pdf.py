@@ -4,11 +4,11 @@
 Intelligence Platform CLI Fabric File
 """
 
+from fabric.api import *
+
 __author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
 __license__ = 'Apache License'
 __version__ = '0.3'
-
-from fabric.api import *
 
 
 @task
@@ -18,12 +18,11 @@ def text(inpath, outpath=None):
     """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
-        if outpath == None:
+        if outpath:
+            run('pdf2txt.py /hdfs%(inpath)s > /hdfs%(outpath)s' % locals(), quiet=True)
+        else:
             run('pdf2txt.py /hdfs%(inpath)s 2> /dev/null' % locals())
             print ''
-        else:
-            run('pdf2txt.py /hdfs%(inpath)s > /hdfs%(outpath)s' % locals(),
-                quiet=True)
 
 
 @task
@@ -37,5 +36,4 @@ def image(inpath, outpath):
     with cd(env.dir):
         run('pdfimages -q /hdfs%(inpath)s %(basename)s' % locals())
         run('mkdir /hdfs%(outpath)s' % locals())
-        rum('for f in `ls *.ppm`; do ppm2tiff $f /hdfs%(outpath)s/${f/.ppm/.jpg}; done'
-            % locals())
+        run('for f in `ls *.ppm`; do ppm2tiff $f /hdfs%(outpath)s/${f/.ppm/.jpg}; done' % locals())

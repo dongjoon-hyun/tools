@@ -1,14 +1,15 @@
-#!/usr/local/bin/python2.7
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 """
 Intelligence Platform CLI Fabric File
 """
 
-__author__    = 'Dongjoon Hyun (dongjoon@apache.org)'
-__license__   = 'Apache License'
-__version__   = '0.3'
-
 from fabric.api import *
+
+__author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
+__license__ = 'Apache License'
+__version__ = '0.3'
+
 
 @task
 def head(inpath, count=5):
@@ -26,6 +27,7 @@ for x in sc.textFile('%(inpath)s').take(%(count)s):
 EOF''' % locals())
         cmd = '/opt/spark/bin/spark-submit --num-executors 300 spark.head.py 2> /dev/null'
         run(cmd)
+
 
 @task
 def sql(sql):
@@ -46,6 +48,7 @@ EOF''' % locals())
         cmd = 'HADOOP_CONF_DIR=/etc/hive/conf /opt/spark/bin/spark-submit --num-executors 300 spark.sql.py 2> /dev/null'
         run(cmd)
 
+
 @task
 def count_line(inpath):
     """
@@ -61,6 +64,7 @@ print sc.textFile('%(inpath)s').count()
 EOF''' % locals())
         cmd = '/opt/spark/bin/spark-submit --num-executors 300 spark.count_line.py 2> /dev/null'
         run(cmd)
+
 
 @task
 def count_line_with(inpath, keyword):
@@ -85,6 +89,7 @@ EOF''' % locals())
         cmd = '/opt/spark/bin/spark-submit --num-executors 300 spark.count_line_with.py 2> /dev/null'
         run(cmd)
 
+
 @task
 def grep(inpath, outpath, keyword):
     """
@@ -100,6 +105,7 @@ sc.textFile('%(inpath)s').filter(lambda line: '%(keyword)s' in line).saveAsTextF
 EOF''' % locals())
         cmd = '/opt/spark/bin/spark-submit --num-executors 300 spark.grep.py 2> /dev/null'
         run(cmd)
+
 
 @task
 def select(inpath, outpath, columns='*', sep='\01'):
@@ -126,8 +132,9 @@ EOF''' % locals())
         cmd = '/opt/spark/bin/spark-submit --num-executors 300 spark.select.py 2> /dev/null'
         run(cmd)
 
+
 @task
-def tf_ko(inpath,outpath,sep='\01'):
+def tf_ko(inpath, outpath, sep='\01'):
     """
     fab spark.tf_ko:/data/text/news/hani/*,/user/hadoop/tf_result
     """
@@ -141,14 +148,19 @@ def tf_ko(inpath,outpath,sep='\01'):
 from pyspark import SparkContext
 import re
 import string
-regex = re.compile(r'[%%s\s0-9a-zA-Z~·]+' %% re.escape(string.punctuation))
+
+def normalize(str):
+    chars = [u'N' if c.isdigit() else c for c in str]
+    chars = [c for c in chars if c.isspace() or c == u'.' or c == u'N' or (44032 <= ord(c) and ord(c)<=55215)]
+    return ''.join(chars)
+
 sc = SparkContext(appName='Term Frequency')
 counts = sc.textFile('%(inpath)s') \
-        .map(lambda line: re.split('%%c' %% (1),line)[1]) \
-        .map(lambda line: line.replace(u"‘"," ").replace(u"’"," ").replace(u"“"," ").replace(u"”"," ").replace(u"△"," ").replace(u"◇"," ")) \
-        .flatMap(lambda line: regex.split(line)) \
-        .filter(lambda word: len(word.strip())>0) \
-        .map(lambda word: (word, 1)) \
+    .map(lambda line: re.split('%%c' %% (1),line)[1]) \
+    .map(normalize) \
+    .flatMap(lambda line: regex.split(line)) \
+    .filter(lambda word: len(word.strip())>0) \
+    .map(lambda word: (word, 1)) \
         .reduceByKey(lambda a,b: a+b) \
         .map(lambda (a,b): (b,a)) \
         .sortByKey(0,1) \
@@ -158,8 +170,9 @@ EOF''' % locals())
         cmd = '/opt/spark/bin/spark-submit --num-executors 300 spark.tf_ko.py 2> /dev/null'
         run(cmd)
 
+
 @task
-def ngram_ko(n,min,inpath,outpath,sep='\01'):
+def ngram_ko(n, min, inpath, outpath, sep='\01'):
     """
     fab spark.ngram_ko:2,1000,/user/hadoop/tf_result,/user/hadoop/ngram_result
     """
@@ -190,13 +203,16 @@ EOF''' % locals())
         cmd = '/opt/spark/bin/spark-submit --num-executors 300 spark.ngram_ko.py 2> /dev/null'
         run(cmd)
 
+
 @task
 def word2vec(inpath, queryword):
     """
     fab spark.word2vec:/sample/sample_hani_kma,대통령
     """
-    cmd = '/opt/spark/bin/spark-submit /hdfs/user/hadoop/demo/nlp/SparkWord2Vec.py %(inpath)s %(queryword)s 2> /dev/null' % locals()
+    cmd = '/opt/spark/bin/spark-submit /hdfs/user/hadoop/demo/nlp/SparkWord2Vec.py %(inpath)s %(queryword)s \
+2> /dev/null' % locals()
     run(cmd)
+
 
 @task
 def naivebayes_train(inpath, lambda_, outpath):
@@ -226,6 +242,7 @@ EOF''' % locals())
         cmd = '/opt/spark/bin/spark-submit spark.naivebayes_train.py 2> /dev/null'
         run(cmd)
 
+
 @task
 def naivebayes_predict(model, inpath, outpath):
     """
@@ -251,8 +268,9 @@ EOF''' % locals())
         cmd = '/opt/spark/bin/spark-submit spark.naivebayes_test.py 2> /dev/null'
         run(cmd)
 
+
 @task
-def sample(inpath,replacement,fraction,seed,outpath):
+def sample(inpath, replacement, fraction, seed, outpath):
     """
     fab spark.sample:/sample/sample_movielens_movies.txt,False,0.5,0,/tmp/sampled_movielens
     """
@@ -266,6 +284,7 @@ sc.textFile('%(inpath)s').sample(%(replacement)s,%(fraction)s,%(seed)s).saveAsTe
 EOF''' % locals())
         cmd = '/opt/spark/bin/spark-submit --num-executors 300 spark.sample.py 2> /dev/null'
         run(cmd)
+
 
 @task
 def lm(inpath, outpath, step, maxiter):
@@ -290,7 +309,8 @@ label = data.map(lambda x: x[-1])
 feature = data.map(lambda x: x[0:-1])
 scaler = StandardScaler().fit(feature)
 feature = scaler.transform(feature)
-model = LinearRegressionWithSGD.train(label.zip(feature).map(lambda (x,y): LabeledPoint(x,y)), intercept=True, iterations=%(maxiter)s, step=%(step)s)
+model = LinearRegressionWithSGD.train(label.zip(feature).map(lambda (x,y): LabeledPoint(x,y)), intercept=True, \
+iterations=%(maxiter)s, step=%(step)s)
 print model
 EOF''' % locals())
         cmd = '/opt/spark/bin/spark-submit spark.lm.py 2> /dev/null'

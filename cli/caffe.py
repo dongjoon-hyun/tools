@@ -1,16 +1,16 @@
-#!/usr/local/bin/python2.7
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 """
 Intelligence Platform CLI Fabric File
 """
 
-__author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
-__license__ = 'Apache License'
-__version__ = '0.3'
-
 import os
 
 from fabric.api import *
+
+__author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
+__license__ = 'Apache License'
+__version__ = '0.3'
 
 
 @task
@@ -162,15 +162,16 @@ EOF''' % locals())
 
 @task
 @hosts('50.1.100.101')
-def video_indexing(modelpath, videopath, outpath, span_times=1, color='True', dims='256:256', channel_swap='2:1:0', topk=3):
+def video_indexing(modelpath, videopath, outpath, span_times=1, color='True', dims='256:256', channel_swap='2:1:0',
+                   topk=3):
     """
     fab caffe.video_indexing:/model/caffe/imagenet,/hdfs/sample/ted_sample.mp4,/tmp/video_index.txt,1
     """
     if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
         print 'Unauthorized path: %(outpath)s' % locals()
-        return 
+        return
     run('hadoop fs -rm -r -f -skipTrash %(outpath)s &> /dev/null' % locals())
-    
+
     dims = dims.replace(':', ',')
     channel_swap = channel_swap.replace(':', ',')
     run('mkdir %s' % env.dir)
@@ -270,7 +271,7 @@ with open('/hdfs' + outfile, 'wt') as f_write:
 EOF''' % locals())
         cmd = '/usr/local/bin/python2.7 caffe.video_indexing.py'
         run(cmd)
-        
+
 
 @task
 def resize_img(inpath, height, width, outpath):

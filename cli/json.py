@@ -1,14 +1,15 @@
-#!/usr/local/bin/python2.7
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 """
 Intelligence Platform CLI Fabric File
 """
 
-__author__    = 'Dongjoon Hyun (dongjoon@apache.org)'
-__license__   = 'Apache License'
-__version__   = '0.3'
-
 from fabric.api import *
+
+__author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
+__license__ = 'Apache License'
+__version__ = '0.3'
+
 
 @task
 def schema(inpath):
@@ -30,8 +31,9 @@ EOF''' % locals())
         cmd = '/opt/spark/bin/spark-submit json.schema.py 2> /dev/null'
         run(cmd)
 
+
 @task
-def filter(inpath,field,value,outpath):
+def filter(inpath, field, value, outpath):
     """
     fab json.filter:/data/text/twitter/20150721_22.json,lang,ko,/tmp/ko
     """
@@ -50,8 +52,9 @@ EOF''' % locals())
         cmd = '/opt/spark/bin/spark-submit json.filter.py 2> /dev/null'
         run(cmd)
 
+
 @task
-def select(inpath,columns,outpath):
+def select(inpath, columns, outpath):
     """
     fab json.select:/data/text/twitter/20150721_22.json,created_at:text,/tmp/result
     """
@@ -70,4 +73,3 @@ df.select(%(columns)s).write.save('%(outpath)s', format='json')
 EOF''' % locals())
         cmd = '/opt/spark/bin/spark-submit json.select.py 2> /dev/null'
         run(cmd)
-
