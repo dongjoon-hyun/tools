@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Viewer</title>
+
+  <link type="text/css" rel="stylesheet" href="http://layout.jquery-dev.com/lib/css/layout-default-latest.css" />
+	<style type="text/css">
+	html, body {
+		background:	#666;
+		width:		100%;
+		height:		100%;
+		padding:	0;
+		margin:		0;
+		overflow:	auto; /* when page gets too small */
+	}
+	#container {
+		background:	#999;
+		height:		100%;
+		margin:		0 auto;
+		width:		100%;
+		max-width:	900px;
+		min-width:	700px;
+		_width:		700px; /* min-width for IE6 */
+	}
+	.pane {
+		display:	none; /* will appear when layout inits */
+	}
+	</style>
+
+	<script type="text/javascript" src="http://layout.jquery-dev.com/lib/js/jquery-latest.js"></script>
+	<script type="text/javascript" src="http://layout.jquery-dev.com/lib/js/jquery-ui-latest.js"></script>
+	<script type="text/javascript" src="http://layout.jquery-dev.com/lib/js/jquery.layout-latest.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function () {
+		$('#container').layout();
+	});
+	</script>
+
+
+  <script src="menutemplate.js"></script>
+  <script>
+  var alertOnlineStatus = function() {
+    console.log(navigator.onLine ? 'online' : 'offline');
+  };
+  window.addEventListener('online',  alertOnlineStatus);
+  window.addEventListener('offline',  alertOnlineStatus);
+  alertOnlineStatus();
+
+  const remote = require('electron').remote;
+  const ipc = require('electron').ipcRenderer;
+  var app = remote.require('app');
+
+  // Menu
+  remote.Menu.setApplicationMenu(remote.Menu.buildFromTemplate(menuTemplate()));
+
+  console.info("createRequest");
+  //curl http://192.168.99.100:8088/ws/v1/cluster
+  function createRequest() {
+    var result = null;
+    if (window.XMLHttpRequest) {
+      // FireFox, Safari, etc.
+      result = new XMLHttpRequest('http://192.168.99.100:8088/ws/v1/cluster');
+      if (typeof xmlhttp.overrideMimeType != 'undefined') {
+        result.overrideMimeType('text/xml'); // Or anything else
+      }
+    }
+    else if (window.ActiveXObject) {
+      // MSIE
+      result = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    else {
+      // No known mechanism -- consider aborting the application
+    }
+    return result;
+  }
+  </script>
+</head>
+<body>
+
+  <div id="container">
+	<div class="pane ui-layout-center">
+		Machines
+	</div>
+	<div class="pane ui-layout-north">Viewer</div>
+	<!--div class="pane ui-layout-south">South</div-->
+	<!--div class="pane ui-layout-east">East</div-->
+	<div class="pane ui-layout-west">Cluster</div>
+</div>
+
+</body>
+</html>

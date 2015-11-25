@@ -1,0 +1,26 @@
+{
+  "name": "electron-app",
+  "version": "1.0.0",
+  "description": "A sample Electron application",
+  "main": "src/main.js",
+  "scripts": {
+    "starts": "electron main.js"
+  },
+  "keywords": [
+    "Electron",
+    "Sample"
+  ],
+  "author": "Dongjoon Hyun (dongjoon@apache.org)",
+  "license": "Apache License",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dongjoon-hyun/electron-sample.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dongjoon-hyun/electron-sample/issues"
+  },
+  "homepage": "http://github.com/dongjoon-hyun/electron-sample#readme",
+  "devDependencies": {
+    "electron-prebuilt": "^0.35.1"
+  }
+}
