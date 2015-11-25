@@ -1,0 +1,45 @@
+html, body {
+  background:	#666;
+  width:		100%;
+  height:		100%;
+  padding:	0;
+  margin:		0;
+  overflow:	auto; /* when page gets too small */
+}
+#container {
+  background:	#999;
+  height:		100%;
+  margin:		0 auto;
+  width:		100%;
+  max-width:	1200px;
+  min-width:	800px;
+  _width:		800px; /* min-width for IE6 */
+}
+.cluster {
+  background-color: green;
+  font-weight: normal;
+  margin: 5px;
+  padding: 15px;
+  width: 140px;
+  height: 100px;
+  border: 1px solid black;
+}
+.active {
+  font-weight: bold;
+  color: red;
+}
+.cluster-info {
+  font-weight: normal;
+}
+.node-info {
+  background-color: green;
+  float: left;
+  margin: 5px;
+  padding: 15px;
+  width: 100px;
+  height: 100px;
+  border: 1px solid black;
+}
+.pane {
+  display:	none; /* will appear when layout inits */
+}

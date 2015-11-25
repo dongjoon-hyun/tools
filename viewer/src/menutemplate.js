@@ -69,6 +69,21 @@ var menuTemplate = function () {
           }
         }
       ]
+    },
+    {
+      label: 'Cluster',
+      submenu: [
+        {
+          label: 'Add',
+          accelerator: commandOrCtrl() + '+A',
+          enabled: true,
+          click: function () {
+          }
+        },
+        {
+          type: 'separator'
+        },
+      ]
     }
   ]
 };
