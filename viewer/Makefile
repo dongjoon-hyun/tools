@@ -1,7 +1,8 @@
 all: clean build
 
 clean:
-	rm -rf Viewer-*-x64
+	rm -rf app
 
 build:
-	electron-packager . Viewer --platform=darwin,linux --arch=x64 --version=0.35.1 --overwrite
+	mkdir app
+	electron-packager . Viewer --platform=darwin,linux,win32 --arch=x64 --version=0.35.1 --overwrite --out=app --ignore=app
