@@ -1,58 +1,50 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html ng-app="viewer">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Viewer</title>
-  <link type="text/css" rel="stylesheet" href="http://layout.jquery-dev.com/lib/css/layout-default-latest.css">
-  <link type="text/css" rel="stylesheet" href="viewer.css">
+    <script src="js/angular.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 
-  <script type="text/javascript" src="http://layout.jquery-dev.com/lib/js/jquery-latest.js"></script>
-  <script type="text/javascript" src="http://layout.jquery-dev.com/lib/js/jquery-ui-latest.js"></script>
-  <script type="text/javascript" src="http://layout.jquery-dev.com/lib/js/jquery.layout-latest.js"></script>
-  <script type="text/javascript">
-  $(document).ready(function () {
-    $('#container').layout();
-  });
-  </script>
-  <script src="menutemplate.js"></script>
-  <script src="cluster.js"></script>
-  <script>
-  var alertOnlineStatus = function() {
-    console.log(navigator.onLine ? 'online' : 'offline');
-  };
-  window.addEventListener('online',  alertOnlineStatus);
-  window.addEventListener('offline',  alertOnlineStatus);
-  alertOnlineStatus();
+    <!-- angular js app -->
+    <script src="js/viewer.js"></script>
 
-  const remote = require('electron').remote;
-  const ipc = require('electron').ipcRenderer;
-  var app = remote.require('app');
+    <!-- electron -->
+    <script src="menutemplate.js"></script>
+    <script>
+        var alertOnlineStatus = function() {
+            console.log(navigator.onLine ? 'online' : 'offline');
+        };
+        window.addEventListener('online',  alertOnlineStatus);
+        window.addEventListener('offline',  alertOnlineStatus);
+        alertOnlineStatus();
 
-  $.ajaxSetup({timeout:1000});
-  // Menu
-  remote.Menu.setApplicationMenu(remote.Menu.buildFromTemplate(menuTemplate()));
-  </script>
+        const remote = require('electron').remote;
+        const ipc = require('electron').ipcRenderer;
+        var app = remote.require('app');
+
+        // Menu
+        remote.Menu.setApplicationMenu(remote.Menu.buildFromTemplate(menuTemplate()));
+    </script>
 </head>
-<body style='position: relative;'>
-  <div id="container">
-    <div class="pane ui-layout-center">
-      <div id='nodes'></div>
+<body ng-controller="ClusterController as clusterCtrl">
+<div class="container">
+    <div class="row">
+        <h3>Viewer</h3>
+        <form ng-submit="clusterCtrl.add()">
+            <input type="text" ng-model="clusterCtrl.ip" size="30" value="{{clusterCtrl.ip}}">
+            <input class="btn-primary" type="submit" value="add">
+        </form>
     </div>
-    <div class="pane ui-layout-north">
-      <input id='newCluster' type="text" value="192.168.99.100:8088">
-      <button onclick='addCluster()'>Add</button>
+    <div class="row">
+        <div class="col-md-4">
+            <cluster-list>
+            </cluster-list>
+        </div>
+        <div class="col-md-8">
+            <node-list>
+            </node-list>
+        </div>
     </div>
-    <!--div class="pane ui-layout-south">South</div-->
-    <!--div class="pane ui-layout-east">East</div-->
-    <div class="pane ui-layout-west">
-      <h2>Cluster</h2>
-      <div id="cluster">
-      </div>
-    </div>
-  </div>
+</div>
 </body>
-<script>
-window.setInterval(updateClusters, 2000);
-</script>
 </html>

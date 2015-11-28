@@ -1,0 +1,12 @@
+<h4>Clusters ({{clusterCtrl.clusters.length}})</h4>
+<div class="list-group">
+    <a class="list-group-item cluster"
+       ng-repeat="cluster in clusterCtrl.clusters"
+       ng-click="clusterCtrl.updateNodes(cluster.ip)">
+        <h4>{{cluster.ip}}</h4>
+        <p>{{cluster.state}}</p>
+        <p>{{cluster.haState}}</p>
+        <p>{{cluster.startedOn}}</p>
+    </a>
+</div>
+
