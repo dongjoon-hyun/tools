@@ -3,10 +3,16 @@
     <a class="list-group-item cluster"
        ng-repeat="cluster in clusterCtrl.clusters"
        ng-click="clusterCtrl.updateNodes(cluster.ip)">
-        <h4>{{cluster.ip}}</h4>
-        <p>{{cluster.state}}</p>
-        <p>{{cluster.haState}}</p>
-        <p>{{cluster.startedOn}}</p>
+        <h4>{{cluster.name}}</h4>
+        <button type="button" class="close" aria-label="Close" ng-click="alert(1);">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <p>{{cluster.resourceManagerType}} {{cluster.resourceManagerVersion}}
+            - {{cluster.startedOn | secondsToDateTime | date:'HH:mm:ss'}}</p>
+        <button ng-show="cluster.state != 'STARTED'" type="button" class="btn btn-warning">CONNECTING</button>
+        <button ng-show="cluster.state == 'STARTED'" type="button" class="btn btn-success">STARTED</button>
+        <button ng-show="cluster.haState == 'ACTIVE'" type="button" class="btn btn-primary">HA</button>
     </a>
 </div>
 

@@ -14,11 +14,8 @@
 
             this.add = function() {
                 this.clusters.push({
-                    ip:this.ip,
-                    resourceManagerVersion:'Unknown',
-                    startedOn:'Unknown',
-                    state:'Unknown',
-                    haState:'Unknown'
+                    ip: this.ip,
+                    name: this.ip.split(':')[0]
                 });
                 this.ip = this.placeHolder;
             };
@@ -27,6 +24,7 @@
                 var url = cluster.ip;
                 $.get('http://' + url + '/ws/v1/cluster', '', function(data) {
                     var info = data['clusterInfo'];
+                    cluster.resourceManagerType = 'YARN';
                     cluster.resourceManagerVersion = info['resourceManagerVersion'];
                     cluster.startedOn = ((new Date() - info['startedOn'])/1000 | 0);
                     cluster.state = info['state'];
@@ -62,5 +60,10 @@
                 restrict: 'E',
                 templateUrl: 'templates/node-list.html'
             };
-        });
+        })
+        .filter('secondsToDateTime', [function() {
+            return function(seconds) {
+                return new Date(1970, 0, 1).setSeconds(seconds);
+            };
+        }]);
 })();
