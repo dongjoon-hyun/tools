@@ -21,27 +21,54 @@
             };
 
             var updateCluster = function(cluster) {
-                var url = cluster.ip;
-                $.get('http://' + url + '/ws/v1/cluster', '', function(data) {
-                    var info = data['clusterInfo'];
-                    cluster.resourceManagerType = 'YARN';
-                    cluster.resourceManagerVersion = info['resourceManagerVersion'];
-                    cluster.startedOn = ((new Date() - info['startedOn'])/1000 | 0);
-                    cluster.state = info['state'];
-                    cluster.haState = info['haState'];
-                }).fail(function() {
-                    cluster.state = 'Disconnected';
-                });
+                if (cluster.ip.endsWith('8088')) {
+                    $.get('http://' + cluster.ip + '/ws/v1/cluster', '', function(data) {
+                        var info = data['clusterInfo'];
+                        cluster.resourceManagerType = 'YARN';
+                        cluster.resourceManagerVersion = info['resourceManagerVersion'];
+                        cluster.startedOn = ((new Date() - info['startedOn'])/1000 | 0);
+                        cluster.state = info['state'];
+                        cluster.haState = info['haState'];
+                    }).fail(function() {
+                        cluster.state = 'Disconnected';
+                    });
+                } else if (cluster.ip.endsWith('5050')) {
+                    $.get('http://' + cluster.ip + '/master/state.json', '', function(data) {
+                        cluster.resourceManagerType = 'MESOS';
+                        cluster.resourceManagerVersion = data['version'];
+                        cluster.startedOn = ((new Date() - data['start_time'])/1000 | 0);
+                        cluster.state = 'STARTED';
+                        cluster.haState = 'Unknown';
+                        nodes.length = 0;
+                        data['slaves'].forEach(function(node) {
+                            nodes.push({
+                                hostName: node['hostname']
+                            });
+                        })
+                    }).fail(function() {
+                        cluster.state = 'Disconnected';
+                    });
+
+
+                }
                 updateNodes(cluster.ip);
             };
 
             var updateNodes = function(ip) {
-                $.get('http://' + ip + '/ws/v1/cluster/nodes', '', function(data) {
-                    nodes.length = 0;
-                    data['nodes']['node'].forEach(function(node) { nodes.push(node); })
-                }).fail(function() {
-                    this.nodes = [];
-                });
+                if (ip.endsWith('8088')) {
+                    $.get('http://' + ip + '/ws/v1/cluster/nodes', '', function(data) {
+                        nodes.length = 0;
+                        data['nodes']['node'].forEach(function(node) {
+                            nodes.push({
+                                hostName: node['nodeHostName']
+                            });
+                        })
+                    }).fail(function() {
+                        this.nodes = [];
+                    });
+                } else if (ip.endsWith('5050')) {
+                    // already done.
+                }
             };
 
             $scope.updateClusters = function() {
