@@ -5,19 +5,28 @@
     var app = angular.module('viewer', [])
         .controller('ClusterController', function($scope, $interval) {
             this.clusters = [];
-            this.nodes = [];
             this.placeHolder = '192.168.99.100:8088';
             this.ip = this.placeHolder;
+            this.selected = 0;
 
             var clusters = this.clusters;
-            var nodes = this.nodes;
 
             this.add = function() {
                 this.clusters.push({
                     ip: this.ip,
-                    name: this.ip.split(':')[0]
+                    name: this.ip.split(':')[0],
+                    nodes: []
                 });
                 this.ip = this.placeHolder;
+            };
+
+            this.select = function(i) {
+                this.selected = i;
+                updateNodes(this.clusters[this.selected]);
+            };
+
+            this.getSelected = function() {
+                return this.clusters[this.selected];
             };
 
             var updateCluster = function(cluster) {
@@ -39,9 +48,9 @@
                         cluster.startedOn = ((new Date() - data['start_time'])/1000 | 0);
                         cluster.state = 'STARTED';
                         cluster.haState = 'Unknown';
-                        nodes.length = 0;
+                        cluster.nodes.length = 0;
                         data['slaves'].forEach(function(node) {
-                            nodes.push({
+                            cluster.nodes.push({
                                 hostName: node['hostname']
                             });
                         })
@@ -49,22 +58,29 @@
                         cluster.state = 'Disconnected';
                     });
                 }
-                updateNodes(cluster.ip);
+                updateNodes(cluster);
             };
 
-            var updateNodes = function(ip) {
-                if (ip.endsWith('8088')) {
-                    $.get('http://' + ip + '/ws/v1/cluster/nodes', '', function(data) {
-                        nodes.length = 0;
+            var updateNodes = function(cluster) {
+                if (cluster.ip.endsWith('8088')) {
+                    $.get('http://' + cluster.ip + '/ws/v1/cluster/nodes', '', function(data) {
+                        cluster.nodes.length = 0;
                         data['nodes']['node'].forEach(function(node) {
-                            nodes.push({
-                                hostName: node['nodeHostName']
+                            cluster.nodes.push({
+                                rack: node['rack'],
+                                hostName: node['nodeHostName'],
+                                state: node['state'],
+                                version: node['version'],
+                                core: node['availableVirtualCores'],
+                                usedCore: node['usedVirtualCores'],
+                                mem: node['availMemoryMB'],
+                                usedMem: node['usedMemoryMB']
                             });
                         })
                     }).fail(function() {
-                        this.nodes = [];
+                        cluster.nodes.length = 0;
                     });
-                } else if (ip.endsWith('5050')) {
+                } else if (cluster.ip.endsWith('5050')) {
                     // already done.
                 }
             };

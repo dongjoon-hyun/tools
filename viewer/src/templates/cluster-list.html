@@ -2,7 +2,7 @@
 <div class="list-group">
     <a class="list-group-item cluster"
        ng-repeat="cluster in clusterCtrl.clusters"
-       ng-click="clusterCtrl.updateNodes(cluster.ip)">
+       ng-click="clusterCtrl.select($index)">
         <h4>{{cluster.name}}</h4>
         <button type="button" class="close" aria-label="Close" ng-click="alert(1);">
             <span aria-hidden="true">&times;</span>
