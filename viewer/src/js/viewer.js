@@ -48,8 +48,6 @@
                     }).fail(function() {
                         cluster.state = 'Disconnected';
                     });
-
-
                 }
                 updateNodes(cluster.ip);
             };
