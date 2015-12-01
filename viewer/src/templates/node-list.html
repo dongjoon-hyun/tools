@@ -3,7 +3,7 @@
     <a class="list-group-item node"
        ng-repeat="node in clusterCtrl.getSelected().nodes">
         <h4>{{node.rack}}/{{node.hostName}}</h4>
-        <p>{{node.version}}</p>
+        <p>{{node.state}}</p>
         <p>{{node.usedCore}}/{{node.core}}</p>
         <p>{{node.usedMem}}/{{node.mem}}</p>
     </a>

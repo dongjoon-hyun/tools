@@ -51,7 +51,13 @@
                         cluster.nodes.length = 0;
                         data['slaves'].forEach(function(node) {
                             cluster.nodes.push({
-                                hostName: node['hostname']
+                                rack: '/default-rack',
+                                hostName: node['hostname'],
+                                state: node['active'] ? 'RUNNING' : 'INACTIVE',
+                                core: node['resources'].cpus,
+                                usedCore: node['used_resources'].cpus,
+                                mem: node['resources'].mem,
+                                usedMem: node['used_resources'].mem
                             });
                         })
                     }).fail(function() {
@@ -70,7 +76,6 @@
                                 rack: node['rack'],
                                 hostName: node['nodeHostName'],
                                 state: node['state'],
-                                version: node['version'],
                                 core: node['availableVirtualCores'],
                                 usedCore: node['usedVirtualCores'],
                                 mem: node['availMemoryMB'],
