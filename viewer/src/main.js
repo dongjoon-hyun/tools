@@ -2,12 +2,14 @@ var app = require('app');
 var BrowserWindow = require('browser-window');
 const ipcMain = require('electron').ipcMain;
 
-var mainWindow = null;
+var win = null;
 
 var shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
-  if (mainWindow) {
-    if (mainWindow.isMinimized()) mainWindow.restore();
-    mainWindow.focus();
+  if (win) {
+    if (win.isMinimized()) {
+      win.restore();
+    }
+    win.focus();
   }
   return true;
 });
@@ -33,18 +35,23 @@ app.on('window-all-closed', function() {
 });
 
 app.on('ready', function() {
-  mainWindow = new BrowserWindow({width: 1200, height: 800});
-  mainWindow.loadURL('file://' + __dirname + '/index.html');
-  mainWindow.on('closed', function() {
-    mainWindow = null;
+  win = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    frame: process.platform === 'win32',
+    transparent: true
   });
-  mainWindow.webContents.openDevTools();
+  win.loadURL('file://' + __dirname + '/index.html');
+  win.on('closed', function() {
+    win = null;
+  });
+  win.webContents.openDevTools();
 });
 
 ipcMain.on('openDevTools', function(event, arg) {
-  mainWindow.webContents.openDevTools();
+  win.webContents.openDevTools();
 });
 
 ipcMain.on('closeDevTools', function(event, arg) {
-  mainWindow.webContents.closeDevTools();
+  win.webContents.closeDevTools();
 });

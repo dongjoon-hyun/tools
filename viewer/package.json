@@ -1,14 +1,16 @@
 {
-  "name": "electron-app",
+  "name": "Viewer",
   "version": "1.0.0",
-  "description": "A sample Electron application",
+  "description": "Viewer",
   "main": "src/main.js",
   "scripts": {
     "starts": "electron main.js"
   },
   "keywords": [
-    "Electron",
-    "Sample"
+    "Hadoop",
+    "Yarn",
+    "Mesos",
+    "Viewer"
   ],
   "author": "Dongjoon Hyun (dongjoon@apache.org)",
   "license": "Apache License",
