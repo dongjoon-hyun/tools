@@ -25,6 +25,14 @@
                 updateNodes(this.clusters[this.selected]);
             };
 
+            this.delete = function(i) {
+                this.clusters.splice(i, 1);
+                if (this.selected == i) {
+                    this.selected = this.clusters.length - 1;
+                    updateNodes(this.clusters[this.selected]);
+                }
+            };
+
             this.getSelected = function() {
                 return this.clusters[this.selected];
             };
