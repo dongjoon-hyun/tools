@@ -7,7 +7,7 @@
             this.clusters = [];
             this.placeHolder = '192.168.99.100:8088';
             this.ip = this.placeHolder;
-            this.selected = 0;
+            this.selected = -1;
 
             var clusters = this.clusters;
 
@@ -15,7 +15,7 @@
                 this.clusters.push({
                     ip: this.ip,
                     name: this.ip.split(':')[0],
-                    nodes: []
+                    racks: {}
                 });
                 this.ip = this.placeHolder;
             };
@@ -29,12 +29,34 @@
                 this.clusters.splice(i, 1);
                 if (this.selected == i) {
                     this.selected = this.clusters.length - 1;
-                    updateNodes(this.clusters[this.selected]);
+                    if (this.selected >= 0) {
+                        updateNodes(this.clusters[this.selected]);
+                    }
                 }
             };
 
             this.getSelected = function() {
                 return this.clusters[this.selected];
+            };
+
+            this.getNumberOfNodes = function() {
+                var count = 0;
+                if (this.selected >= 0) {
+                    for (var rack in this.getSelected().racks) {
+                        count += rack.length;
+                    }
+                }
+                return count;
+            };
+
+            this.getTotalNumberOfNodes = function() {
+                var count = 0;
+                this.clusters.forEach(function(cluster,index,array) {
+                    for (var rack in cluster.racks) {
+                        count += cluster.racks[rack].length;
+                    }
+                });
+                return count;
             };
 
             var updateCluster = function(cluster) {
@@ -56,9 +78,13 @@
                         cluster.startedOn = ((new Date() - data['start_time'])/1000 | 0);
                         cluster.state = 'STARTED';
                         cluster.haState = 'Unknown';
-                        cluster.nodes.length = 0;
+                        cluster.racks = {};
                         data['slaves'].forEach(function(node) {
-                            cluster.nodes.push({
+                            node['rack'] = '/default-rack';
+                            if (!(node['rack'] in cluster.racks)) {
+                                cluster.racks[node['rack']] = [];
+                            }
+                            cluster.racks[node['rack']].push({
                                 rack: '/default-rack',
                                 hostName: node['hostname'],
                                 state: node['active'] ? 'RUNNING' : 'INACTIVE',
@@ -78,20 +104,23 @@
             var updateNodes = function(cluster) {
                 if (cluster.ip.endsWith('8088')) {
                     $.get('http://' + cluster.ip + '/ws/v1/cluster/nodes', '', function(data) {
-                        cluster.nodes.length = 0;
+                        cluster.racks = {};
                         data['nodes']['node'].forEach(function(node) {
-                            cluster.nodes.push({
+                            if (!(node['rack'] in cluster.racks)) {
+                                cluster.racks[node['rack']] = [];
+                            }
+                            cluster.racks[node['rack']].push({
                                 rack: node['rack'],
                                 hostName: node['nodeHostName'],
                                 state: node['state'],
                                 core: node['availableVirtualCores'],
-                                usedCore: node['usedVirtualCores'],
+                                usedCore: node['usedVirtualCores']+1,
                                 mem: node['availMemoryMB'],
-                                usedMem: node['usedMemoryMB']
+                                usedMem: node['usedMemoryMB']+10240
                             });
                         })
                     }).fail(function() {
-                        cluster.nodes.length = 0;
+                        cluster.racks = {};
                     });
                 } else if (cluster.ip.endsWith('5050')) {
                     // already done.
@@ -114,10 +143,10 @@
                 restrict: 'E',
                 templateUrl: 'templates/node-list.html'
             };
-        })
-        .filter('secondsToDateTime', [function() {
-            return function(seconds) {
-                return new Date(1970, 0, 1).setSeconds(seconds);
-            };
-        }]);
+        });
+    app.filter('secondsToDateTime', [function() {
+        return function(seconds) {
+            return new Date(1970, 0, 1).setSeconds(seconds);
+        };
+    }]);
 })();
