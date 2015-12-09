@@ -1,18 +1,28 @@
 <h4>Nodes ({{clusterCtrl.getNumberOfNodes()}})</h4>
-<div class="panel panel-default" ng-repeat="(rack,nodes) in clusterCtrl.getSelected().racks">
+<div class="panel panel-primary"
+     ng-repeat="(rack,nodes) in clusterCtrl.getSelected().racks">
     <div class="panel-heading">{{rack}}</div>
     <div class="panel-body list-group">
-        <div class="list-group-item" ng-repeat="node in nodes">
+        <div class="list-group-item"
+             ng-repeat="node in nodes">
             <div>{{node.hostName}} / {{node.state}}</div>
             <div class="progress">
-                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="{{node.usedCore}}"
-                     aria-valuemin="0" aria-valuemax="{{node.core}}" ng-style="{ 'width' : 100*node.usedCore/node.core + '%'}">
+                <div class="progress-bar progress-bar-striped active"
+                     role="progressbar"
+                     aria-valuenow="{{node.usedCore}}"
+                     aria-valuemin="0"
+                     aria-valuemax="{{node.core}}"
+                     ng-style="{ 'width' : 100*node.usedCore/node.core + '%'}">
                     {{node.usedCore}} / {{node.core}}
                 </div>
             </div>
             <div class="progress">
-                <div class="progress-bar progress-bar-striped active progress-bar-info" role="progressbar" aria-valuenow="{{node.usedMem}}"
-                     aria-valuemin="0" aria-valuemax="{{node.mem}}" ng-style="{ 'width' : 100*node.usedMem/node.mem + '%' }">
+                <div class="progress-bar progress-bar-striped active progress-bar-info"
+                     role="progressbar"
+                     aria-valuenow="{{node.usedMem}}"
+                     aria-valuemin="0"
+                     aria-valuemax="{{node.mem}}"
+                     ng-style="{ 'width' : 100*node.usedMem/node.mem + '%' }">
                     {{node.usedMem}} / {{node.mem}}
                 </div>
             </div>

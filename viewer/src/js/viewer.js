@@ -68,6 +68,7 @@
                         cluster.startedOn = ((new Date() - info['startedOn'])/1000 | 0);
                         cluster.state = info['state'];
                         cluster.haState = info['haState'];
+                        cluster.color = 'ghostwhite';
                     }).fail(function() {
                         cluster.state = 'Disconnected';
                     });
@@ -79,6 +80,7 @@
                         cluster.state = 'STARTED';
                         cluster.haState = 'Unknown';
                         cluster.racks = {};
+                        cluster.color = 'aliceblue';
                         data['slaves'].forEach(function(node) {
                             node['rack'] = '/default-rack';
                             if (!(node['rack'] in cluster.racks)) {
