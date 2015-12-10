@@ -1,4 +1,4 @@
-IMAGE=dongjoon/testclusters
+IMAGE=dongjoon/testcluster
 
 LINK=""
 for i in {1..3}
