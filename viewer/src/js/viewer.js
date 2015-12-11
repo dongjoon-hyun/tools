@@ -2,6 +2,14 @@
     // jQuery Loading into electron
     window.$ = window.jQuery = require('./js/jquery.min.js');
 
+    $( document ).ajaxError(function( event, request, settings ) {
+        console.log(event);
+        var dt = new Date(event.timeStamp);
+        var time = dt.toLocaleTimeString();
+        $('#log').children().slice(2).detach();
+        $('#log').prepend('<div class="list-group-item">' + time + ' : ' + event.type + '</div>');
+    });
+
     var app = angular.module('viewer', [])
         .controller('ClusterController', function($scope, $interval) {
             this.clusters = [];
@@ -121,7 +129,7 @@
                                 usedMem: node['usedMemoryMB']+10240
                             });
                         })
-                    }).fail(function() {
+                    }).error(function() {
                         cluster.racks = {};
                     });
                 } else if (cluster.ip.endsWith('5050')) {
