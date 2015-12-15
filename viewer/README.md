@@ -1,6 +1,6 @@
 # Viewer
 
-This is a electron-based cross-platform viewer for cluster.
+This is an electron-based cross-platform cluster viewer.
 
 ## Build Apps
 ```
