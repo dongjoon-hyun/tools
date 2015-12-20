@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-FROM reefrt/mesos0.25
+FROM reefrt/mesos0.26
 MAINTAINER Dongjoon Hyun <dongjoon@apache.org>
 
 COPY core-site.xml /usr/local/hadoop/etc/hadoop/
