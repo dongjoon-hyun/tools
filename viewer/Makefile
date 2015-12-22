@@ -24,7 +24,7 @@ clean:
 
 build:
 	mkdir app
-	electron-packager . Viewer --platform=darwin,linux,win32 --arch=x64 --version=0.36.0 --overwrite --out=app --ignore=app
+	electron-packager . Viewer --platform=darwin,linux,win32 --arch=x64 --version=0.36.1 --overwrite --out=app --ignore=app
 
 docker:
 	docker build -t dongjoon/testcluster docker
