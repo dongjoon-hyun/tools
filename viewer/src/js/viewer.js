@@ -20,12 +20,13 @@
     // jQuery Loading into electron
     window.$ = window.jQuery = require('./js/jquery.min.js');
 
+    var logs = [];
+
     $( document ).ajaxError(function( event, request, settings ) {
-        console.log(event);
-        var dt = new Date(event.timeStamp);
-        var time = dt.toLocaleTimeString();
-        $('#log').children().slice(2).detach();
-        $('#log').prepend('<div class="list-group-item">' + time + ' : ' + event.type + '</div>');
+        if (logs.length > 2) {
+            logs.splice(0, 1);
+        }
+        logs.push({'type':'ERROR', 'timeStamp':event.timeStamp, 'url': settings.url});
     });
 
     var app = angular.module('viewer', [])
@@ -34,6 +35,7 @@
             this.placeHolder = '192.168.99.100:8088';
             this.ip = this.placeHolder;
             this.selected = -1;
+            this.logs = logs;
 
             var clusters = this.clusters;
 
@@ -95,6 +97,7 @@
                         cluster.state = info['state'];
                         cluster.haState = info['haState'];
                         cluster.color = 'ghostwhite';
+                        updateNodes(cluster);
                     }).fail(function() {
                         cluster.state = 'Disconnected';
                     });
@@ -126,7 +129,6 @@
                         cluster.state = 'Disconnected';
                     });
                 }
-                updateNodes(cluster);
             };
 
             var updateNodes = function(cluster) {
@@ -170,6 +172,12 @@
             return {
                 restrict: 'E',
                 templateUrl: 'templates/node-list.html'
+            };
+        })
+        .directive('logList', function() {
+            return {
+                restrict: 'E',
+                templateUrl: 'templates/log-list.html'
             };
         });
     app.filter('secondsToDateTime', [function() {

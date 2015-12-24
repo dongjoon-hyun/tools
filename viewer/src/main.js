@@ -56,8 +56,8 @@ app.on('ready', function() {
   win = new BrowserWindow({
     width: 1200,
     height: 800,
-    frame: process.platform === 'win32',
-    transparent: true
+    frame: true,
+    transparent: false
   });
   win.loadURL('file://' + __dirname + '/index.html');
   win.on('closed', function() {
