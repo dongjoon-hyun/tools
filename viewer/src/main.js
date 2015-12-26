@@ -63,7 +63,6 @@ app.on('ready', function() {
   win.on('closed', function() {
     win = null;
   });
-  win.webContents.openDevTools();
 });
 
 ipcMain.on('openDevTools', function(event, arg) {

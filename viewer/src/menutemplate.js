@@ -65,13 +65,14 @@ var menuTemplate = function () {
         },
         {
           label: 'Show Debug',
-          accelerator: commandOrCtrl() + '+d',
+          accelerator: commandOrCtrl() + '+D',
           click: function() {
             require('electron').ipcRenderer.send('openDevTools', '');
           }
         },
         {
           label: 'Hide Debug',
+          accelerator: commandOrCtrl() + '+Shift+D',
           click: function() {
             require('electron').ipcRenderer.send('closeDevTools', '');
           }
