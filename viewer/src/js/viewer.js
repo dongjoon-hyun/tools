@@ -23,7 +23,7 @@
     var logs = [];
 
     $( document ).ajaxError(function( event, request, settings ) {
-        if (logs.length > 2) {
+        if (logs.length > 1) {
             logs.splice(0, 1);
         }
         logs.push({'type':'ERROR', 'timeStamp':event.timeStamp, 'url': settings.url});
