@@ -21,6 +21,9 @@ var BrowserWindow = require('browser-window');
 const ipcMain = require('electron').ipcMain;
 
 var win = null;
+var flags = {
+  devTools: false
+};
 
 var shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
   if (win) {
@@ -65,10 +68,11 @@ app.on('ready', function() {
   });
 });
 
-ipcMain.on('openDevTools', function(event, arg) {
-  win.webContents.openDevTools();
-});
-
-ipcMain.on('closeDevTools', function(event, arg) {
-  win.webContents.closeDevTools();
+ipcMain.on('toggleDevTools', function(event, arg) {
+  if (flags['devTools']) {
+    win.webContents.closeDevTools();
+  } else {
+    win.webContents.openDevTools();
+  }
+  flags['devTools'] = !flags['devTools'];
 });

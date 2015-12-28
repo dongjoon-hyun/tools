@@ -57,23 +57,6 @@ var menuTemplate = function () {
           type: 'separator'
         },
         {
-          label: 'Show Debug',
-          accelerator: commandOrCtrl() + '+D',
-          click: function() {
-            require('electron').ipcRenderer.send('openDevTools', '');
-          }
-        },
-        {
-          label: 'Hide Debug',
-          accelerator: commandOrCtrl() + '+Shift+D',
-          click: function() {
-            require('electron').ipcRenderer.send('closeDevTools', '');
-          }
-        },
-        {
-          type: 'separator'
-        },
-        {
           label: 'Hide Viewer',
           accelerator: commandOrCtrl() + '+H',
           selector: 'hide:'
@@ -112,6 +95,25 @@ var menuTemplate = function () {
         {
           type: 'separator'
         },
+      ]
+    },
+    {
+      label: 'View',
+      submenu: [
+        {
+          label: 'Developer',
+          enabled: true,
+          submenu: [
+            {
+              label: 'Toggle Developer Tools',
+              enabled: true,
+              accelerator: commandOrCtrl() + '+Alt+I',
+              click: function() {
+                require('electron').ipcRenderer.send('toggleDevTools', '');
+              }
+            }
+          ]
+        }
       ]
     }
   ]
