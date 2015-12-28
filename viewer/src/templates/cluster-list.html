@@ -29,7 +29,8 @@ under the License.
         </button>
         <a ng-click="clusterCtrl.select($index)">
             <h4>{{cluster.name}}</h4>
-            <p>{{cluster.resourceManagerType}} {{cluster.resourceManagerVersion}}
+            <p ng-show="cluster.state == 'STARTED'">
+                {{cluster.resourceManagerType}} {{cluster.resourceManagerVersion}}
                 - {{cluster.startedOn | secondsToDateTime | date:'HH:mm:ss'}}</p>
             <button ng-show="cluster.state != 'STARTED'"
                     type="button"
