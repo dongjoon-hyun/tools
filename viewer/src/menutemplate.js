@@ -29,7 +29,18 @@ var menuTemplate = function () {
           label: 'About Viewer',
           enabled: true,
           click: function () {
-            //router.get().transitionTo('about');
+          }
+        },
+        {
+          label: 'View License',
+          enabled: true,
+          click: function () {
+          }
+        },
+        {
+          label: 'Version ' + app.getVersion(),
+          enabled: false,
+          click: function () {
           }
         },
         {
@@ -40,28 +51,10 @@ var menuTemplate = function () {
           accelerator: commandOrCtrl() + '+,',
           enabled: true,
           click: function () {
-            //router.get().transitionTo('preferences');
           }
         },
         {
           type: 'separator'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Hide',
-          accelerator: commandOrCtrl() + '+H',
-          selector: 'hide:'
-        },
-        {
-          label: 'Hide Others',
-          accelerator: commandOrCtrl() + '+Shift+H',
-          selector: 'hideOtherApplications:'
-        },
-        {
-          label: 'Show All',
-          selector: 'unhideAllApplications:'
         },
         {
           label: 'Show Debug',
@@ -76,6 +69,23 @@ var menuTemplate = function () {
           click: function() {
             require('electron').ipcRenderer.send('closeDevTools', '');
           }
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Hide Viewer',
+          accelerator: commandOrCtrl() + '+H',
+          selector: 'hide:'
+        },
+        {
+          label: 'Hide Others',
+          accelerator: commandOrCtrl() + '+Shift+H',
+          selector: 'hideOtherApplications:'
+        },
+        {
+          label: 'Show All',
+          selector: 'unhideAllApplications:'
         },
         {
           type: 'separator'
