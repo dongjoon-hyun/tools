@@ -20,7 +20,7 @@ under the License.
 <div class="list-group">
     <div class="list-group-item"
          ng-style="{ 'background-color': cluster.color }"
-         ng-repeat="cluster in clusterCtrl.clusters">
+         ng-repeat="cluster in clusterCtrl.clusters track by $index">
         <button type="button"
                 class="close"
                 aria-label="Close"

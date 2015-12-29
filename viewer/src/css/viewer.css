@@ -20,17 +20,8 @@ html, body {
     height: 100%;
 }
 .main {
-    height: 100%;
-}
-.header {
-    overflow: auto;
-    height: 12%;
 }
 .cluster-view {
-    overflow: auto;
-    height: 65%;
 }
 .log-view {
-    overflow: auto;
-    height: 23%;
 }

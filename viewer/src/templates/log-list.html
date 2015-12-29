@@ -16,10 +16,10 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<div class="panel panel-info">
+<div class="panel panel-info" style="height:100%">
     <div class="panel-heading">Log</div>
-    <ul class="panel-body list-group">
-        <li class="list-group-item" ng-repeat="log in clusterCtrl.logs">
+    <ul class="panel-body list-group" style="height:100%">
+        <li class="list-group-item" ng-repeat="log in clusterCtrl.logs track by $index">
             [{{log.timeStamp | date:'HH:mm:ss'}}] {{log.type}} : {{log.url}}
         </li>
     </ul>

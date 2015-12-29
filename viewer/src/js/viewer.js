@@ -29,7 +29,7 @@
         logs.push({'type':'ERROR', 'timeStamp':event.timeStamp, 'url': settings.url});
     });
 
-    var app = angular.module('viewer', [])
+    var app = angular.module('viewer', ['ui.layout'])
         .controller('ClusterController', function($scope, $interval) {
             this.clusters = [];
             this.placeHolder = '192.168.99.100:8088';
