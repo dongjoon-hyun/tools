@@ -71,7 +71,7 @@
                 var count = 0;
                 if (this.selected >= 0) {
                     for (var rack in this.getSelected().racks) {
-                        count += rack.length;
+                        count += this.getSelected().racks[rack].length;
                     }
                 }
                 return count;
@@ -112,11 +112,11 @@
                         cluster.color = 'aliceblue';
                         data['slaves'].forEach(function(node) {
                             node['rack'] = '/default-rack';
-                            if (!(node['rack'] in cluster.racks)) {
+                            if (!cluster.racks.hasOwnProperty(node['rack'])) {
                                 cluster.racks[node['rack']] = [];
                             }
                             cluster.racks[node['rack']].push({
-                                rack: '/default-rack',
+                                rack: node['rack'],
                                 hostName: node['hostname'],
                                 state: node['active'] ? 'RUNNING' : 'INACTIVE',
                                 core: node['resources'].cpus,
