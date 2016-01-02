@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<h5>Nodes ({{clusterCtrl.getNumberOfNodes()}})</h5>
+<div>NODES ({{clusterCtrl.getNumberOfNodes()}})</div>
 <div class="panel panel-primary"
      ng-repeat="(rack,nodes) in clusterCtrl.getSelected().racks track by $index">
     <div class="panel-heading">{{rack}}</div>

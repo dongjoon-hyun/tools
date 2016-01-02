@@ -26,6 +26,9 @@ html, body {
 }
 .cluster-view {
 }
+a {
+    text-decoration: none !important;
+}
 .log-view {
 }
 .btn-circle {

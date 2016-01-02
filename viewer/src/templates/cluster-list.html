@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<h5>Clusters ({{clusterCtrl.clusters.length}})</h5>
+<div>CLUSTERS ({{clusterCtrl.clusters.length}})</div>
 <div class="list-group">
     <div class="list-group-item"
          ng-repeat="cluster in clusterCtrl.clusters track by $index">
@@ -27,19 +27,19 @@ under the License.
             <span aria-hidden="true">&times;</span>
         </button>
         <a ng-click="clusterCtrl.select($index)">
-            <h5>{{cluster.name}}</h5>
+            <div>{{cluster.name}}</div>
             <p ng-show="cluster.state == 'STARTED'">
                 {{cluster.resourceManagerType}} {{cluster.resourceManagerVersion}}
                 - {{cluster.startedOn | secondsToDateTime | date:'HH:mm:ss'}}</p>
             <button ng-show="cluster.state != 'STARTED'"
                     type="button"
-                    class="btn btn-warning">CONNECTING</button>
+                    class="btn btn-warning btn-xs">CONNECTING</button>
             <button ng-show="cluster.state == 'STARTED'"
                     type="button"
-                    class="btn btn-success">STARTED</button>
+                    class="btn btn-success btn-xs">STARTED</button>
             <button ng-show="cluster.haState == 'ACTIVE'"
                     type="button"
-                    class="btn btn-primary">HA</button>
+                    class="btn btn-primary btn-xs">HA</button>
         </a>
     </div>
 </div>
