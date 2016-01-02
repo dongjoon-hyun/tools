@@ -23,7 +23,7 @@ under the License.
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="css/ui-layout.css"/>
     <link rel="stylesheet" type="text/css" href="css/viewer.css">
 
@@ -55,17 +55,23 @@ under the License.
 </head>
 <body ng-controller="ClusterController as clusterCtrl">
 <div ui-layout options="{ dividerSize: 1, disableToggle: true}">
-    <div ui-layout-container size="10%" id="header">
-        <h3 style="margin:5px">Viewer</h3>
-        <form class="form-inline" ng-submit="clusterCtrl.add()">
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-addon">http://</div>
-                    <input type="text" class="form-control" ng-model="clusterCtrl.ip" size="30" value="{{clusterCtrl.ip}}">
-                </div>
+    <div ui-layout-container size="48px" min-size="48px" id="header">
+        <div ui-layout options="{ flow: 'column', dividerSize: 1, disableToggle: true }">
+            <div ui-layout-container size="10%">
+                <h4 style="margin:5px">Viewer</h4>
             </div>
-            <button class="btn btn-primary" type="submit">Add New Cluster</button>
-        </form>
+            <div ui-layout-container size="90%">
+                <form class="form-inline" ng-submit="clusterCtrl.add()">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">http://</div>
+                            <input type="text" class="form-control" ng-model="clusterCtrl.ip" size="30" value="{{clusterCtrl.ip}}">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Add New Cluster</button>
+                </form>
+            </div>
+        </div>
     </div>
     <div ui-layout-container id="main">
         <div ui-layout options="{ flow: 'column', dividerSize: 1, disableToggle: true }">

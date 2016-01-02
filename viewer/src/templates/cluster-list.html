@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<h4>Clusters ({{clusterCtrl.clusters.length}})</h4>
+<h5>Clusters ({{clusterCtrl.clusters.length}})</h5>
 <div class="list-group">
     <div class="list-group-item"
          ng-style="{ 'background-color': cluster.color }"
@@ -28,7 +28,7 @@ under the License.
             <span aria-hidden="true">&times;</span>
         </button>
         <a ng-click="clusterCtrl.select($index)">
-            <h4>{{cluster.name}}</h4>
+            <h5>{{cluster.name}}</h5>
             <p ng-show="cluster.state == 'STARTED'">
                 {{cluster.resourceManagerType}} {{cluster.resourceManagerVersion}}
                 - {{cluster.startedOn | secondsToDateTime | date:'HH:mm:ss'}}</p>
