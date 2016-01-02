@@ -51,16 +51,25 @@ under the License.
 
         // Menu
         remote.Menu.setApplicationMenu(remote.Menu.buildFromTemplate(menuTemplate()));
+
+        $(document).ready(function() {
+            $('.ui-splitbar').css('background', 'black');
+        });
     </script>
 </head>
 <body ng-controller="ClusterController as clusterCtrl">
 <div ui-layout options="{ dividerSize: 1, disableToggle: true}">
     <div ui-layout-container size="48px" min-size="48px" id="header">
-        <div ui-layout options="{ flow: 'column', dividerSize: 1, disableToggle: true }">
-            <div ui-layout-container size="10%">
+        <div ui-layout options="{ flow: 'column', dividerSize: 0, disableToggle: true }">
+            <div ui-layout-container size="100px" style="margin:14px">
+                <button type="button" class="btn btn-danger btn-circle" onclick="window.close()"></button>
+                <button type="button" class="btn btn-warning btn-circle" onclick="require('electron').ipcRenderer.send('minimize', '');"></button>
+                <button type="button" class="btn btn-success btn-circle" onclick="require('electron').ipcRenderer.send('toggleFullScreen', '');"></button>
+            </div>
+            <div ui-layout-container size="100px" style="top:10%;">
                 <h4 style="margin:5px">Viewer</h4>
             </div>
-            <div ui-layout-container size="90%">
+            <div ui-layout-container style="top:10%">
                 <form class="form-inline" ng-submit="clusterCtrl.add()">
                     <div class="form-group">
                         <div class="input-group">
@@ -68,14 +77,14 @@ under the License.
                             <input type="text" class="form-control" ng-model="clusterCtrl.ip" size="30" value="{{clusterCtrl.ip}}">
                         </div>
                     </div>
-                    <button class="btn btn-primary" type="submit">Add New Cluster</button>
+                    <button class="btn btn-success" type="submit">Add New Cluster</button>
                 </form>
             </div>
         </div>
     </div>
     <div ui-layout-container id="main">
         <div ui-layout options="{ flow: 'column', dividerSize: 1, disableToggle: true }">
-            <div ui-layout-container size="20%">
+            <div ui-layout-container size="20%" min-size="200px" id="sidebar">
                 <cluster-list>
                 </cluster-list>
             </div>
@@ -83,12 +92,12 @@ under the License.
                 <node-list>
                 </node-list>
             </div>
-            <div ui-layout-container size="10%">
-                details
+            <div ui-layout-container size="10%" min-size="200px">
+                <h5>Details</h5>
             </div>
         </div>
     </div>
-    <div ui-layout-container size="20%" id="footer">
+    <div ui-layout-container size="10%" min-size="96px" id="footer">
         <log-list>
         </log-list>
     </div>

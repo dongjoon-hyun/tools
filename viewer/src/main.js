@@ -22,7 +22,8 @@ const ipcMain = require('electron').ipcMain;
 
 var win = null;
 var flags = {
-  devTools: false
+  devTools: false,
+  fullscreen: false
 };
 
 var shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
@@ -59,7 +60,7 @@ app.on('ready', function() {
   win = new BrowserWindow({
     width: 1200,
     height: 800,
-    frame: true,
+    frame: false,
     transparent: false
   });
   win.loadURL('file://' + __dirname + '/index.html');
@@ -75,4 +76,17 @@ ipcMain.on('toggleDevTools', function(event, arg) {
     win.webContents.openDevTools();
   }
   flags['devTools'] = !flags['devTools'];
+});
+
+ipcMain.on('maximize', function(event, arg) {
+  win.maximize();
+});
+
+ipcMain.on('minimize', function(event, arg) {
+  win.minimize();
+});
+
+ipcMain.on('toggleFullScreen', function(event, arg) {
+  flags['fullScreen'] = !flags['fullScreen'];
+  win.setFullScreen(flags['fullScreen']);
 });
