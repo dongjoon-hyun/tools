@@ -115,6 +115,18 @@ var menuTemplate = function () {
           ]
         }
       ]
+    },
+    {
+      label: 'Help',
+      submenu: [
+        {
+          label: 'Show Licenses',
+          enabled: true,
+          click: function() {
+            openLicense();
+          }
+        }
+      ]
     }
   ]
 };

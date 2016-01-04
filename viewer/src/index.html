@@ -31,6 +31,7 @@ under the License.
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/ui-layout.js"></script>
+    <script src="js/ui-bootstrap.min.js"></script>
 
     <!-- angular js app -->
     <script src="js/viewer.js"></script>
@@ -58,6 +59,12 @@ under the License.
     </script>
 </head>
 <body ng-controller="ClusterController as clusterCtrl">
+<div class="invisible">
+    <button id="openLicense" ng-click="clusterCtrl.openDialog('templates/licenses.html')"></button>
+</div>
+<script>
+    var openLicense = function(id) { $('#openLicense').click(); };
+</script>
 <div ui-layout options="{ dividerSize: 1, disableToggle: true}">
     <div ui-layout-container size="48px" min-size="48px" id="header">
         <div ui-layout options="{ flow: 'column', dividerSize: 0, disableToggle: true }">

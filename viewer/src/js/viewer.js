@@ -29,8 +29,8 @@
         logs.push({'type':'ERROR', 'timeStamp':event.timeStamp, 'url': settings.url});
     });
 
-    var app = angular.module('viewer', ['ui.layout'])
-        .controller('ClusterController', function($scope, $interval) {
+    var app = angular.module('viewer', ['ui.layout', 'ui.bootstrap'])
+        .controller('ClusterController', function($scope, $interval, $uibModal) {
             this.clusters = [];
             this.placeHolder = '192.168.99.100:8088';
             this.ip = this.placeHolder;
@@ -168,6 +168,26 @@
                 clusters.forEach(updateCluster);
             };
             $interval(function() { $scope.updateClusters(); }, 2000);
+
+            this.openDialog = function (templateUrl, size) {
+                var modalInstance = $uibModal.open({
+                    animation: false,
+                    templateUrl: templateUrl,
+                    controller: 'ModalInstanceCtrl',
+                    size: size,
+                    resolve: {
+                        items: function () {
+                            return ['item1', 'item2', 'item3'];
+                        }
+                    }
+                });
+                modalInstance.result.then(function (selectedItem) {
+                    console.log('Selected: ' + selectedItem);
+                    $scope.selected = selectedItem;
+                }, function () {
+                    console.log('Modal dismissed at: ' + new Date());
+                });
+            };
         })
         .directive('clusterList', function() {
             return {
@@ -211,6 +231,21 @@
                     return Object.defineProperty(obj[key], '$key', { enumerable: false, value: key});
                 });
             }
+        };
+    });
+
+    var popup = angular.module('viewer').controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items) {
+        $scope.items = items;
+        $scope.selected = {
+            item: $scope.items[0]
+        };
+
+        $scope.ok = function () {
+            $uibModalInstance.close($scope.selected.item);
+        };
+
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
         };
     });
 })();
