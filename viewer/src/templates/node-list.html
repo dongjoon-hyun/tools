@@ -18,32 +18,14 @@ under the License.
 -->
 <div>NODES ({{clusterCtrl.getNumberOfNodes()}})</div>
 <div class="panel panel-primary"
-     ng-repeat="(rack,nodes) in clusterCtrl.getSelected().racks track by $index">
+     ng-repeat="(rack,nodes) in clusterCtrl.getSelectedCluster().racks track by $index">
     <div class="panel-heading">{{rack}}</div>
     <div class="panel-body list-group">
         <div class="list-group-item"
              ng-repeat="node in nodes">
-            <div>{{node.hostName}} / {{node.state}}</div>
-            <div class="progress">
-                <div class="progress-bar progress-bar-striped active"
-                     role="progressbar"
-                     aria-valuenow="{{node.usedCore}}"
-                     aria-valuemin="0"
-                     aria-valuemax="{{node.core}}"
-                     ng-style="{ 'width' : 100*node.usedCore/node.core + '%'}">
-                    {{node.usedCore}} / {{node.core}}
-                </div>
-            </div>
-            <div class="progress">
-                <div class="progress-bar progress-bar-striped active progress-bar-info"
-                     role="progressbar"
-                     aria-valuenow="{{node.usedMem}}"
-                     aria-valuemin="0"
-                     aria-valuemax="{{node.mem}}"
-                     ng-style="{ 'width' : 100*node.usedMem/node.mem + '%' }">
-                    {{node.usedMem}} / {{node.mem}}
-                </div>
-            </div>
+            <a href="" ng-click="alert('1');">
+                <div>{{node.hostName}} / {{node.state}}</div>
+            </a>
         </div>
     </div>
 </div>

@@ -63,15 +63,22 @@
                 }
             };
 
-            this.getSelected = function() {
+            this.getSelectedCluster = function() {
                 return this.clusters[this.selected];
+            };
+
+            this.getSelectedNode = function() {
+                if (this.getSelectedCluster()) {
+                    return this.getSelectedCluster().racks[Object.keys(this.getSelectedCluster().racks)[0]][0];
+                }
+                return null;
             };
 
             this.getNumberOfNodes = function() {
                 var count = 0;
                 if (this.selected >= 0) {
-                    for (var rack in this.getSelected().racks) {
-                        count += this.getSelected().racks[rack].length;
+                    for (var rack in this.getSelectedCluster().racks) {
+                        count += this.getSelectedCluster().racks[rack].length;
                     }
                 }
                 return count;
@@ -144,9 +151,9 @@
                                 hostName: node['nodeHostName'],
                                 state: node['state'],
                                 core: node['availableVirtualCores'],
-                                usedCore: node['usedVirtualCores']+1,
+                                usedCore: node['usedVirtualCores'],
                                 mem: node['availMemoryMB'],
-                                usedMem: node['usedMemoryMB']+10240
+                                usedMem: node['usedMemoryMB']
                             });
                         })
                     }).error(function() {
@@ -172,6 +179,12 @@
             return {
                 restrict: 'E',
                 templateUrl: 'templates/node-list.html'
+            };
+        })
+        .directive('nodeDetail', function() {
+            return {
+                restrict: 'E',
+                templateUrl: 'templates/node-detail.html'
             };
         })
         .directive('logList', function() {
