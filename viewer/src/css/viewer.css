@@ -22,7 +22,8 @@ html, body {
 #header, #sidebar {
     background-color: #282828;
 }
-.main {
+#node-list {
+    background-color: #181818;
 }
 .cluster-view {
 }
