@@ -19,7 +19,7 @@ under the License.
 <div>CLUSTERS ({{clusterCtrl.clusters.length}})</div>
 <div class="list-group">
     <div class="list-group-item"
-         ng-repeat="cluster in clusterCtrl.clusters track by $index">
+         ng-repeat="cluster in clusterCtrl.clusters | orderBy:'name' track by $index">
         <button type="button"
                 class="close"
                 aria-label="Close"

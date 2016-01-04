@@ -143,7 +143,7 @@
                     $.get('http://' + cluster.ip + '/ws/v1/cluster/nodes', '', function(data) {
                         cluster.racks = {};
                         data['nodes']['node'].forEach(function(node) {
-                            if (!(node['rack'] in cluster.racks)) {
+                            if (!cluster.racks.hasOwnProperty(node['rack'])) {
                                 cluster.racks[node['rack']] = [];
                             }
                             cluster.racks[node['rack']].push({
@@ -198,4 +198,19 @@
             return new Date(1970, 0, 1).setSeconds(seconds);
         };
     }]);
+    app.filter('toArray', function () {
+        return function (obj, addKey) {
+            if (!(obj instanceof Object)) {
+                return obj;
+            }
+
+            if ( addKey === false ) {
+                return Object.values(obj);
+            } else {
+                return Object.keys(obj).map(function (key) {
+                    return Object.defineProperty(obj[key], '$key', { enumerable: false, value: key});
+                });
+            }
+        };
+    });
 })();

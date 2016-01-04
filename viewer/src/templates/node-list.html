@@ -18,11 +18,11 @@ under the License.
 -->
 <div>NODES ({{clusterCtrl.getNumberOfNodes()}})</div>
 <div class="panel panel-primary"
-     ng-repeat="(rack,nodes) in clusterCtrl.getSelectedCluster().racks track by $index">
-    <div class="panel-heading">{{rack}}</div>
+     ng-repeat="item in clusterCtrl.getSelectedCluster().racks | toArray | orderBy:'$key' track by $index">
+    <div class="panel-heading">{{item.$key}}</div>
     <div class="panel-body list-group">
         <div class="list-group-item"
-             ng-repeat="node in nodes">
+             ng-repeat="node in item | orderBy:'hostName' track by $index">
             <a href="" ng-click="alert('1');">
                 <div>{{node.hostName}} / {{node.state}}</div>
             </a>
