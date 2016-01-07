@@ -19,7 +19,11 @@
 html, body {
     height: 100%;
 }
-#header, #sidebar {
+#header {
+    -webkit-app-region: drag;
+    background-color: #282828;
+}
+#sidebar {
     background-color: #282828;
 }
 #node-list {
@@ -40,4 +44,5 @@ a {
     font-size: 9px;
     line-height: 1.428571429;
     border-radius: 15px;
+    margin-right: 2px;
 }
