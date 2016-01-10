@@ -60,7 +60,7 @@ app.on('ready', function() {
   win = new BrowserWindow({
     width: 1200,
     height: 800,
-    frame: false,
+    frame: process.platform === 'win32',
     transparent: false
   });
   win.loadURL('file://' + __dirname + '/index.html');
