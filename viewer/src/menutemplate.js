@@ -125,6 +125,22 @@ var menuTemplate = function () {
           click: function() {
             openLicense();
           }
+        },
+        {
+          label: 'Send a feedback',
+          enabled: true,
+          click: function() {
+            var newline = '%0A';
+            var mailto = 'support@sfbasoft.com';
+            var subject = '[v' + app.getVersion() + '/' + navigator.platform + '/' + navigator.language + '] Viewer Feedback';
+            var comment = '[Feedback]' + newline + 'Please enter here' + newline.repeat(10);
+            var version = '[Environment]' + newline;
+            for (var prop in process.versions) {
+              version += prop + ': v' + process.versions[prop] + newline;
+            }
+            var body = comment + version + newline;
+            require('shell').openExternal('mailto:' + mailto + '?subject=' + subject + '\&body=' + body);
+          }
         }
       ]
     }
