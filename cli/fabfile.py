@@ -33,6 +33,7 @@ import spark
 import hive
 import caffe
 import r
+import tensorflow
 import dolphin
 import deepdist
 import cuda
