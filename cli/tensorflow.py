@@ -30,13 +30,10 @@ __version__ = '0.1'
 from fabric.api import *
 
 @task
-def lm(inpath, outpath, step, maxiter):
+def lm(inpath, step, maxiter):
     """
-    fab tensorflow.lm:/sample/sample_regression,/tmp/lm_result,0.5,10
+    fab tensorflow.lm:/sample/sample_regression,0.1,100
     """
-    if not (outpath.startswith('/tmp/') or outpath.startswith('/user/hadoop/')):
-        print 'Unauthorized path: %(outpath)s' % locals()
-        return
     run('mkdir %s' % env.dir)
     with cd(env.dir):
         run('''cat <<'EOF' > tensorflow.lm.py
@@ -63,8 +60,7 @@ sess = tf.Session()
 sess.run(tf.initialize_all_variables())
 for step in xrange(%(maxiter)s):
     sess.run(train)
-print(step, sess.run(W), sess.run(b))
-
+print "%%.2f * x + %%.2f" %% (sess.run(W), sess.run(b))
 EOF''' % locals())
         cmd = '/usr/bin/env python tensorflow.lm.py 2> /dev/null'
         run(cmd)
