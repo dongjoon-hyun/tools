@@ -48,7 +48,7 @@ import datetime
 env.dir = '/log/cli/%s_%s' % (datetime.datetime.now().__format__('%Y%m%d_%H%M'), os.getpid())
 env.hosts = ['xxxx']
 env.warn_only = True
-env.user = 'userid'
+env.user = ''
 env.password = ''
 env.output_prefix = False
 output['status'] = False
