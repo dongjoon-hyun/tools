@@ -31,6 +31,21 @@ from fabric.api import *
 
 
 @task
+def lm(inpath):
+    """
+    fab r.lm:/sample/sample_regression
+    """
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<'EOF' > r.lm.R
+df <- read.table("%(inpath)s", header=F, sep=" ", stringsAsFactors=F, col.names=c('x','y'))
+lm(y ~ x, data=df)
+EOF''' % locals())
+        cmd = '/usr/bin/Rscript --vanilla r.lm.R'
+        run(cmd)
+
+
+@task
 def word_cloud(inpath, topk, outpath, sep='\01'):
     """
     fab r.word_cloud:/user/hadoop/tf_result/part-00000,100,/user/hadoop/wordcloud.png
