@@ -20,6 +20,7 @@
 
 """
 Tensorflow CLI Fabric File
+(Based on TensorFlow Website)[https://www.tensorflow.org]
 """
 
 __author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
@@ -63,4 +64,48 @@ for step in xrange(%(maxiter)s):
 print "%%.2f * x + %%.2f" %% (sess.run(W), sess.run(b))
 EOF''' % locals())
         cmd = '/usr/bin/env python tensorflow.lm.py 2> /dev/null'
+        run(cmd)
+
+
+@task
+def mnist(inpath):
+    """
+    fab tensorflow.mnist:/sample/mnist/
+    """
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<'EOF' > tensorflow.mnist.py
+# -*- coding: utf-8 -*-
+import tensorflow as tf
+from tensorflow.examples.tutorials.mnist import input_data
+
+# Data.
+mnist = input_data.read_data_sets("%(inpath)s", one_hot=True)
+
+# Model.
+x = tf.placeholder(tf.float32, [None, 784])
+#W = tf.Variable(tf.zeros([784, 10]))
+W = tf.Variable(tf.truncated_normal([784, 10], stddev=0.1))
+#b = tf.Variable(tf.zeros([10]))
+b = tf.Variable(tf.constant(0.1, shape=[10]))
+y = tf.nn.softmax(tf.matmul(x, W) + b)
+
+# Train.
+y_ = tf.placeholder(tf.float32, [None, 10])
+cross_entropy = -tf.reduce_sum(y_ * tf.log(y))
+train_step = tf.train.AdamOptimizer(0.001).minimize(cross_entropy)
+
+# Start.
+sess = tf.Session()
+sess.run(tf.initialize_all_variables())
+for i in range(2000):
+  batch_xs, batch_ys = mnist.train.next_batch(500)
+  sess.run(train_step, {x: batch_xs, y_: batch_ys})
+
+# Test.
+correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+print(sess.run(accuracy, {x: mnist.test.images, y_: mnist.test.labels}))
+EOF''' % locals())
+        cmd = '/usr/bin/env python tensorflow.mnist.py 2> /dev/null | grep -v Extracting '
         run(cmd)
