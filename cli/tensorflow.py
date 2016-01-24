@@ -68,9 +68,9 @@ EOF''' % locals())
 
 
 @task
-def mnist(inpath):
+def mnist(inpath,outpath):
     """
-    fab tensorflow.mnist:/sample/mnist/
+    fab tensorflow.mnist:/sample/mnist,/tmp/mnist
     """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
@@ -80,7 +80,7 @@ import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 
 # Data.
-mnist = input_data.read_data_sets("%(inpath)s", one_hot=True)
+mnist = input_data.read_data_sets("%(inpath)s/", one_hot=True)
 
 # Model.
 x = tf.placeholder(tf.float32, [None, 784])
@@ -104,6 +104,10 @@ for i in range(4000):
 correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 print(sess.run(accuracy, {x: mnist.test.images, y_: mnist.test.labels}))
+
+# Save.
+saver = tf.train.Saver()
+saver.save(sess, "%(outpath)s/model", 0)
 EOF''' % locals())
         cmd = '/usr/bin/env python tensorflow.mnist.py 2> /dev/null | grep -v Extracting '
         run(cmd)
