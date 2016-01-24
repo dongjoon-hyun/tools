@@ -84,9 +84,7 @@ mnist = input_data.read_data_sets("%(inpath)s", one_hot=True)
 
 # Model.
 x = tf.placeholder(tf.float32, [None, 784])
-#W = tf.Variable(tf.zeros([784, 10]))
 W = tf.Variable(tf.truncated_normal([784, 10], stddev=0.1))
-#b = tf.Variable(tf.zeros([10]))
 b = tf.Variable(tf.constant(0.1, shape=[10]))
 y = tf.nn.softmax(tf.matmul(x, W) + b)
 
@@ -98,7 +96,7 @@ train_step = tf.train.AdamOptimizer(0.001).minimize(cross_entropy)
 # Start.
 sess = tf.Session()
 sess.run(tf.initialize_all_variables())
-for i in range(2000):
+for i in range(4000):
   batch_xs, batch_ys = mnist.train.next_batch(500)
   sess.run(train_step, {x: batch_xs, y_: batch_ys})
 
