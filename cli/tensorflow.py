@@ -84,12 +84,12 @@ mnist = input_data.read_data_sets("%(inpath)s/", one_hot=True)
 
 # Model.
 x = tf.placeholder(tf.float32, [None, 784])
+y_ = tf.placeholder(tf.float32, [None, 10])
 W = tf.Variable(tf.truncated_normal([784, 10], stddev=0.1))
 b = tf.Variable(tf.constant(0.1, shape=[10]))
 y = tf.nn.softmax(tf.matmul(x, W) + b)
 
 # Train.
-y_ = tf.placeholder(tf.float32, [None, 10])
 cross_entropy = -tf.reduce_sum(y_ * tf.log(y))
 train_step = tf.train.AdamOptimizer(0.001).minimize(cross_entropy)
 
@@ -110,4 +110,38 @@ saver = tf.train.Saver()
 saver.save(sess, "%(outpath)s/model", 0)
 EOF''' % locals())
         cmd = '/usr/bin/env python tensorflow.mnist.py 2> /dev/null | grep -v Extracting '
+        run(cmd)
+
+
+@task()
+def predict(inpath, model):
+    """
+    fab tensorflow.predict:/sample/mnist,/tmp/mnist/model-0
+    """
+    run('mkdir %s' % env.dir)
+    with cd(env.dir):
+        run('''cat <<'EOF' > tensorflow.predict.py
+# -*- coding: utf-8 -*-
+import tensorflow as tf
+from tensorflow.examples.tutorials.mnist import input_data
+
+# Model.
+x = tf.placeholder(tf.float32, [None, 784])
+y_ = tf.placeholder(tf.float32, [None, 10])
+W = tf.Variable(tf.truncated_normal([784, 10], stddev=0.1))
+b = tf.Variable(tf.constant(0.1, shape=[10]))
+y = tf.nn.softmax(tf.matmul(x, W) + b)
+
+# Load pre-built variables.
+sess = tf.Session()
+saver = tf.train.Saver()
+saver.restore(sess, "%(model)s")
+
+# Predict.
+mnist = input_data.read_data_sets("%(inpath)s/", one_hot=True)
+correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+print(sess.run(accuracy, {x: mnist.test.images, y_: mnist.test.labels}))
+EOF''' % locals())
+        cmd = '/usr/bin/env python tensorflow.predict.py'
         run(cmd)
