@@ -148,9 +148,9 @@ EOF''' % locals())
 
 
 @task
-def mnist_conv(inpath, epoch):
+def mnist_conv(inpath, epoch, outpath):
     """
-    fab tensorflow.mnist_conv:/sample/mnist,1
+    fab tensorflow.mnist_conv:/sample/mnist,1,/tmp/mnist_conv
     """
     run('mkdir %s' % env.dir)
     with cd(env.dir):
@@ -242,6 +242,10 @@ with tf.Session() as sess:
     _, l, lr, predictions = sess.run([optimizer, loss, learning_rate, train_prediction], feed_dict=feed_dict)
     print('%%.1f' %% error_rate(eval_in_batches(batch_data, sess), batch_labels))
   print('%%.1f' %% error_rate(eval_in_batches(test_data, sess), test_labels))
+
+  # Save.
+  saver = tf.train.Saver()
+  saver.save(sess, "%(outpath)s/model", 0)
 EOF''' % locals())
         cmd = '/usr/bin/env python tensorflow.mnist_conv.py 2> /dev/null'
         run(cmd)
