@@ -23,7 +23,7 @@ Public Tweet Collector
 """
 
 __author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
-__copyright__ = 'Copyright (c) 2015'
+__copyright__ = 'Copyright (c) 2015-2016'
 __license__ = 'Apache License 2.0'
 __version__ = '0.1'
 

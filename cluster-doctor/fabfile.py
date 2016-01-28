@@ -24,7 +24,7 @@ Check configuration & status of all nodes in a cluster.
 """
 
 __author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
-__copyright__ = 'Copyright (c) 2015'
+__copyright__ = 'Copyright (c) 2015-2016'
 __license__ = 'Apache License'
 __version__ = '0.1'
 

@@ -25,6 +25,7 @@ HDFS CLI Fabric File
 from fabric.api import *
 
 __author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
+__copyright__ = 'Copyright (c) 2015-2016'
 __license__ = 'Apache License'
 __version__ = '0.2'
 
