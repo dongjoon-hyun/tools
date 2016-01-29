@@ -28,7 +28,7 @@ __copyright__ = 'Copyright (c) 2015-2016'
 __license__ = 'Apache License'
 __version__ = '0.1'
 
-from fabric.api import *
+from fabric.api import roles, run, env, output
 
 env.roledefs = dict()
 env.roledefs['nn'] = []  # Add name node IPs

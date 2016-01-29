@@ -22,7 +22,7 @@
 HDFS CLI Fabric File
 """
 
-from fabric.api import *
+from fabric.api import task, run
 
 __author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
 __copyright__ = 'Copyright (c) 2015-2016'

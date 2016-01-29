@@ -28,7 +28,7 @@ __license__ = 'Apache License'
 __version__ = '0.1'
 
 import os
-from fabric.api import *
+from fabric.api import task, hosts, run, env, cd
 
 
 @task

@@ -28,7 +28,7 @@ __copyright__ = 'Copyright (c) 2016'
 __license__ = 'Apache License'
 __version__ = '0.1'
 
-from fabric.api import *
+from fabric.api import task, run, env, cd
 
 @task
 def lm(inpath, step, maxiter):
