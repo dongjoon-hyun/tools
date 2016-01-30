@@ -22,29 +22,36 @@
 TED Crawler
 """
 
-__author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
-__copyright__ = 'Copyright (c) 2015-2016'
-__license__ = 'Apache License'
-__version__ = '0.1'
+# pylint: disable=line-too-long, bare-except
 
 import os
 import re
 import sys
 import time
-import getopt
 import urllib2
 from bs4 import BeautifulSoup
+import gflags
+
+__author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
+__copyright__ = 'Copyright (c) 2015-2016'
+__license__ = 'Apache License'
+__version__ = '0.1'
+
+FLAGS = gflags.FLAGS
+gflags.DEFINE_string('crawl', None, 'Crawl.', short_name='c')
+gflags.DEFINE_boolean('parse', None, 'Parse.', short_name='p')
+gflags.DEFINE_boolean('debug', False, 'produces debugging output')
 
 
-class TED:
+class TED(object):
     """
     TED
     """
-
     def __init__(self):
         pass
 
     def crawl(self, lang='ko'):
+        """Crawl list pages."""
         try:
             os.mkdir('talks')
         except:
@@ -55,8 +62,9 @@ class TED:
                 self.crawl_page(url, language)
 
     def crawl_page(self, url, language):
+        """Crawl a page."""
         print url
-        soup = BeautifulSoup(urllib2.urlopen(url).read())
+        soup = BeautifulSoup(urllib2.urlopen(url).read(), "html.parser")
         for link in soup.find_all('a'):
             url = link.get('href')
             if url.startswith('/talks/'):
@@ -65,13 +73,15 @@ class TED:
                     continue
                 html_file = open('.%(filename)s_%(language)s.html' % locals(), 'w')
                 print 'http://www.ted.com%(filename)s?language=%(language)s' % locals()
-                f = urllib2.urlopen('http://www.ted.com%(filename)s/transcript?language=%(language)s' % locals())
-                html_file.write(f.read())
+                content = urllib2.urlopen('http://www.ted.com%(filename)s/transcript?language=%(language)s'
+                                          % locals())
+                html_file.write(content.read())
                 html_file.close()
 
                 en_html_file = open('.%(filename)s_en.html' % locals(), 'w')
                 print 'http://www.ted.com%(filename)s?language=en' % locals()
-                en_f = urllib2.urlopen('http://www.ted.com%(filename)s/transcript?language=en' % locals())
+                en_f = urllib2.urlopen('http://www.ted.com%(filename)s/transcript?language=en'
+                                       % locals())
                 en_html_file.write(en_f.read())
                 en_html_file.close()
 
@@ -87,36 +97,38 @@ class TED:
 
     @staticmethod
     def crawl_video(url, filename):
+        """Crawl Video."""
         print 'Download', url
         os.system('curl -o %(filename)s -LO %(url)s' % locals())
 
     @staticmethod
     def parse():
-        for root, dirs, files in os.walk("talks"):
+        """Parse HTML."""
+        for _, _, files in os.walk("talks"):
             for name in files:
                 if name.endswith('txt') or name.endswith('detail'):
                     continue
                 print name
-                soup = BeautifulSoup(open('talks/' + name,'r'))
+                soup = BeautifulSoup(open('talks/' + name, 'r'), "html.parser")
                 subtitle_file = open('talks/%(name)s_txt' % locals(), 'w')
                 for script in soup.find_all('span', 'talk-transcript__fragment'):
                     subtitle_file.write(unicode(script.text).encode('utf8'))
                 subtitle_file.close()
 
 
-if __name__ == '__main__':
+def main(argv):
+    """Main."""
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hcp", ["help", "crawl", "parse"])
-    except getopt.GetoptError as err:
-        sys.exit(0)
+        FLAGS(argv)
+    except gflags.FlagsError, ex:
+        print '%s' % ex
+        sys.exit(1)
 
     ted = TED()
-    for o, a in opts:
-        if o == "-v":
-            verbose = True
-        elif o in ("-h", "--help"):
-            sys.exit()
-        elif o in ("-c", '--crawl'):
-            ted.crawl()
-        elif o in ("-p", '--parse'):
-            ted.parse()
+    if FLAGS.crawl:
+        ted.crawl()
+    if FLAGS.parse:
+        ted.parse()
+
+if __name__ == '__main__':
+    main(sys.argv)

@@ -22,6 +22,8 @@
 News Crawler
 """
 
+# pylint: disable=line-too-long, bare-except
+
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
