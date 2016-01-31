@@ -22,36 +22,39 @@
 Public Tweet Collector
 """
 
+# pylint: disable=line-too-long, bare-except
+
+import io
+import os
+import json
+import time
+import datetime
+import threading
+import tweepy
+
 __author__ = 'Dongjoon Hyun (dongjoon@apache.org)'
 __copyright__ = 'Copyright (c) 2015-2016'
 __license__ = 'Apache License 2.0'
 __version__ = '0.1'
 
-import io
-import os
-import tweepy
-import json
-import time
-import datetime
-import threading
-
 
 class FileOutListener(tweepy.streaming.StreamListener):
+    """Standard Streaming Listener"""
     def on_data(self, status):
         try:
-            s = json.loads(status)
+            status = json.loads(status)
             try:
-                id = s['id']
-                if s['lang'] != 'ko' and s['lang'] != 'en':
+                status_id = status['id']
+                if status['lang'] != 'ko' and status['lang'] != 'en':
                     return True
-                print s['created_at'], s['text']
+                print status_id, status['created_at'], status['text']
             except:
                 return True  # 'delete' tweets has no id field.
             filename = datetime.datetime.now().strftime('%Y%m%d_%H.json')
-            with io.open(filename, 'a', encoding='utf-8') as f:
-                f.write(unicode(json.dumps(s, ensure_ascii=False) + "\n"))
-        except Exception as e:
-            print e
+            with io.open(filename, 'a', encoding='utf-8') as jsonfile:
+                jsonfile.write(unicode(json.dumps(status, ensure_ascii=False) + "\n"))
+        except Exception as ex:
+            print ex
         return True
 
     def on_error(self, status):
@@ -59,19 +62,21 @@ class FileOutListener(tweepy.streaming.StreamListener):
 
 
 class S3Uploader(threading.Thread):
+    """Upload into S3"""
     def run(self):
         while True:
             filename = (datetime.datetime.now() - datetime.timedelta(minutes=61)).strftime('%Y%m%d_%H.json')
             try:
                 ret = os.system("aws s3 cp %s s3://mybucket/data/text/twitter/" % filename)
-                if 0 == ret:
+                if ret == 0:
                     os.remove(filename)
             except:
                 pass
             time.sleep(60)
 
 
-if __name__ == '__main__':
+def main():
+    """Main."""
     keys = open('key.txt', 'r').readlines()
     api_key = keys[0].strip()
     api_secret = keys[1].strip()
@@ -80,8 +85,12 @@ if __name__ == '__main__':
     auth = tweepy.OAuthHandler(api_key, api_secret)
     auth.set_access_token(access_token, access_token_secret)
 
-    t = S3Uploader()
-    t.start()
+    uploader = S3Uploader()
+    uploader.start()
 
     stream = tweepy.Stream(auth, FileOutListener())
     stream.sample()
+
+
+if __name__ == '__main__':
+    main()
