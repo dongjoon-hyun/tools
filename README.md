@@ -6,3 +6,4 @@
 * Hadoop Cluster Doctor
 * Command Line Inteface Tools
 * News Collector
+* Remote Shell via Telegram Bot
