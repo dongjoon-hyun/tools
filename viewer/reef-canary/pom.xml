@@ -13,52 +13,47 @@
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>tang</artifactId>
-      <version>0.14.0-SNAPSHOT</version>
+      <version>0.14.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>reef-common</artifactId>
-      <version>0.14.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.reef</groupId>
-      <artifactId>reef-common</artifactId>
-      <version>0.14.0-SNAPSHOT</version>
+      <version>0.14.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>reef-runtime-local</artifactId>
-      <version>0.14.0-SNAPSHOT</version>
+      <version>0.14.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>reef-runtime-yarn</artifactId>
-      <version>0.14.0-SNAPSHOT</version>
+      <version>0.14.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>reef-runtime-mesos</artifactId>
-      <version>0.14.0-SNAPSHOT</version>
+      <version>0.14.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>reef-io</artifactId>
-      <version>0.14.0-SNAPSHOT</version>
+      <version>0.14.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>reef-checkpoint</artifactId>
-      <version>0.14.0-SNAPSHOT</version>
+      <version>0.14.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>reef-webserver</artifactId>
-      <version>0.14.0-SNAPSHOT</version>
+      <version>0.14.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>reef-poison</artifactId>
-      <version>0.14.0-SNAPSHOT</version>
+      <version>0.14.0</version>
     </dependency>
     <!-- End of REEF -->
 
@@ -108,6 +103,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
+        <version>2.4.3</version>
         <executions>
           <execution>
             <phase>package</phase>
