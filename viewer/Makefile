@@ -24,7 +24,7 @@ clean:
 
 build:
 	mkdir -p app
-	electron-packager . Viewer --platform=darwin,linux,win32 --arch=x64 --version=0.36.11 --overwrite --out=app --ignore=app
+	electron-packager . Viewer --platform=darwin,linux,win32 --arch=x64 --version=0.37.3 --overwrite --out=app --ignore=app
 
 compress:
 	cd app && rm -f *.zip && \
