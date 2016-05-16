@@ -10,7 +10,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM reefrt/mesos0.28
+FROM reefrt/mesos0.28-dev
 MAINTAINER Dongjoon Hyun <dongjoon@apache.org>
 
 COPY core-site.xml /usr/local/hadoop/etc/hadoop/
