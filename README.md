@@ -4,6 +4,6 @@
 
 * Cross-platform Cluster Viewer
 * Hadoop Cluster Doctor
-* Command Line Inteface Tools
+* Command Line Interface Tools
 * News Collector
 * Remote Shell via Telegram Bot
