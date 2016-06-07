@@ -22,52 +22,56 @@ limitations under the License.
   <name>reef-canary</name>
   <url>http://maven.apache.org</url>
 
+  <properties>
+    <reef.version>0.15.0</reef.version>
+  </properties>
+
   <dependencies>
     <!-- REEF -->
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>tang</artifactId>
-      <version>0.14.0</version>
+      <version>${reef.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>reef-common</artifactId>
-      <version>0.14.0</version>
+      <version>${reef.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>reef-runtime-local</artifactId>
-      <version>0.14.0</version>
+      <version>${reef.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>reef-runtime-yarn</artifactId>
-      <version>0.14.0</version>
+      <version>${reef.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>reef-runtime-mesos</artifactId>
-      <version>0.14.0</version>
+      <version>${reef.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>reef-io</artifactId>
-      <version>0.14.0</version>
+      <version>${reef.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>reef-checkpoint</artifactId>
-      <version>0.14.0</version>
+      <version>${reef.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>reef-webserver</artifactId>
-      <version>0.14.0</version>
+      <version>${reef.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.reef</groupId>
       <artifactId>reef-poison</artifactId>
-      <version>0.14.0</version>
+      <version>${reef.version}</version>
     </dependency>
     <!-- End of REEF -->
 
