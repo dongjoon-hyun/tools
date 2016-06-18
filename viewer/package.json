@@ -23,6 +23,6 @@
   },
   "homepage": "http://github.com/dongjoon-hyun/electron-sample#readme",
   "devDependencies": {
-    "electron-prebuilt": "^1.2.2"
+    "electron-prebuilt": "^1.2.3"
   }
 }
